@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the AccountRef ListID for the Check
      *
@@ -68,7 +68,7 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
     }
 
     // Path: AccountRef FullName, datatype:
-    
+
     /**
      * Set the AccountRef FullName for the Check
      *
@@ -91,7 +91,7 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
     }
 
     // Path: TxnDate, datatype: DATETYPE
-    
+
     /**
      * Set the TxnDate for the Check
      *
@@ -130,7 +130,7 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
         return $this->getTxnDate($format = null);
     }
     // Path: Memo, datatype: STRTYPE
-    
+
     /**
      * Set the Memo for the Check
      *
@@ -151,12 +151,12 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
     {
         return $this->get('Memo');
     }
-    
+
     public function setAmount($amount)
     {
         return $this->setAmountType('Amount', $amount);
     }
-    
+
     public function getAmount()
     {
         return $this->getAmountType('Amount');
@@ -166,22 +166,22 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
     {
         return $this->addListItem('DepositLine', $obj);
     }
-    
+
     public function asList($request)
     {
         switch ($request) {
             case 'DepositAddRq':
-                
+
                 if (isset($this->_object['DepositLine'])) {
                     $this->_object['DepositLineAdd'] = $this->_object['DepositLine'];
                 }
-                
+
                 break;
             case 'DepositModRq':
-                
+
                 break;
         }
-        
+
         return parent::asList($request);
     }
 
@@ -190,27 +190,27 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
         if (is_null($object)) {
             $object = $this->_object;
         }
-        
+
         switch ($root) {
             case QUICKBOOKS_ADD_DEPOSIT:
-                
+
                 foreach ($object['DepositLineAdd'] as $key => $obj) {
                     $obj->setOverride('DepositLineAdd');
                 }
-                
+
                 break;
             case QUICKBOOKS_MOD_DEPOSIT:
-                
+
                 foreach ($object['DepositLineMod'] as $key => $obj) {
                     $obj->setOverride('DepositLineMod');
                 }
-                
+
                 break;
         }
-        
+
         return parent::asXML($root, $parent, $object);
     }
-    
+
     /**
      *
      */
@@ -219,7 +219,7 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
         $this->_cleanup();
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      *
      *
@@ -233,15 +233,15 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
         $this->_cleanup();
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      *
      */
     protected function _cleanup()
     {
-        
+
     }
-    
+
     /**
      * Tell what type of object this is
      *

@@ -24,7 +24,7 @@ class QuickBooks_IPP_Service_SalesOrder extends QuickBooks_IPP_Service
     {
         return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESORDER, $query, null, $page, $size);
     }
-    
+
     /**
      *
      *
@@ -35,7 +35,7 @@ class QuickBooks_IPP_Service_SalesOrder extends QuickBooks_IPP_Service
         $xml = null;
         return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESORDER, $ID, $domain, $xml);
     }
-    
+
     public function add($Context, $realmID, $Object)
     {
         return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESORDER, $Object);

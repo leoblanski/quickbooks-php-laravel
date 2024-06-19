@@ -31,7 +31,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
     }
 
     // Path: ItemGroupRef ListID, datatype:
-    
+
     /**
      * Set the ItemGroupRef ListID for the Check
      *
@@ -65,7 +65,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
     }
 
     // Path: ItemGroupRef FullName, datatype:
-    
+
     /**
      * Set the ItemGroupRef FullName for the Check
      *
@@ -88,7 +88,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
     }
 
     // Path: Desc, datatype:
-    
+
     /**
      * Set the Desc for the Check
      *
@@ -126,7 +126,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
         $this->getDesc();
     }
     // Path: Quantity, datatype:
-    
+
     /**
      * Set the Quantity for the Check
      *
@@ -149,7 +149,7 @@ class QuickBooks_QBXML_Object_Check_ItemGroupLine extends QuickBooks_QBXML_Objec
     }
 
     // Path: UnitOfMeasure, datatype:
-    
+
     /**
      * Set the UnitOfMeasure for the Check
      *

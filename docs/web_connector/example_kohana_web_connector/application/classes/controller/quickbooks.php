@@ -1,4 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
 
 /**
  * QuickBooks Kohana Integration Example
@@ -11,7 +13,6 @@
 
 class Controller_Quickbooks extends Controller_Website
 {
-
     public function action_index()
     {
         $this->template->title = __('Quickbooks Management Portal');

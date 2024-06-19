@@ -90,12 +90,12 @@ class QuickBooks_XML_Parser
     /**
      *
      */
-    const BACKEND_SIMPLEXML = 'simplexml';
+    public const BACKEND_SIMPLEXML = 'simplexml';
 
     /**
      *
      */
-    const BACKEND_BUILTIN = 'builtin';
+    public const BACKEND_BUILTIN = 'builtin';
 
     /**
      * Create a new QuickBooks_XML parser object
@@ -141,7 +141,7 @@ class QuickBooks_XML_Parser
         } elseif (substr(trim($mixed), 0, 6) == '{"warn') {
             // Intuit has a bug where some of their services return JSON erors
             // instead of XML, so we catch these here...
-            
+
             return '';
         } elseif (substr(trim($mixed), 0, 1) != '<') {
             return file_get_contents($mixed);

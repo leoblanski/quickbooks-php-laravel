@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'CustomerAdd';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -116,10 +116,10 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PriceLevelRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -204,10 +204,10 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PriceLevelRef FullName' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -293,7 +293,7 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -378,10 +378,10 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PriceLevelRef FullName' => 999.99,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -466,19 +466,19 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PriceLevelRef FullName' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     protected function &_inLocalePaths()
     {
         static $paths = [
             'CustomerTypeRef FullName' => [ 'QBOE' ],
             ];
-        
+
         return $paths;
     }
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -564,7 +564,7 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PreferredDeliveryMethod',
   'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

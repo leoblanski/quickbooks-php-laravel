@@ -56,7 +56,7 @@ foreach ($fields as $field) {
 
         print("\t" . $field . ': {' . $cast . '} (length: ' . strlen($cast) . ')' . "\n");
     }
-    
+
     print("\n");
 }
 print("\n");

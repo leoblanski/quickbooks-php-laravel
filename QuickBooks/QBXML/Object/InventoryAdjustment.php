@@ -544,7 +544,7 @@ class QuickBooks_QBXML_Object_InventoryAdjustment extends QuickBooks_QBXML_Objec
         if (is_null($object)) {
             $object = $this->_object;
         }
-        
+
         switch ($root) {
             case QUICKBOOKS_ADD_INVENTORYADJUSTMENT:
                 foreach ($object['InventoryAdjustmentLineAdd'] as $key => $obj) {

@@ -46,19 +46,19 @@ ini_set('include_path', ini_get('include_path') . QUICKBOOKS_DIRECTORY_SEPARATOR
 
 if (function_exists('date_default_timezone_get')) {
     @date_default_timezone_get();
-    
+
     if (function_exists('error_get_last') and
         $arrerr = error_get_last() and
         substr($arrerr['message'], 0, strlen('date_default_timezone_get')) == 'date_default_timezone_get') {
         // Ooops, they never set their time-zone and PHP is warning them about
         // 	this! Let's try to auto-set their timezone, and set a flag so that
         // 	they can find out what's going wrong later.
-        
+
         /**
          *
          */
         define('QUICKBOOKS_TIMEZONE_AUTOSET', true);
-        
+
         date_default_timezone_set('America/New_York');
     }
 }
@@ -998,14 +998,14 @@ QuickBooks_Loader::load('/QuickBooks/Compat.php');
 // If this constant isn't defined, then include *everything*
 if (!defined('QUICKBOOKS_FRAMEWORKS')) {
     $all = 0;
-    
+
     $constants = get_defined_constants(true);
     foreach ($constants['user'] as $constant => $value) {
         if (substr($constant, 0, 21) == 'QUICKBOOKS_FRAMEWORK_') {
             $all = $all | $value;
         }
     }
-    
+
     /**
      * Determines which frameworks are included (if not defined, this defines it to include *everything*)
      * @var integer
@@ -1026,12 +1026,12 @@ if (QUICKBOOKS_FRAMEWORKS & QUICKBOOKS_FRAMEWORK_WEBCONNECTOR) {
      * SOAP server for QuickBooks web services
      */
     QuickBooks_Loader::load('/QuickBooks/WebConnector/Server.php');
-    
+
     /**
      * Web Connector generation
      */
     QuickBooks_Loader::load('/QuickBooks/WebConnector/QWC.php');
-    
+
     /**
      * Various QuickBooks utility classes
      */

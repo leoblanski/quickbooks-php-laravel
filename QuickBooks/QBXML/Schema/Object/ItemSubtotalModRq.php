@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSubtotalModRq extends QuickBooks_QBXML_
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'ItemSubtotalMod';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -42,10 +42,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSubtotalModRq extends QuickBooks_QBXML_
   'ItemDesc' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -56,10 +56,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSubtotalModRq extends QuickBooks_QBXML_
   'ItemDesc' => 4095,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Schema_Object_ItemSubtotalModRq extends QuickBooks_QBXML_
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -82,10 +82,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSubtotalModRq extends QuickBooks_QBXML_
   'ItemDesc' => 999.99,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -96,10 +96,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSubtotalModRq extends QuickBooks_QBXML_
   'ItemDesc' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -111,7 +111,7 @@ class QuickBooks_QBXML_Schema_Object_ItemSubtotalModRq extends QuickBooks_QBXML_
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -122,7 +122,7 @@ class QuickBooks_QBXML_Schema_Object_ItemSubtotalModRq extends QuickBooks_QBXML_
   4 => 'ItemDesc',
   5 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_VehicleModRq extends QuickBooks_QBXML_Schem
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'VehicleMod';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -42,10 +42,10 @@ class QuickBooks_QBXML_Schema_Object_VehicleModRq extends QuickBooks_QBXML_Schem
   'Desc' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -56,10 +56,10 @@ class QuickBooks_QBXML_Schema_Object_VehicleModRq extends QuickBooks_QBXML_Schem
   'Desc' => 256,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Schema_Object_VehicleModRq extends QuickBooks_QBXML_Schem
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -82,10 +82,10 @@ class QuickBooks_QBXML_Schema_Object_VehicleModRq extends QuickBooks_QBXML_Schem
   'Desc' => 999.99,
   'IncludeRetElement' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -96,10 +96,10 @@ class QuickBooks_QBXML_Schema_Object_VehicleModRq extends QuickBooks_QBXML_Schem
   'Desc' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -111,7 +111,7 @@ class QuickBooks_QBXML_Schema_Object_VehicleModRq extends QuickBooks_QBXML_Schem
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -122,7 +122,7 @@ class QuickBooks_QBXML_Schema_Object_VehicleModRq extends QuickBooks_QBXML_Schem
   4 => 'Desc',
   5 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

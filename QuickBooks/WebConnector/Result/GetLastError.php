@@ -32,7 +32,7 @@ class QuickBooks_WebConnector_Result_GetLastError extends QuickBooks_WebConnecto
      * @param string $resp
      */
     public $getLastErrorResult;
-    
+
     /**
      * Create a new result object
      *

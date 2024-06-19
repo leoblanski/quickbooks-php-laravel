@@ -33,33 +33,33 @@ $realm = $creds['qb_realm'];
 if ($Context = $IPP->context()) {
     // Set the DBID
     $IPP->dbid($Context, 'something');
-    
+
     // Set the IPP flavor
     $IPP->flavor($creds['qb_flavor']);
-    
+
     // Get the base URL if it's QBO
     if ($creds['qb_flavor'] == QuickBooks_IPP_IDS::FLAVOR_ONLINE) {
         $IPP->baseURL($IPP->getBaseURL($Context, $realm));
     }
-    
+
     //print('Base URL is [' . $IPP->baseURL() . ']' . "\n\n");
-    
+
     $CustomerService = new QuickBooks_IPP_Service_Customer();
-    
+
     $perpage = 10;
     $page = 1;
     do {
         print('<h3>PAGE ' . $page . '</h3>' . "\n\n");
-        
+
         $list = $CustomerService->findAll($Context, $realm, null, $page, $perpage);
-        
+
         foreach ($list as $Customer) {
             print('&bull; ' . $Customer->getId() . ' => ' . $Customer->getName() . '<br>' . "\n\n");
         }
-        
+
         $page++;
     } while (count($list) >= $perpage);
-    
+
     /*
     print("\n\n\n\n");
     print('Request [' . $IPP->lastRequest() . ']');

@@ -28,30 +28,30 @@ class QuickBooks_QBXML_Schema_Object_TxnVoidRq extends QuickBooks_QBXML_Schema_O
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
   'TxnVoidType' => 'ENUMTYPE',
   'TxnID' => 'IDTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
   'TxnVoidType' => 0,
   'TxnID' => 0,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -59,27 +59,27 @@ class QuickBooks_QBXML_Schema_Object_TxnVoidRq extends QuickBooks_QBXML_Schema_O
   'TxnID' => false,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
   'TxnVoidType' => 999.99,
   'TxnID' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
   'TxnVoidType' => false,
   'TxnID' => false,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -91,14 +91,14 @@ class QuickBooks_QBXML_Schema_Object_TxnVoidRq extends QuickBooks_QBXML_Schema_O
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
   0 => 'TxnVoidType',
   1 => 'TxnID',
 ];
-            
+
         return $paths;
     }
 }

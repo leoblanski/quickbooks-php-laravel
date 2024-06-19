@@ -35,10 +35,10 @@ $dsn = 'mysql://root:root@localhost/quickbooks_example_app_web_connector';
 if (!QuickBooks_Utilities::initialized($dsn)) {
     // Initialize creates the neccessary database schema for queueing up requests and logging
     QuickBooks_Utilities::initialize($dsn);
-    
+
     // This creates a username and password which is used by the Web Connector to authenticate
     QuickBooks_Utilities::createUser($dsn, $qbwc_user, $qbwc_pass);
-    
+
     // Create our test table
     mysql_query('CREATE TABLE my_customer_table (
 	  id int(10) unsigned NOT NULL AUTO_INCREMENT,

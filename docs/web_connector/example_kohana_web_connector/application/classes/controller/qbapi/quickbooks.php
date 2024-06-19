@@ -1,4 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
 
 /**
  * QuickBooks Kohana Integration Example
@@ -18,7 +20,6 @@ require_once 'framework/QuickBooks.php';
 
 class Controller_Qbapi_Quickbooks extends Controller
 {
-
     /**
      * Prep the page for the web connector
      * @author Jayson Lindsley <Jayson@nerds4u.net>
@@ -68,7 +69,7 @@ class Controller_Qbapi_Quickbooks extends Controller
             QUICKBOOKS_ADD_CUSTOMER => [ [$this, '_quickbooks_customer_add_request'], [$this,'_quickbooks_customer_add_response' ]],
             QUICKBOOKS_MOD_CUSTOMER => [ [$this, '_quickbooks_customer_mod_request'], [$this, '_quickbooks_customer_mod_response']],
         ];
-        
+
         //Map error handling to functions
         $errmap = [
             3070 => [$this, '_quickbooks_error_stringtoolong'],
@@ -92,16 +93,16 @@ class Controller_Qbapi_Quickbooks extends Controller
 
             // This creates a username and password which is used by the Web Connector to authenticate
             QuickBooks_Utilities::createUser($dsn, $user, $pass);
-        
+
             // Initial test case customer
             $primary_key_of_new_customer = 512;
-        
+
             // Fire up the Queue
             $Queue = new QuickBooks_WebConnector_Queue($dsn);
-        
+
             // Drop the directive and the customer into the queue
             $Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_new_customer);
-    
+
             // Also note the that ->enqueue() method supports some other parameters:
             // 	string $action				The type of action to queue up
             //	mixed $ident = null			Pass in the unique primary key of your record here, so you can pull the data from your application to build a qbXML request in your request handler
@@ -113,16 +114,16 @@ class Controller_Qbapi_Quickbooks extends Controller
         }
         //To be used with singleton queue
         $driver_options = [];
-    
+
         //Callback options, not needed at the moment
         $callback_options = [];
 
         //nothing needed here at the moment
         $soap_options = [];
-        
+
         //construct a new instance of the web connector server
         $Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
-        
+
         //instruct server to handle responses
         $response = $Server->handle(true, true);
     }
@@ -163,7 +164,7 @@ class Controller_Qbapi_Quickbooks extends Controller
         Kohana::$log->add(Log::NOTICE, 'Add Customer Response: ' . $xml);
 
         Kohana::$log->add(Log::NOTICE, 'Applying QB_LISTID to customer: ' . $ID . ', listid: ' . $idents['ListID']);
-        
+
         //fetch the customer
         $mycustomer = ORM::factory('customer', $ID);
         //Save the list id

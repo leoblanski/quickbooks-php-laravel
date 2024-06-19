@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of the Class
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of the Class
      *
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      *
      */
@@ -58,12 +58,12 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return $this->set('ParentRef ListID', $ListID);
     }
-    
+
     public function getParentListID()
     {
         return $this->get('ParentRef ListID');
     }
-    
+
     /**
      * @deprecated
      */
@@ -76,12 +76,12 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return $this->set('ParentRef FullName', $name);
     }
-    
+
     public function getParentFullName()
     {
         return $this->get('ParentRef FullName');
     }
-    
+
     /**
      * @deprecated
      */
@@ -89,7 +89,7 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return $this->get('ParentRef FullName');
     }
-    
+
     /**
      * Set the name of the class
      *
@@ -100,7 +100,7 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name of the class
      *
@@ -110,7 +110,7 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-    
+
     /**
      *
      */
@@ -123,7 +123,7 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return $this->set('FullName', $name);
     }
-    
+
     /**
      * Set this Class active or not
      *
@@ -132,9 +132,9 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
      */
     public function setIsActive($value)
     {
-        return $this->set('IsActive', (boolean) $value);
+        return $this->set('IsActive', (bool) $value);
     }
-    
+
     /**
      * Tell whether or not this class object is active
      *
@@ -144,7 +144,7 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return $this->get('IsActive');
     }
-    
+
     /**
      * Perform any needed clean-up of the object data members
      *
@@ -154,7 +154,7 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this Class object
      *
@@ -165,10 +165,10 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -181,10 +181,10 @@ class QuickBooks_QBXML_Object_Class extends QuickBooks_QBXML_Object
     public function asQBXML($request, $version = null, $locale = null, $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $version, $locale, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

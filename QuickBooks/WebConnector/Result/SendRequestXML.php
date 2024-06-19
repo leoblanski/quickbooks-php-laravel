@@ -32,7 +32,7 @@ class QuickBooks_WebConnector_Result_SendRequestXML extends QuickBooks_WebConnec
      * @var string
      */
     public $sendRequestXMLResult;
-    
+
     /**
      * Create a new result response
      *

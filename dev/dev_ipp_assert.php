@@ -17,15 +17,15 @@ $IPP = new QuickBooks_IPP();
 
 if ($Context = $IPP->authenticate($username, $password, $token)) {
     $IPP->application($appdbid);
-    
+
     //$IPP->useDebugMode(true);
-    
+
     if ($IPP->assertFederatedIdentity($Context, 'XXXXXod-intuit.ipp.prod', 'https://secure.your-url.com/saml.php')) {
         print('SUCCESS!');
     } else {
         print('Error [' . $IPP->errorCode() . ': ' . $IPP->errorText() . ', ' . $IPP->errorDetail() . ']');
     }
-    
+
     print("\n\n\n\n");
     print($IPP->lastRequest());
     print("\n\n\n\n");

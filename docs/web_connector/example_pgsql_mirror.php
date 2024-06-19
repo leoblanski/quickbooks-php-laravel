@@ -46,20 +46,20 @@ $dsn = 'pgsql://postgres:password@localhost/quickbooks.qb';
 //	schema and set up the username/password, etc.)
 if (!QuickBooks_Utilities::initialized($dsn)) {
     header('Content-Type: text/plain');
-    
+
     // It takes a really long time to build the schema...
     set_time_limit(0);
-    
+
     $driver_options = [
         ];
-        
+
     $init_options = [
         'quickbooks_sql_enabled' => true,
         ];
-        
+
     QuickBooks_Utilities::initialize($dsn, $driver_options, $init_options);
     QuickBooks_Utilities::createUser($dsn, $username, $password);
-    
+
     exit;
 }
 
@@ -80,7 +80,7 @@ $hooks = [
     // Register a hook which occurs when we perform an INSERT into the SQL database for a record from QuickBooks
     // QUICKBOOKS_SQL_HOOK_SQL_INSERT => 'my_function_name_for_inserts',
     //QUICKBOOKS_SQL_HOOK_SQL_INSERT => 'MyHookClass::myMethod',
-    
+
     // Register a hook which occurs when we perform an UPDATE on the SQL database for a record from QuickBooks
     // QUICKBOOKS_SQL_HOOK_SQL_UPDATE => 'my_function_name_for_updates',
 
@@ -91,7 +91,7 @@ $hooks = [
         array( $hook_obj, 'myMethod' ),
         ),
     */
-    
+
     // Example of using the hook factory to use a pre-defined hook
     //QUICKBOOKS_SQL_HOOK_SQL_INSERT => QuickBooks_Hook_Factory::create(
     //	'Relay_POST', 								// Relay the hook data to a remote URL via a HTTP POST

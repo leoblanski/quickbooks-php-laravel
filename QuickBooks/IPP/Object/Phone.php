@@ -4,10 +4,10 @@ QuickBooks_Loader::load('/QuickBooks/IPP/Object.php');
 
 class QuickBooks_IPP_Object_Phone extends QuickBooks_IPP_Object
 {
-    const DEVICETYPE_LANDLINE = 'LandLine';
-    const DEVICETYPE_MOBILE = 'Mobile';
-    const DEVICETYPE_FAX = 'Fax';
-    
+    public const DEVICETYPE_LANDLINE = 'LandLine';
+    public const DEVICETYPE_MOBILE = 'Mobile';
+    public const DEVICETYPE_FAX = 'Fax';
+
     protected function _order()
     {
         return [

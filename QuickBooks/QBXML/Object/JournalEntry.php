@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
     }
 
     // Path: TxnDate, datatype: DATETYPE
-    
+
     /**
      * Set the TxnDate for the JournalEntry
      *
@@ -79,7 +79,7 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
         $this->getTxnDate($format = null);
     }
     // Path: RefNumber, datatype: STRTYPE
-    
+
     /**
      * Set the RefNumber for the JournalEntry
      *
@@ -102,7 +102,7 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
     }
 
     // Path: Memo, datatype: STRTYPE
-    
+
     /**
      * Set the Memo for the JournalEntry
      *
@@ -125,7 +125,7 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
     }
 
     // Path: IsAdjustment, datatype: BOOLTYPE
-    
+
     /**
      * Set the IsAdjustment for the JournalEntry
      *
@@ -146,27 +146,27 @@ class QuickBooks_QBXML_Object_JournalEntry extends QuickBooks_QBXML_Object
     {
         return $this->getBooleanType('IsAdjustment');
     }
-    
+
     public function addDebitLine($obj)
     {
         return $this->addListItem('JournalDebitLine', $obj);
     }
-    
+
     public function addJournalDebitLine($obj)
     {
         return $this->addDebitLine($obj);
     }
-    
+
     public function addCreditLine($obj)
     {
         return $this->addListItem('JournalCreditLine', $obj);
     }
-    
+
     public function addJournalCreditLine($obj)
     {
         return $this->addCreditLine($obj);
     }
-    
+
     /**
      * Tell the type of object this is
      *

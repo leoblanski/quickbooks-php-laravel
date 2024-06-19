@@ -2849,7 +2849,7 @@ abstract class QuickBooks_Driver_Sql extends QuickBooks_Driver
         }
 
         return [
-            'CREATE TABLE ' . ($if_not_exists?'IF NOT EXISTS ':'') . $name . ' ( ' . "\n" . substr($sql, 0, -3) . ' ); ',
+            'CREATE TABLE ' . ($if_not_exists ? 'IF NOT EXISTS ' : '') . $name . ' ( ' . "\n" . substr($sql, 0, -3) . ' ); ',
             ];
     }
 

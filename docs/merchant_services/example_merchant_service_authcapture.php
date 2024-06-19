@@ -106,7 +106,7 @@ $amount = 295.0;
 if ($Transaction = $MS->authorize($Card, $amount)) {
     print('Card authorized!' . "\n");
     print_r($Transaction);
-    
+
     // 	Every time the MerchantService class returns a $Transaction object to you,
     // 	you should store the returned $Transaction. You'll need the returned
     // 	$Transaction object (or at the very least the data contained therein) in
@@ -115,14 +115,14 @@ if ($Transaction = $MS->authorize($Card, $amount)) {
     //
     // 	There are several convienence methods to convert the $Transaction object to
     // 	more storage-friendly formats if you would prefer to use these:
-    
+
     // Get the transaction as a string which can later be turned back into a transaction object
     $str = $Transaction->serialize();
     print('Serialized transaction: ' . $str . "\n\n");
-    
+
     // Now convert it back to a transaction object
     $Transaction = QuickBooks_MerchantService_Transaction::unserialize($str);
-    
+
     if ($Transaction = $MS->capture($Transaction, $amount)) {
         /*
         print("\n\n");
@@ -139,7 +139,7 @@ if ($Transaction = $MS->authorize($Card, $amount)) {
         print('Card captured!' . "\n");
         print_r($Transaction);
         print("\n\n");
-        
+
         // Let's print that qbXML bit again because it'll have more data now
         $qbxml = $Transaction->toQBXML();
         print('qbXML transaction info: ' . $qbxml . "\n\n");

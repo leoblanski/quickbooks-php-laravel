@@ -31,7 +31,7 @@ foreach ($list as $UOM) {
     print('Unit of measure [' . $UOM->getName() . '] of type [' . $UOM->getBaseType() . ']' . "\n");
     for ($i = 0; $i < $UOM->countConvUnit(); $i++) {
         $ConvUnit = $UOM->getConvUnit($i);
-        
+
         print("\t" . $ConvUnit->getName() . ', ' . $ConvUnit->getConvRatio() . "\n");
     }
     print("\n");

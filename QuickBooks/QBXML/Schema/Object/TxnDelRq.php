@@ -28,30 +28,30 @@ class QuickBooks_QBXML_Schema_Object_TxnDelRq extends QuickBooks_QBXML_Schema_Ob
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
   'TxnDelType' => 'ENUMTYPE',
   'TxnID' => 'IDTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
   'TxnDelType' => 0,
   'TxnID' => 0,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -59,27 +59,27 @@ class QuickBooks_QBXML_Schema_Object_TxnDelRq extends QuickBooks_QBXML_Schema_Ob
   'TxnID' => false,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
   'TxnDelType' => 999.99,
   'TxnID' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
   'TxnDelType' => false,
   'TxnID' => false,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -91,14 +91,14 @@ class QuickBooks_QBXML_Schema_Object_TxnDelRq extends QuickBooks_QBXML_Schema_Ob
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
   0 => 'TxnDelType',
   1 => 'TxnID',
 ];
-            
+
         return $paths;
     }
 }

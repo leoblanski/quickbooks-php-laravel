@@ -24,8 +24,8 @@ class QuickBooks_Payments_BankAccount
 {
     protected $_data;
 
-    const TYPE_PERSONAL_CHECKING = 'PERSONAL_CHECKING';
-    const TYPE_PERSONAL_SAVINGS = 'PERSONAL_SAVINGS';
+    public const TYPE_PERSONAL_CHECKING = 'PERSONAL_CHECKING';
+    public const TYPE_PERSONAL_SAVINGS = 'PERSONAL_SAVINGS';
 
     public function __construct($name, $number, $routing, $type, $phone)
     {

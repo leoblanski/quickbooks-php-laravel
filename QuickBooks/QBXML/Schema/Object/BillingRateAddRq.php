@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_BillingRateAddRq extends QuickBooks_QBXML_S
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -45,10 +45,10 @@ class QuickBooks_QBXML_Schema_Object_BillingRateAddRq extends QuickBooks_QBXML_S
   'BillingRateAdd BillingRatePerItem AdjustBillingRateRelativeTo' => 'ENUMTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -62,10 +62,10 @@ class QuickBooks_QBXML_Schema_Object_BillingRateAddRq extends QuickBooks_QBXML_S
   'BillingRateAdd BillingRatePerItem AdjustBillingRateRelativeTo' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -80,7 +80,7 @@ class QuickBooks_QBXML_Schema_Object_BillingRateAddRq extends QuickBooks_QBXML_S
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -94,10 +94,10 @@ class QuickBooks_QBXML_Schema_Object_BillingRateAddRq extends QuickBooks_QBXML_S
   'BillingRateAdd BillingRatePerItem AdjustBillingRateRelativeTo' => 999.99,
   'IncludeRetElement' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -111,10 +111,10 @@ class QuickBooks_QBXML_Schema_Object_BillingRateAddRq extends QuickBooks_QBXML_S
   'BillingRateAdd BillingRatePerItem AdjustBillingRateRelativeTo' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -126,7 +126,7 @@ class QuickBooks_QBXML_Schema_Object_BillingRateAddRq extends QuickBooks_QBXML_S
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -143,7 +143,7 @@ class QuickBooks_QBXML_Schema_Object_BillingRateAddRq extends QuickBooks_QBXML_S
   10 => 'BillingRateAdd BillingRatePerItem AdjustBillingRateRelativeTo',
   11 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

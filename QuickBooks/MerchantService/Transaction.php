@@ -36,13 +36,13 @@ class QuickBooks_MerchantService_Transaction
      * @var string
      */
     protected $_type;
-    
+
     /**
      * The transaction ID
      * @var string
      */
     protected $_transID;
-    
+
     /**
      * The client transaction ID
      * @var string
@@ -60,7 +60,7 @@ class QuickBooks_MerchantService_Transaction
     protected $_cvvmatch;
     protected $_networkname;
     protected $_networknumber;
-    
+
     protected $_resultcode;
     protected $_resultmessage;
 
@@ -70,7 +70,7 @@ class QuickBooks_MerchantService_Transaction
     protected $_nameoncard;
     protected $_address;
     protected $_postalcode;
-    
+
     /**
      * Create a new Transaction object
      *
@@ -111,7 +111,7 @@ class QuickBooks_MerchantService_Transaction
         $this->_networkname = $networkname;
         $this->_networknumber = $networknumber;
     }
-    
+
     /**
      *
      *
@@ -120,17 +120,17 @@ class QuickBooks_MerchantService_Transaction
     {
         $this->_resultcode = $resultcode;
         $this->_resultmessage = $resultmessage;
-        
+
         $this->_creditcardnumber = $creditcardnumber;
         $this->_expmonth = $expmonth;
         $this->_expyear = $expyear;
         $this->_nameoncard = $nameoncard;
         $this->_address = $address;
         $this->_postalcode = $postalcode;
-        
+
         return true;
     }
-    
+
     /**
      * Set the transaction ID for this transaction
      *
@@ -141,7 +141,7 @@ class QuickBooks_MerchantService_Transaction
     {
         $this->_transID = $transID;
     }
-    
+
     /**
      * Set the client transaction ID for this transaction
      *
@@ -152,7 +152,7 @@ class QuickBooks_MerchantService_Transaction
     {
         $this->_clientTransID = $clientTransID;
     }
-    
+
     /**
      * Get the transaction ID
      *
@@ -162,7 +162,7 @@ class QuickBooks_MerchantService_Transaction
     {
         return $this->_transID;
     }
-    
+
     /**
      *
      *
@@ -171,17 +171,17 @@ class QuickBooks_MerchantService_Transaction
     {
         return $this->_clientTransID;
     }
-    
+
     public function getAuthorizationCode()
     {
         return $this->_authcode;
     }
-    
+
     public function getMerchantAccountNumber()
     {
         return $this->_merchant;
     }
-    
+
     /**
      * Get the address verification (AVS) status of the transaction
      *
@@ -211,7 +211,7 @@ class QuickBooks_MerchantService_Transaction
     {
         return $this->_avszip = $avszip;
     }
-    
+
     public function getCardSecurityCodeMatch()
     {
         return $this->_cvvmatch;
@@ -221,27 +221,27 @@ class QuickBooks_MerchantService_Transaction
     {
         return $this->_cvvmatch = $cvvmatch;
     }
-    
+
     public function getReconBatchID()
     {
         return $this->_batch;
     }
-    
+
     public function getPaymentGroupingCode()
     {
         return $this->_paymentgroup;
     }
-    
+
     public function getPaymentStatus()
     {
         return $this->_paymentstatus;
     }
-    
+
     public function getTxnAuthorizationTime()
     {
         return $this->_txnauthtime;
     }
-    
+
     public function getTxnAuthorizationStamp()
     {
         return $this->_txnauthstamp;
@@ -271,7 +271,7 @@ class QuickBooks_MerchantService_Transaction
             'NetworkName' => $this->_networkname,
             'NetworkNumber' => $this->_networknumber,
             //'DebitCardTransID' => $this->_transID,
-            
+
             'CreditCardTxnInfo_CreditCardTxnInputInfo_CreditCardNumber' => $this->_creditcardnumber,
             'CreditCardTxnInfo_CreditCardTxnInputInfo_ExpirationMonth' => $this->_expmonth,
             'CreditCardTxnInfo_CreditCardTxnInputInfo_ExpirationYear' => $this->_expyear,
@@ -304,7 +304,7 @@ class QuickBooks_MerchantService_Transaction
             'CreditCardTxnInfo_CreditCardTxnResultInfo_ClientTransID' => $this->_clientTransID,
             ];
     }
-    
+
     public static function fromArray($arr)
     {
         static $defaults = [
@@ -356,9 +356,9 @@ class QuickBooks_MerchantService_Transaction
             'CreditCardTxnInfo_CreditCardTxnResultInfo_TxnAuthorizationStamp' => null,
             'CreditCardTxnInfo_CreditCardTxnResultInfo_ClientTransID' => null,
             ];
-        
+
         $trans = array_merge($defaults, $arr);
-        
+
         $obj = new QuickBooks_MerchantService_Transaction(
             $trans['Type'],
             $trans['CreditCardTransID'],
@@ -376,7 +376,7 @@ class QuickBooks_MerchantService_Transaction
             $trans['NetworkName'],
             $trans['NetworkNumber']
         );
-            
+
         $obj->setExtraData(
             $trans['CreditCardTxnInfo_CreditCardTxnResultInfo_ResultCode'],
             $trans['CreditCardTxnInfo_CreditCardTxnResultInfo_ResultMessage'],
@@ -387,10 +387,10 @@ class QuickBooks_MerchantService_Transaction
             $trans['CreditCardTxnInfo_CreditCardTxnInputInfo_CreditCardAddress'],
             $trans['CreditCardTxnInfo_CreditCardTxnInputInfo_CreditCardPostalCode']
         );
-        
+
         return $obj;
     }
-    
+
     public function toXML()
     {
         $xml = '';
@@ -400,14 +400,14 @@ class QuickBooks_MerchantService_Transaction
             $xml .= '<' . $key . '>' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '</' . $key . '>' . QUICKBOOKS_CRLF;
         }
         $xml .= '</QBMSTransaction>';
-        
+
         return $xml;
     }
-    
+
     public function toQBXML()
     {
         // CreditCardTxnInfo
-        
+
         $arr = [
             'CreditCardTxnInputInfo' => [
                 'CreditCardNumber' => $this->_creditcardnumber,
@@ -423,7 +423,7 @@ class QuickBooks_MerchantService_Transaction
             'CreditCardTxnResultInfo' => [
                 'ResultCode' => $this->_resultcode,
                 'ResultMessage' => $this->_resultmessage,
-                
+
                 'CreditCardTransID' => $this->_transID,
                 'MerchantAccountNumber' => $this->_merchant,
                 'AuthorizationCode' => $this->_authcode,
@@ -441,21 +441,21 @@ class QuickBooks_MerchantService_Transaction
                 'TxnAuthorizationStamp' => $this->_txnauthstamp,
                 'ClientTransID' => $this->_clientTransID,
             ]];
-        
+
         $xml = '';
         foreach ($arr as $creditcardtxn => $data) {
             $xml .= '<' . $creditcardtxn . '>' . QUICKBOOKS_CRLF;
-            
+
             foreach ($data as $key => $value) {
                 $xml .= "\t" . '<' . $key . '>' . htmlspecialchars($value) . '</' . $key . '>' . QUICKBOOKS_CRLF;
             }
-            
+
             $xml .= '</' . $creditcardtxn . '>' . QUICKBOOKS_CRLF;
         }
-        
+
         return $xml;
     }
-    
+
     /**
      *
      *
@@ -466,29 +466,29 @@ class QuickBooks_MerchantService_Transaction
     {
         $errnum = 0;
         $errmsg = '';
-        
+
         $arr = [];
-        
+
         $Parser = new QuickBooks_XML_Parser($xml);
         if ($Doc = $Parser->parse($errnum, $errmsg)) {
             $Root = $Doc->getRoot();
-            
+
             foreach ($Root->asArray(QuickBooks_XML::ARRAY_PATHS) as $path => $value) {
                 $tmp = explode(' ', $path);
                 $key = trim(end($tmp));
-                
+
                 $arr[$key] = $value;
             }
         }
-        
+
         return QuickBooks_MerchantService_Transaction::fromArray($arr);
     }
-    
+
     public function serialize()
     {
         return serialize($this->toArray());
     }
-    
+
     public static function unserialize($str)
     {
         return QuickBooks_MerchantService_Transaction::fromArray(unserialize($str));

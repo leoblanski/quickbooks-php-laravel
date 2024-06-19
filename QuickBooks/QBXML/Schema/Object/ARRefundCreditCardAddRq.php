@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ARRefundCreditCardAddRq extends QuickBooks_
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'ARRefundCreditCardAdd';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -83,10 +83,10 @@ class QuickBooks_QBXML_Schema_Object_ARRefundCreditCardAddRq extends QuickBooks_
   'RefundAppliedToTxnAdd RefundAmount' => 'AMTTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -138,10 +138,10 @@ class QuickBooks_QBXML_Schema_Object_ARRefundCreditCardAddRq extends QuickBooks_
   'RefundAppliedToTxnAdd RefundAmount' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -194,7 +194,7 @@ class QuickBooks_QBXML_Schema_Object_ARRefundCreditCardAddRq extends QuickBooks_
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -246,10 +246,10 @@ class QuickBooks_QBXML_Schema_Object_ARRefundCreditCardAddRq extends QuickBooks_
   'RefundAppliedToTxnAdd RefundAmount' => 999.99,
   'IncludeRetElement' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -301,10 +301,10 @@ class QuickBooks_QBXML_Schema_Object_ARRefundCreditCardAddRq extends QuickBooks_
   'RefundAppliedToTxnAdd RefundAmount' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -316,7 +316,7 @@ class QuickBooks_QBXML_Schema_Object_ARRefundCreditCardAddRq extends QuickBooks_
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -373,7 +373,7 @@ class QuickBooks_QBXML_Schema_Object_ARRefundCreditCardAddRq extends QuickBooks_
   50 => 'RefundAppliedToTxnAdd RefundAmount',
   51 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

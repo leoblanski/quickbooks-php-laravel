@@ -27,7 +27,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID for this item
      *
@@ -38,7 +38,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID for this item
      *
@@ -48,7 +48,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      * Set the name for this item
      *
@@ -59,7 +59,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name for this item
      *
@@ -69,17 +69,17 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-    
+
     public function setFullName($fullname)
     {
         return $this->setFullNameType('FullName', 'Name', 'ParentRef FullName', $fullname);
     }
-    
+
     public function getFullName()
     {
         return $this->getFullNameType('FullName', 'Name', 'ParentRef FullName');
     }
-    
+
     /**
      * Set the QuantityOnHand for this item
      *
@@ -90,7 +90,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->set('QuantityOnHand', (int) $quantity);
     }
-    
+
     /**
      * Get the QuantityOnHand for this item
      *
@@ -100,7 +100,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('QuantityOnHand');
     }
-    
+
     /**
      * Set the description of this item
      *
@@ -116,7 +116,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('SalesDesc');
     }
-    
+
     /**
      * Set the price for this item
      *
@@ -127,7 +127,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->set('SalesPrice', sprintf('%01.2f', (float) $price));
     }
-    
+
     /**
      * Get the price for this item
      */
@@ -135,7 +135,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('SalesPrice');
     }
-    
+
     /**
      * Set the account ListID for this item
      *
@@ -146,7 +146,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->set('IncomeAccountRef ListID', $ListID);
     }
-    
+
     /**
      * (Sales OR Purchase)
      * @deprecated
@@ -155,12 +155,12 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->set('IncomeAccountRef FullName', $name);
     }
-    
+
     public function setIncomeAccountFullName($FullName)
     {
         return $this->setFullNameType('IncomeAccountRef FullName', null, null, $FullName);
     }
-    
+
     /**
      * (Sales OR Purchase)
      */
@@ -173,7 +173,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('IncomeAccountRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     /**
      *
      */
@@ -181,7 +181,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('IncomeAccountRef ListID');
     }
-    
+
     /**
      * @deprecated
      */
@@ -199,7 +199,7 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->set('AssetAccountRef FullName', $name);
     }
-    
+
     /**
      * @deprecated
      */
@@ -207,22 +207,22 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('AssetAccountRef FullName');
     }
-    
+
     public function getAssetAccountFullName()
     {
         return $this->get('AssetAccountRef FullName');
     }
-    
+
     public function setAssetAccountListID($ListID)
     {
         return $this->set('AssetAccountRef ListID', $ListID);
     }
-    
+
     public function getAssetAccountListID()
     {
         return $this->get('AssetAccountRef ListID');
     }
-    
+
     public function setAssetAccountApplicationID($value)
     {
         return $this->set('AssetAccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
@@ -232,32 +232,32 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('AssetAccountRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     public function setPurchaseDescription($desc)
     {
         return $this->set('PurchaseDesc', $desc);
     }
-    
+
     public function getPurchaseDescription()
     {
         return $this->get('PurchaseDesc');
     }
-    
+
     public function setPurchaseCost($cost)
     {
         return $this->set('PurchaseCost', sprintf('%01.2f', (float) $cost));
     }
-    
+
     public function getPurchaseCost()
     {
         return $this->get('PurchaseCost');
     }
-    
+
     public function setCOGSAccountListID($ListID)
     {
         return $this->set('COGSAccountRef ListID', $ListID);
     }
-    
+
     /**
      * @deprecated
      */
@@ -265,12 +265,12 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->set('COGSAccountRef FullName', $name);
     }
-    
+
     public function setCOGSAccountFullName($FullName)
     {
         return $this->setFullNameType('COGSAccountRef FullName', null, null, $FullName);
     }
-    
+
     public function setCOGSAccountApplicationID($value)
     {
         return $this->set('COGSAccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
@@ -280,12 +280,12 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('COGSAccountRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     public function getCOGSAccountListID()
     {
         return $this->get('COGSAccountRef ListID');
     }
-    
+
     /**
      * @deprecated
      */
@@ -298,17 +298,17 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('COGSAccountRef FullName');
     }
-    
+
     public function setPreferredVendorListID($ListID)
     {
         return $this->set('PrefVendorRef ListID', $ListID);
     }
-    
+
     public function setPreferredVendorName($name)
     {
         return $this->set('PrefVendorRef FullName', $name);
     }
-    
+
     public function setPreferredVendorApplicationID($value)
     {
         return $this->set('PrefVendorRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_VENDOR, QUICKBOOKS_LISTID, $value));
@@ -318,27 +318,27 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     {
         return $this->get('PrefVendorRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     public function getPreferredVendorListID()
     {
         return $this->get('PrefVendorRef ListID');
     }
-    
+
     public function getPreferredVendorName()
     {
         return $this->get('PrefVendorRef FullName');
     }
-    
+
     public function getUnitOfMeasureSetListID()
     {
         return $this->get('UnitOfMeasureSetRef ListID');
     }
-    
+
     public function getUnitOfMeasureSetFullName()
     {
         return $this->get('UnitOfMeasureSetRef FullName');
     }
-    
+
     /**
      *
      *
@@ -346,20 +346,20 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
      */
     protected function _cleanup()
     {
-        
+
         return true;
     }
-    
+
     /**
      *
      */
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -372,10 +372,10 @@ class QuickBooks_QBXML_Object_InventoryItem extends QuickBooks_QBXML_Object
     public function asQBXML($request, $version = null, $locale = null, $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $version, $locale, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

@@ -35,7 +35,7 @@ abstract class QuickBooks_Encryption
     {
         return '{' . strlen(get_class($this)) . ':' . strtolower(get_class($this)) . '}' . $str;
     }
-    
+
     /**
      * AES encryption
      *
@@ -48,9 +48,9 @@ abstract class QuickBooks_Encryption
     {
         $tmp = array_merge(range('a', 'z'), range('A', 'Z'), range(0, 9));
         shuffle($tmp);
-            
+
         $salt = substr(implode('', $tmp), 0, 32);
-            
+
         return $salt;
     }
 }

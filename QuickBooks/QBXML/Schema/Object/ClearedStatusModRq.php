@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ClearedStatusModRq extends QuickBooks_QBXML
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -39,10 +39,10 @@ class QuickBooks_QBXML_Schema_Object_ClearedStatusModRq extends QuickBooks_QBXML
   'ClearedStatusMod TxnLineID' => 'IDTYPE',
   'ClearedStatusMod ClearedStatus' => 'ENUMTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -50,10 +50,10 @@ class QuickBooks_QBXML_Schema_Object_ClearedStatusModRq extends QuickBooks_QBXML
   'ClearedStatusMod TxnLineID' => 0,
   'ClearedStatusMod ClearedStatus' => 0,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -62,7 +62,7 @@ class QuickBooks_QBXML_Schema_Object_ClearedStatusModRq extends QuickBooks_QBXML
   'ClearedStatusMod ClearedStatus' => false,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -70,10 +70,10 @@ class QuickBooks_QBXML_Schema_Object_ClearedStatusModRq extends QuickBooks_QBXML
   'ClearedStatusMod TxnLineID' => 0,
   'ClearedStatusMod ClearedStatus' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -81,10 +81,10 @@ class QuickBooks_QBXML_Schema_Object_ClearedStatusModRq extends QuickBooks_QBXML
   'ClearedStatusMod TxnLineID' => false,
   'ClearedStatusMod ClearedStatus' => false,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -96,7 +96,7 @@ class QuickBooks_QBXML_Schema_Object_ClearedStatusModRq extends QuickBooks_QBXML
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -104,7 +104,7 @@ class QuickBooks_QBXML_Schema_Object_ClearedStatusModRq extends QuickBooks_QBXML
   1 => 'ClearedStatusMod TxnLineID',
   2 => 'ClearedStatusMod ClearedStatus',
 ];
-            
+
         return $paths;
     }
 }

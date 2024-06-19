@@ -180,21 +180,21 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
      * @var resource
      */
     protected $_conn;
-    
+
     /**
      * Log level (debug, verbose, normal)
      *
      * @var integer
      */
     protected $_log_level;
-    
+
     /**
      * User-defined hook functions
      *
      * @var array
      */
     protected $_hooks;
-    
+
     /**
      * Create a new Microsoft SQL Server back-end driver
      *
@@ -205,7 +205,7 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
     {
         $config = $this->_defaults($config);
         $this->_log_level = (int) $config['log_level'];
-        
+
         if (is_resource($dsn_or_conn)) {
             $this->_conn = $dsn_or_conn;
         } else {
@@ -217,13 +217,13 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
                 'pass' => '',
                 'path' => '/quickbooks',
                 ];
-            
+
             $parse = QuickBooks_Utilities::parseDSN($dsn_or_conn, $defaults);
-            
+
             $this->_connect($parse['host'], $parse['port'], $parse['user'], $parse['pass'], substr($parse['path'], 1), $config['new_link'], $config['client_flags']);
         }
     }
-    
+
     /**
      * Merge an array of configuration options with the defaults
      *
@@ -237,10 +237,10 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
             'client_flags' => 0,
             'new_link' => true,
             ];
-        
+
         return array_merge($defaults, $config);
     }
-    
+
     /**
      * Tell whether or not the SQL driver has been initialized
      *
@@ -259,7 +259,7 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
             //$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE) => false,
             //$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE) => false,
             ];
-        
+
         $errnum = 0;
         $errmsg = '';
         $res = $this->_query("
@@ -271,21 +271,21 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
 				TABLE_TYPE = 'BASE TABLE' ", $errnum, $errmsg);
         while ($arr = $this->_fetch($res)) {
             $table = current($arr);
-            
+
             if (isset($required[$table])) {
                 $required[$table] = true;
             }
         }
-        
+
         foreach ($required as $table => $exists) {
             if (!$exists) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Connect to the database
      *
@@ -302,16 +302,16 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
     {
         mssql_min_message_severity(QUICKBOOKS_DRIVER_SQL_MSSQL_MESSAGE_LEVEL);
         mssql_min_error_severity(QUICKBOOKS_DRIVER_SQL_MSSQL_ERROR_LEVEL);
-        
+
         if ($port) {
             $this->_conn = mssql_connect($host, $user, $pass, $new_link) or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysql_error(): ' . mssql_get_last_message());
         } else {
             $this->_conn = mssql_connect($host . ':' . $port, $user, $pass, $new_link) or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysql_error(): ' . mssql_get_last_message());
         }
-        
+
         return mssql_select_db($db, $this->_conn);
     }
-    
+
     /**
      * Fetch an array from a database result set
      *
@@ -321,15 +321,15 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
     protected function _fetch($res)
     {
         $arr = mssql_fetch_assoc($res);
-        
+
         // What's going on with this...?
         foreach ($arr as $key => $value) {
             $arr[$key] = trim($value);
         }
-        
+
         return $arr;
     }
-    
+
     /**
      * Query the database
      *
@@ -340,7 +340,7 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
     {
         if ($limit) {
             $sql = str_replace([ 'SELECT ', "SELECT\n", "SELECT\r" ], 'SELECT TOP ' . (int) $limit . ' ' . "\n", $sql);
-            
+
             /*
 select * from (
  select top 10 emp_id,lname,fname from (
@@ -350,31 +350,31 @@ select * from (
  ) as newtbl order by lname desc
 ) as newtbl2 order by lname asc
             */
-            
+
             if ($offset) {
-                
+
             } else {
-                
+
             }
         } elseif ($offset) {
             // @todo Does this need to be implemented...?
         }
-        
+
         $res = mssql_query($sql, $this->_conn);
-        
+
         if (!$res) {
             $errnum = 1;
             $errmsg = mssql_get_last_message();
-            
+
             //print($sql);
-            
+
             trigger_error('Error: ' . $errmsg . "\n" . 'SQL: ' . $sql, E_USER_ERROR);
             return false;
         }
-        
+
         return $res;
     }
-    
+
     /**
      * Issue a query to the SQL server
      *
@@ -387,7 +387,7 @@ select * from (
     {
         return $this->_query($sql, $errnum, $errmsg, $offset, $limit);
     }*/
-    
+
     /**
      * Tell the number of rows the last run query affected
      *
@@ -397,7 +397,7 @@ select * from (
     {
         return mssql_rows_affected($this->_conn);
     }
-    
+
     /**
      * Tell the last inserted AUTO_INCREMENT value
      *
@@ -411,10 +411,10 @@ select * from (
             $arr = $this->_fetch($res);
             return $arr['last_insert_id'];
         }
-        
+
         return 0;
     }
-    
+
     /**
      * Rewind the result set
      *
@@ -426,10 +426,10 @@ select * from (
         if (mssql_num_rows($res) > 0) {
             return mssql_data_seek($res, 0);
         }
-        
+
         return true;
     }
-    
+
     /**
      * Tell the number of records in a result resource
      *
@@ -440,7 +440,7 @@ select * from (
     {
         return $this->_count($res);
     }
-    
+
     /**
      * Escape a string
      *
@@ -451,7 +451,7 @@ select * from (
     {
         return $this->_escape($str);
     }
-    
+
     /**
      * Fetch a record from a result set
      *
@@ -462,7 +462,7 @@ select * from (
     {
         return $this->_fetch($res);
     }
-    
+
     /**
      * Escape a string for the database
      *
@@ -473,10 +473,10 @@ select * from (
     {
         $str = str_replace("\0", '[NULL]', $str);
         $str = str_replace("'", "''", $str);
-        
+
         return $str;
     }
-    
+
     /**
      * Count the number of rows returned from the database
      *
@@ -487,7 +487,7 @@ select * from (
     {
         return mssql_num_rows($res);
     }
-    
+
     /**
      * Override for the default SQL generation functions, MSSQL-specific field generation function
      *
@@ -508,19 +508,19 @@ select * from (
         $sql = '';
         switch ($def[0]) {
             case QUICKBOOKS_DRIVER_SQL_SERIAL:
-                
+
                 $sql = $name . ' integer NOT NULL IDENTITY(1, 1) '; // AUTO_INCREMENT
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT_OR_UPDATE:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_UPDATE:
-                
+
                 $sql = $name . ' TIMESTAMP ';
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_DATETIME:
             case QUICKBOOKS_DRIVER_SQL_DATE:
                 $sql = $name . ' DATETIME ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' NULL ';
@@ -528,21 +528,21 @@ select * from (
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_VARCHAR:
                 $sql = $name . ' VARCHAR';
-                
+
                 /*if ($name == 'ListID')
                 {
                     print('LIST ID:');
                     print_r($def);
                 }*/
-                
+
                 if (!empty($def[1])) {
                     $sql .= '(' . (int) $def[1] . ') ';
                 }
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' NULL ';
@@ -554,15 +554,15 @@ select * from (
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_CHAR:
                 $sql = $name . ' CHAR';
-                
+
                 if (!empty($def[1])) {
                     $sql .= '(' . (int) $def[1] . ') ';
                 }
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' NULL ';
@@ -572,11 +572,11 @@ select * from (
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_TEXT:
                 $sql = $name . ' TEXT ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' NULL ';
@@ -586,12 +586,12 @@ select * from (
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_INTEGER:
-                
+
                 $sql = $name . ' INTEGER ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' NULL ';
@@ -599,11 +599,11 @@ select * from (
                         $sql .= ' DEFAULT ' . (int) $def[2];
                     }
                 }
-                
+
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_BOOLEAN:
                 $sql = $name . ' tinyint ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' NULL ';
@@ -613,7 +613,7 @@ select * from (
                         $sql .= ' DEFAULT 0 ';
                     }
                 }
-                
+
                 return $sql;
                 /*case QUICKBOOKS_DRIVER_SQL_INTEGER:
                     $sql = $name . ' int(10) unsigned ';
@@ -636,11 +636,11 @@ select * from (
 
                     return $sql;*/
             default:
-                
+
                 return parent::_generateFieldSchema($name, $def);
         }
     }
-    
+
     /**
      * Map a default SQL table name to a MySQL table name
      *
@@ -674,7 +674,7 @@ select * from (
                 return $table;
         }
     }
-    
+
     protected function _mapSalt($salt)
     {
         switch ($salt) {
@@ -684,13 +684,13 @@ select * from (
                 return $salt;
         }
     }
-    
+
     protected function _fields($table)
     {
         $sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'" . $table . "'";
-        
+
         $list = [];
-        
+
         $errnum = 0;
         $errmsg = '';
         $res = $this->_query($sql, $errnum, $errmsg);

@@ -10,7 +10,7 @@ class QuickBooks_IPP_Object_Employee extends QuickBooks_IPP_Object
             'TypeOf' => 'Person',
             ];
     }
-    
+
     protected function _order()
     {
         return [

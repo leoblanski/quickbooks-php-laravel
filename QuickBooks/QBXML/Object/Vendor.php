@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of the Class
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of the Class
      *
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      * Set the name of the class
      *
@@ -61,7 +61,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name of the class
      *
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-    
+
     /**
      *
      */
@@ -84,7 +84,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->set('FullName', $name);
     }
-    
+
     /**
      * Set this Class active or not
      *
@@ -93,9 +93,9 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
      */
     public function setIsActive($value)
     {
-        return $this->set('IsActive', (boolean) $value);
+        return $this->set('IsActive', (bool) $value);
     }
-    
+
     /**
      * Tell whether or not this class object is active
      *
@@ -105,17 +105,17 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('IsActive');
     }
-    
+
     public function setCompanyName($name)
     {
         return $this->set('CompanyName', $name);
     }
-    
+
     public function getCompanyName()
     {
         return $this->get('CompanyName');
     }
-    
+
     /**
      *
      *
@@ -126,7 +126,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->set('FirstName', $fname);
     }
-    
+
     /**
      *
      *
@@ -136,7 +136,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('FirstName');
     }
-    
+
     /**
      *
      *
@@ -147,54 +147,54 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->set('LastName', $lname);
     }
-    
+
     public function getLastName()
     {
         return $this->get('LastName');
     }
-    
+
     public function setMiddleName($mname)
     {
         return $this->set('MiddleName', $mname);
     }
-    
+
     public function getMiddleName()
     {
         return $this->get('MiddleName');
     }
-    
+
     public function getVendorAddress($part = null, $defaults = [])
     {
         return $this->_getXYZAddress('Vendor', '', $part, $defaults);
     }
-    
+
     public function setVendorAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $postalcode = '', $country = '', $note = '')
     {
         return $this->_setXYZAddress('Vendor', '', $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note);
     }
-    
+
     protected function _setXYZAddress($pre, $post, $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note)
     {
         for ($i = 1; $i <= 5; $i++) {
             $this->set($pre . 'Address' . $post . ' Addr' . $i, ${'addr' . $i});
         }
-        
+
         $this->set($pre . 'Address' . $post . ' City', $city);
         $this->set($pre . 'Address' . $post . ' State', $state);
         $this->set($pre . 'Address' . $post . ' PostalCode', $postalcode);
         $this->set($pre . 'Address' . $post . ' Country', $country);
         $this->set($pre . 'Address' . $post . ' Note', $note);
     }
-    
+
     protected function _getXYZAddress($pre, $post, $part = null, $defaults = [])
     {
         if (!is_null($part)) {
             return $this->get($pre . 'Address' . $post . ' ' . $part);
         }
-        
+
         return $this->getArray($pre . 'Address' . $post . ' *', $defaults);
     }
-    
+
     public function setPhone($phone)
     {
         return $this->set('Phone', $phone);
@@ -204,7 +204,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('Phone');
     }
-    
+
     /**
      * Set the alternate phone number for this customer
      *
@@ -231,7 +231,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->set('Fax', $fax);
     }
-    
+
     public function getFax()
     {
         return $this->get('Fax');
@@ -252,7 +252,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('Email');
     }
-    
+
     /**
      * Set the contact person for this customer
      *
@@ -268,7 +268,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('Contact');
     }
-    
+
     /**
      * Set the alternate contact for this customer
      *
@@ -284,7 +284,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('AltContact');
     }
-    
+
     /**
      * Set the salutation for this customer
      *
@@ -295,7 +295,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->set('Salutation', $salut);
     }
-    
+
     /**
      *
      *
@@ -305,7 +305,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('Salutation');
     }
-    
+
     /**
      *
      *
@@ -315,7 +315,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('NameOnCheck');
     }
-  
+
     /**
      * Set the payee name for this vendor
      *
@@ -326,7 +326,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->set('NameOnCheck', $name);
     }
-  
+
     /**
     	 * Set the VendorTypeRef FullName for the vendor
     	 *
@@ -337,7 +337,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->set('VendorTypeRef FullName', $type);
     }
-  
+
     /**
     	 * Get the VendorTypeRef FullName for the vendor
     	 *
@@ -347,7 +347,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return $this->get('VendorTypeRef FullName');
     }
-    
+
     /**
      * Perform any needed clean-up of the object data members
      *
@@ -357,7 +357,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this Class object
      *
@@ -368,10 +368,10 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -384,10 +384,10 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
     public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

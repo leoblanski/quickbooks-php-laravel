@@ -37,7 +37,7 @@ class QuickBooks_IPP_Service_TimeActivity extends QuickBooks_IPP_Service
     {
         return parent::_query($Context, $realm, $query);
     }
-    
+
     /**
      * Delete a timeactivity from IDS/QuickBooks
      *
@@ -47,12 +47,12 @@ class QuickBooks_IPP_Service_TimeActivity extends QuickBooks_IPP_Service
     {
         return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY, $IDType);
     }
-    
+
     public function add($Context, $realmID, $Object)
     {
         return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY, $Object);
     }
-    
+
     public function update($Context, $realmID, $IDType, $Object)
     {
         return parent::_update($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_TIMEACTIVITY, $Object, $IDType);

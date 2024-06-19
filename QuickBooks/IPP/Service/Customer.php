@@ -38,7 +38,7 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
         $xml = null;
         return parent::_findById($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $IDType, $xml, $query);
     }
-    
+
     /**
      * Get a customer by name
      *
@@ -52,7 +52,7 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
         $xml = null;
         return parent::_findByName($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $name, $xml);
     }
-    
+
     /**
      * Delete a customer from IDS/QuickBooks
      *
@@ -62,12 +62,12 @@ class QuickBooks_IPP_Service_Customer extends QuickBooks_IPP_Service
     {
         return parent::_delete($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $IDType);
     }
-    
+
     public function add($Context, $realm, $Object)
     {
         return parent::_add($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $Object);
     }
-    
+
     public function update($Context, $realm, $IDType, $Object)
     {
         return parent::_update($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $Object, $IDType);

@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'DataExtAdd';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -46,10 +46,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'OtherDataExtType' => 'ENUMTYPE',
   'DataExtValue' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -64,10 +64,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'OtherDataExtType' => 0,
   'DataExtValue' => 1024,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -83,7 +83,7 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'DataExtValue' => false,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -98,10 +98,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'OtherDataExtType' => 999.99,
   'DataExtValue' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -116,10 +116,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'OtherDataExtType' => false,
   'DataExtValue' => false,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -131,7 +131,7 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -146,7 +146,7 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   8 => 'OtherDataExtType',
   9 => 'DataExtValue',
 ];
-            
+
         return $paths;
     }
 }

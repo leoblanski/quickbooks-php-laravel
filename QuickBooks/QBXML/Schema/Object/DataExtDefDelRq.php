@@ -28,30 +28,30 @@ class QuickBooks_QBXML_Schema_Object_DataExtDefDelRq extends QuickBooks_QBXML_Sc
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
   'OwnerID' => 'GUIDTYPE',
   'DataExtName' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
   'OwnerID' => 0,
   'DataExtName' => 31,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -59,27 +59,27 @@ class QuickBooks_QBXML_Schema_Object_DataExtDefDelRq extends QuickBooks_QBXML_Sc
   'DataExtName' => false,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
   'OwnerID' => 999.99,
   'DataExtName' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
   'OwnerID' => false,
   'DataExtName' => false,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -91,14 +91,14 @@ class QuickBooks_QBXML_Schema_Object_DataExtDefDelRq extends QuickBooks_QBXML_Sc
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
   0 => 'OwnerID',
   1 => 'DataExtName',
 ];
-            
+
         return $paths;
     }
 }

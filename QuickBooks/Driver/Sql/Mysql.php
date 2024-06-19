@@ -147,21 +147,21 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
      * @var resource
      */
     protected $_conn;
-    
+
     /**
      * Log level (debug, verbose, normal)
      *
      * @var integer
      */
     protected $_log_level;
-    
+
     /**
      * User-defined hook functions
      *
      * @var array
      */
     protected $_hooks;
-    
+
     /**
      * Create a new MySQL back-end driver
      *
@@ -172,7 +172,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         $config = $this->_defaults($config);
         $this->_log_level = (int) $config['log_level'];
-        
+
         if (is_resource($dsn_or_conn)) {
             $this->_conn = $dsn_or_conn;
         } else {
@@ -184,18 +184,18 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
                 'pass' => '',
                 'path' => '/quickbooks',
                 ];
-            
+
             $parse = QuickBooks_Utilities::parseDSN($dsn_or_conn, $defaults);
-            
+
             //print_r($parse);
-            
+
             $this->_connect($parse['host'], $parse['port'], $parse['user'], $parse['pass'], substr($parse['path'], 1), $config['new_link'], $config['client_flags']);
         }
-        
+
         // Call the parent constructor too
         parent::__construct($dsn_or_conn, $config);
     }
-    
+
     /**
      * Merge an array of configuration options with the defaults
      *
@@ -209,10 +209,10 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
             'client_flags' => 0,
             'new_link' => true,
             ];
-        
+
         return array_merge($defaults, $config);
     }
-    
+
     /**
      * Tell whether or not the SQL driver has been initialized
      *
@@ -231,27 +231,27 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
             //$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE) => false,
             //$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE) => false,
             ];
-        
+
         $errnum = 0;
         $errmsg = '';
         $res = $this->_query('SHOW TABLES ', $errnum, $errmsg);
         while ($arr = $this->_fetch($res)) {
             $table = current($arr);
-            
+
             if (isset($required[$table])) {
                 $required[$table] = true;
             }
         }
-        
+
         foreach ($required as $table => $exists) {
             if (!$exists) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Connect to the database
      *
@@ -271,22 +271,22 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
         } else {
             $this->_conn = mysql_connect($host, $user, $pass, $new_link, $client_flags) or die('host: ' . $host . ', user: ' . $user . ', pass: XXXX, mysql_error(): ' . mysql_error());
         }
-            
+
         // Select the correct database
         $tmp = mysql_select_db($db, $this->_conn) or die(mysql_error());
-        
+
         // Support UTF-8 chars
         mysql_query("SET NAMES 'utf8'", $this->_conn);
-        
+
         /*
         static $connections = array();
         $connections[] = $user . ':' . $pass . '@' . $host . ':' . $port . '/' . $db;
         mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( 'MySQL connection #" . count($connections) . ", " . print_r($connections, true) . "', NOW() )", $this->_conn) or die(mysql_error());
         */
-        
+
         return $tmp;
     }
-    
+
     /**
      * Fetch an array from a database result set
      *
@@ -297,7 +297,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         return mysql_fetch_assoc($res);
     }
-    
+
     /**
      * Query the database
      *
@@ -315,11 +315,11 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
         } elseif ($offset) {
             // @todo Should this be implemented...?
         }
-        
+
         //print($sql . "\n\n");
         $res = mysql_query($sql, $this->_conn);
         //mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( '" . mysql_real_escape_string($sql) . "', NOW() ) ");
-        
+
         /*
         CREATE TABLE quickbooks_debug (
           quickbooks_debug_id int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -328,7 +328,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
           PRIMARY KEY (quickbooks_debug_id)
         ) ENGINE=MyISAM
         */
-        
+
         // Debugging...
         /*
         mysql_query("
@@ -344,20 +344,20 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
                 NOW()
             )");
         */
-        
+
         if (!$res) {
             $errnum = mysql_errno($this->_conn);
             $errmsg = mysql_error($this->_conn);
-            
+
             //print($sql);
-            
+
             trigger_error('Error Num.: ' . $errnum . "\n" . 'Error Msg.:' . $errmsg . "\n" . 'SQL: ' . $sql, E_USER_ERROR);
             return false;
         }
-        
+
         return $res;
     }
-    
+
     /**
      *
      *
@@ -366,19 +366,19 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     protected function _fields($table)
     {
         $sql = 'SHOW FIELDS FROM ' . $table;
-        
+
         $list = [];
-        
+
         $errnum = 0;
         $errmsg = '';
         $res = $this->_query($sql, $errnum, $errmsg);
         while ($arr = $this->_fetch($res)) {
             $list[] = current($arr);
         }
-        
+
         return $list;
     }
-    
+
     /**
      * Issue a query to the SQL server
      *
@@ -391,7 +391,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         return $this->_query($sql, $errnum, $errmsg, $offset, $limit);
     }*/
-    
+
     /**
      * Tell the number of rows the last run query affected
      *
@@ -401,7 +401,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         return mysql_affected_rows($this->_conn);
     }
-    
+
     /**
      * Tell the last inserted AUTO_INCREMENT value
      *
@@ -411,7 +411,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         return mysql_insert_id($this->_conn);
     }
-    
+
     /**
      * Tell the number of records in a result resource
      *
@@ -422,7 +422,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         return $this->_count($res);
     }
-    
+
     /**
      * Escape a string
      *
@@ -433,7 +433,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         return $this->_escape($str);
     }
-    
+
     /**
      * Fetch a record from a result set
      *
@@ -444,7 +444,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         return $this->_fetch($res);
     }
-    
+
     /**
      * Rewind the result set
      *
@@ -456,10 +456,10 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
         if (mysql_num_rows($res) > 0) {
             return mysql_data_seek($res, 0);
         }
-        
+
         return true;
     }
-    
+
     /**
      * Escape a string for the database
      *
@@ -470,7 +470,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         return mysql_real_escape_string($str, $this->_conn);
     }
-    
+
     /**
      * Count the number of rows returned from the database
      *
@@ -481,7 +481,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         return mysql_num_rows($res);
     }
-    
+
     /**
      * Override for the default SQL generation functions, MySQL-specific field generation function
      *
@@ -493,25 +493,25 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
     {
         switch ($def[0]) {
             case QUICKBOOKS_DRIVER_SQL_SERIAL:
-                
+
                 $sql = $name . ' int(10) unsigned NOT NULL '; // AUTO_INCREMENT
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT_OR_UPDATE:
-                
+
                 $sql = $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ';
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_UPDATE:
-                
+
                 $sql = $name . ' TIMESTAMP DEFAULT 0 ON UPDATE CURRENT_TIMESTAMP ';
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT:
-                
+
                 $sql = $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ';
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_BOOLEAN:
                 $sql = $name . ' tinyint(1) ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' DEFAULT NULL ';
@@ -521,11 +521,11 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
                         $sql .= ' DEFAULT 0 ';
                     }
                 }
-                
+
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_INTEGER:
                 $sql = $name . ' int(10) unsigned ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' DEFAULT NULL ';
@@ -535,14 +535,14 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 return $sql;
             default:
-                
+
                 return parent::_generateFieldSchema($name, $def);
         }
     }
-    
+
     /**
      * Map a default SQL table name to a MySQL table name
      *
@@ -574,7 +574,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
                 return QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX . $table;
         }
     }
-    
+
     protected function _mapSalt($salt)
     {
         switch ($salt) {
@@ -584,27 +584,27 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
                 return $salt;
         }
     }
-    
+
     protected function _generateCreateTable($name, $arr, $primary = [], $keys = [], $uniques = [], $if_not_exists = true)
     {
         $arr_sql = parent::_generateCreateTable($name, $arr, $primary, $keys, $uniques, $if_not_exists);
-        
+
         if (is_array($primary) and count($primary) == 1) {
             $primary = current($primary);
         }
-        
+
         if (is_array($primary)) {
             //ALTER TABLE  `quickbooks_ident` ADD PRIMARY KEY (  `qb_action` ,  `unique_id` )
             $arr_sql[] = 'ALTER TABLE ' . $name . ' ADD PRIMARY KEY ( ' . implode(', ', $primary) . ' ) ';
         } elseif ($primary) {
             $arr_sql[] = 'ALTER TABLE ' . $name . ' ADD PRIMARY KEY(' . $primary . '); ';
-            
+
             if ($arr[$primary][0] == QUICKBOOKS_DRIVER_SQL_SERIAL) {
                 // add the auto-increment
                 $arr_sql[] = 'ALTER TABLE ' . $name . ' CHANGE ' . $primary . ' ' . $primary . ' INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;';
             }
         }
-        
+
         foreach ($keys as $key) {
             if (is_array($key)) {		// compound key
                 $arr_sql[] = 'ALTER TABLE ' . $name . ' ADD INDEX(' . implode(', ', $key) . ');';
@@ -612,7 +612,7 @@ class QuickBooks_Driver_Sql_Mysql extends QuickBooks_Driver_Sql
                 $arr_sql[] = 'ALTER TABLE ' . $name . ' ADD INDEX(' . $key . ');';
             }
         }
-        
+
         return $arr_sql;
     }
 }

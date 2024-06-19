@@ -53,7 +53,7 @@ for ($i = 0; $i < $Report->getRowCount(); $i++) {
     for ($j = 0; $j < $Report->getColumnCount(); $j++) {
         print(str_pad($Report->getData()->getDataRow($i)->getColumnData($j), 25));
     }
-    
+
     print("\r\n");
 }
 

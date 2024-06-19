@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'CheckMod';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -124,10 +124,10 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -220,10 +220,10 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 159,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -317,7 +317,7 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -410,10 +410,10 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -506,10 +506,10 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -521,7 +521,7 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -614,7 +614,7 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   86 => 'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName',
   87 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

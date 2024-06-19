@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of the shipping method
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of the shipping method
      *
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      * Set the name of the shipping method
      *
@@ -61,7 +61,7 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name of the shipping method
      *
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-    
+
     /**
      * Set this shipping method as active or not
      *
@@ -82,7 +82,7 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     {
         return $this->setBooleanType('IsActive', $value);
     }
-    
+
     /**
      * Tell whether or not this shipping method is active
      *
@@ -92,7 +92,7 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     {
         return $this->getBooleanType('IsActive');
     }
-    
+
     /**
      *
      */
@@ -100,32 +100,32 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     {
         return $this->set('ParentRef ListID', $ListID);
     }
-    
+
     public function getParentListID()
     {
         return $this->get('ParentRef ListID');
     }
-    
+
     public function setParentFullName($value)
     {
         return $this->set('ParentRef FullName', $value);
     }
-    
+
     public function getParentFullName()
     {
         return $this->get('ParentRef FullName');
     }
-    
+
     public function setParentApplicationID($value)
     {
         return $this->set('ParentRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
     }
-    
+
     public function getParentApplicationID()
     {
         return $this->get('ParentRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     /**
      * Perform any needed clean-up of the object data members
      *
@@ -135,7 +135,7 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this shipping method object
      *
@@ -146,10 +146,10 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -162,10 +162,10 @@ class QuickBooks_QBXML_Object_ShipMethod extends QuickBooks_QBXML_Object
     public function asQBXML($request, $version = null, $locale = null, $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $version = null, $locale = null, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

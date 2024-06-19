@@ -25,7 +25,7 @@ class QuickBooks_IPP_Service_BillPaymentCreditCard extends QuickBooks_IPP_Servic
         $xml = null;
         return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_BILLPAYMENTCREDITCARD, $IDType, $domain, $xml);
     }
-    
+
     public function findAll($Context, $realmID)
     {
         $xml = null;

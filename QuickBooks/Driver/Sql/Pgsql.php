@@ -147,30 +147,30 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
      * @var resource
      */
     protected $_conn;
-    
+
     /**
      * User-defined hook functions
      *
      * @var array
      */
     protected $_hooks;
-    
+
     /**
      *
      */
     protected $_last_result;
-    
+
     /**
      *
      */
     protected $_schema;
-    
+
     /**
      * The table last used by $this->insert()
      * @var string
      */
     protected $last_insert_table;
-    
+
     /**
      * Create a new MySQL back-end driver
      *
@@ -180,7 +180,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     public function __construct($dsn_or_conn, $config)
     {
         $config = $this->_defaults($config);
-        
+
         if (is_resource($dsn_or_conn)) {
             $this->_conn = $dsn_or_conn;
         } else {
@@ -192,16 +192,16 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 'pass' => '',
                 'path' => '/quickbooks',
                 ];
-            
+
             $parse = QuickBooks_Utilities::parseDSN($dsn_or_conn, $defaults);
-            
+
             $this->_connect($parse['host'], $parse['port'], $parse['user'], $parse['pass'], substr($parse['path'], 1), $config['new_link']);
         }
 
         // Call the parent constructor too
         parent::__construct($dsn_or_conn, $config);
     }
-    
+
     /**
      * Merge an array of configuration options with the defaults
      *
@@ -213,10 +213,10 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
         $defaults = [
             'new_link' => true,
             ];
-        
+
         return array_merge($defaults, $config);
     }
-    
+
     protected function _initialized()
     {
         $required = [
@@ -230,7 +230,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
             //$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE) => false,
             //$this->_mapTableName(QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE) => false,
             ];
-        
+
         $errnum = 0;
         $errmsg = '';
         $res = $this->_query("
@@ -242,21 +242,21 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 				table_schema = '" . $this->_escape($this->_schema) . "' AND table_type = 'BASE TABLE' ", $errnum, $errmsg);
         while ($arr = $this->_fetch($res)) {
             $table = current($arr);
-            
+
             if (isset($required[$table])) {
                 $required[$table] = true;
             }
         }
-        
+
         foreach ($required as $table => $exists) {
             if (!$exists) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Connect to the database
      *
@@ -272,50 +272,50 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     protected function _connect($host, $port, $user, $pass, $db, $new_link, $client_flags = null)
     {
         $this->_schema = null;
-        
+
         $tmp = [];
-        
+
         if ($host) {
             $tmp[] = 'host=' . $host;
         }
-        
+
         if ((int) $port) {
             $tmp[] = 'port=' . (int) $port;
         }
-        
+
         if ($user) {
             $tmp[] = 'user=' . $user;
         }
-        
+
         if ($pass) {
             $tmp[] = 'password=' . $pass;
         }
-            
+
         if ($db) {
             if (false !== strpos($db, '.')) {
                 $explode = explode('.', $db);
-                
+
                 //$tmp[] = 'schema=' . $explode[0];
-                
+
                 $this->_schema = $explode[1];
-                
+
                 $tmp[] = 'dbname=' . $explode[0];
             } else {
                 $tmp[] = 'dbname=' . $db;
             }
         }
-        
+
         $str = implode(' ', $tmp);
-        
+
         if ($new_link) {
             $this->_conn = pg_connect($str, PGSQL_CONNECT_FORCE_NEW);
         } else {
             $this->_conn = pg_connect($str);
         }
-        
+
         if ($this->_schema) {
             //print('SETTING HERE: [' . $this->_schema . ']');
-            
+
             $errnum = 0;
             $errmsg = null;
             $this->_query('SET search_path TO ' . $this->_escape($this->_schema) . ', public', $errnum, $errmsg);
@@ -323,20 +323,20 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
             // Default to using the 'public' schema
             $this->_schema = 'public';
         }
-        
+
         //$errnum = 0;
         //$errmsg = null;
         //print_r($this->_fetch($this->_query("SHOW search_path", $errnum, $errmsg)));
         //die('SCHEMA IS: ' . $this->_schema);
     }
-    
+
     /**
      *
      */
     protected function _fields($table)
     {
         $list = [];
-        
+
         $sql = "
 			SELECT 
 				column_name 
@@ -344,17 +344,17 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
 				information_schema.columns
 			WHERE
 				table_name = '" . $this->_escape($table) . "' ";
-        
+
         $errnum = 0;
         $errmsg = '';
         $res = $this->_query($sql, $errnum, $errmsg);
         while ($arr = $this->_fetch($res)) {
             $list[] = current($arr);
         }
-        
+
         return $list;
     }
-    
+
     /**
      * Fetch an array from a database result set
      *
@@ -364,7 +364,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     protected function _fetch($res, $print = false)
     {
         $arr = pg_fetch_assoc($res);
-        
+
         $booleans = [
             QUICKBOOKS_DRIVER_SQL_FIELD_TO_SYNC,
             QUICKBOOKS_DRIVER_SQL_FIELD_TO_VOID,
@@ -374,7 +374,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
             QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_DELETED,
             QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_VOIDED
             ];
-        
+
         if ($arr) {
             foreach ($arr as $key => $value) {
                 if (in_array($key, $booleans)) {
@@ -385,16 +385,16 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                     } else {
                         $value = null;
                     }
-                    
+
                     $arr[$key] = $value;
                 }
             }
         }
-        
+
         if (is_array($arr)) {
             reset($arr);
         }
-        
+
         /*
         if ($print)
         {
@@ -403,10 +403,10 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
             die('}} OUTPUT STOP');
         }
         */
-        
+
         return $arr;
     }
-    
+
     /**
      * Query the database
      *
@@ -417,7 +417,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     {
         if (strtoupper(substr(trim($sql), 0, 6)) != 'UPDATE') {
             // PostgreSQL does not support LIMIT for UPDATE queries
-            
+
             if ($limit) {
                 if ($offset) {
                     $sql .= ' LIMIT ' . (int) $offset . ', ' . (int) $limit;
@@ -428,7 +428,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 // @todo Should this be implemented...?
             }
         }
-        
+
         //
         $boolean_fixes = [
             'qbsql_to_skip != 1' => 		' qbsql_to_skip <> TRUE ',
@@ -439,25 +439,25 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
             'qbsql_to_void = 1' => 			' qbsql_to_void = TRUE ',
             'qbsql_flag_voided != 1' => 	' qbsql_flag_voided <> TRUE ',
             ];
-        
+
         $sql = str_replace(array_keys($boolean_fixes), array_values($boolean_fixes), $sql);
-        
+
         // Run the query
         $res = pg_query($this->_conn, $sql);
-        
+
         $this->_last_result = $res;
-        
+
         if (!$res) {
             $errnum = -1;
             $errmsg = pg_last_error($this->_conn);
-            
+
             trigger_error('PostgreSQL Error: ' . $errmsg . ', SQL: ' . $sql, E_USER_ERROR);
             return false;
         }
-        
+
         return $res;
     }
-    
+
     /**
      * Issue a query to the SQL server
      *
@@ -470,7 +470,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     {
         return $this->_query($sql, $errnum, $errmsg, $offset, $limit);
     }*/
-    
+
     /**
      * Tell the number of rows the last run query affected
      *
@@ -480,7 +480,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     {
         return pg_affected_rows($this->_last_result);
     }
-    
+
     /**
      * Tell the last inserted AUTO_INCREMENT value
      *
@@ -490,7 +490,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     {
         $errnum = 0;
         $errmsg = '';
-        
+
         // get the current table's primary key
         $sql = "SELECT               
                 pg_attribute.attname, 
@@ -502,21 +502,21 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 pg_attribute.attrelid = pg_class.oid AND 
                 pg_attribute.attnum = any(pg_index.indkey)
                 AND indisprimary";
-        
+
         $res = $this->query($sql, $errnum, $errmsg);
-        
+
         $sequence = pg_fetch_result($res, 0, 0);
-        
+
         // get the last ID
         $sql = "select currval(pg_get_serial_sequence('" . $this->last_insert_table . "', '" . $sequence . "'));";
-        
+
         $res = $this->query($sql, $errnum, $errmsg);
-        
+
         $last_insert_id = pg_fetch_result($res, 0, 0);
-        
+
         return $last_insert_id;
     }
-    
+
     /**
      * Tell the number of records in a result resource
      *
@@ -527,7 +527,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     {
         return $this->_count($res);
     }
-    
+
     /**
      * Escape a string
      *
@@ -538,7 +538,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     {
         return $this->_escape($str);
     }
-    
+
     /**
      * Fetch a record from a result set
      *
@@ -549,7 +549,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     {
         return $this->_fetch($res);
     }
-    
+
     /**
      * Rewind the result set
      *
@@ -561,10 +561,10 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
         if (pg_num_rows($res) > 0) {
             pg_fetch_assoc($res, 0);
         }
-        
+
         return true;
     }
-    
+
     /**
      * Escape a string for the database
      *
@@ -575,7 +575,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     {
         return pg_escape_string($this->_conn, $str);
     }
-    
+
     /**
      * Count the number of rows returned from the database
      *
@@ -586,7 +586,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     {
         return pg_num_rows($res);
     }
-    
+
     /**
      * Map a default SQL table name to a PostgreSQL table name
      *
@@ -624,7 +624,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 return QUICKBOOKS_DRIVER_SQL_PGSQL_PREFIX . $table;
         }
     }
-    
+
     /**
      * Map an encryption salt to a PostgreSQL-specific encryption salt
      *
@@ -640,7 +640,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 return $salt;
         }
     }
-    
+
     /**
      * Override for the default SQL generation functions, PostgreSQL-specific field generation function
      *
@@ -653,7 +653,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
         switch ($def[0]) {
             case QUICKBOOKS_DRIVER_SQL_INTEGER:
                 $sql = '"' . $name . '" INTEGER ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' DEFAULT NULL ';
@@ -661,18 +661,18 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                         $sql .= ' DEFAULT ' . (int) $def[2];
                     }
                 }
-                
+
                 break;
             case QUICKBOOKS_DRIVER_SQL_DECIMAL:
                 $sql = '"' . $name . '" DECIMAL ';
-        
+
                 if (!empty($def[1])) {
                     $tmp = explode(',', $def[1]);
                     if (count($tmp) == 2) {
                         $sql .= '(' . (int) $tmp[0] . ',' . (int) $tmp[1] . ') ';
                     }
                 }
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' NULL ';
@@ -684,15 +684,15 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                         }
                     }
                 }
-                
+
                 if (isset($tmp)) {
                     unset($tmp);
                 }
-                
+
                 break;
             case QUICKBOOKS_DRIVER_SQL_FLOAT:
                 $sql = '"' . $name . '" FLOAT ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' NULL ';
@@ -700,11 +700,11 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                         $sql .= ' DEFAULT ' . sprintf('%01.2f', (float) $def[2]);
                     }
                 }
-                
+
                 break;
             case QUICKBOOKS_DRIVER_SQL_BOOLEAN:
                 $sql = '"' . $name . '" BOOLEAN ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' DEFAULT NULL ';
@@ -716,20 +716,20 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 break;
             case QUICKBOOKS_DRIVER_SQL_SERIAL:
                 $sql = '"' . $name . '" SERIAL NOT NULL '; // AUTO_INCREMENT
-                
+
                 return $sql;
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT_OR_UPDATE:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_UPDATE:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT:
             case QUICKBOOKS_DRIVER_SQL_DATETIME:
-                
+
                 $sql = '"' . $name . '" timestamp without time zone ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' DEFAULT NULL ';
@@ -739,7 +739,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 /*case QUICKBOOKS_DRIVER_SQL_BOOLEAN:
                     $sql = $name . ' tinyint(1) ';
 
@@ -763,17 +763,17 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 // no break
             case QUICKBOOKS_DRIVER_SQL_VARCHAR:
                 $sql = '"' . $name . '" VARCHAR';
-                
+
                 /*if ($name == 'ListID')
                 {
                     print('LIST ID:');
                     print_r($def);
                 }*/
-                
+
                 if (!empty($def[1])) {
                     $sql .= '(' . (int) $def[1] . ') ';
                 }
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' DEFAULT NULL ';
@@ -785,15 +785,15 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 break;
             case QUICKBOOKS_DRIVER_SQL_CHAR:
                 $sql = '"' . $name . '" CHAR';
-                
+
                 if (!empty($def[1])) {
                     $sql .= '(' . (int) $def[1] . ') ';
                 }
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' DEFAULT NULL ';
@@ -803,12 +803,12 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 break;
             default:
             case QUICKBOOKS_DRIVER_SQL_TEXT:
                 $sql = '"' . $name . '" TEXT ';
-                
+
                 if (isset($def[2])) {
                     if (strtolower($def[2]) == 'null') {
                         $sql .= ' DEFAULT NULL ';
@@ -818,12 +818,12 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 } else {
                     $sql .= ' NOT NULL ';
                 }
-                
+
                 break;
         }
         return $sql;
     }
-    
+
     /**
      * Override for the default SQL generation functions, PostgreSQL-specific field generation function
      *
@@ -836,11 +836,11 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     protected function _generateCreateTable($name, $arr, $primary = [], $keys = [], $uniques = [], $if_not_exists = true)
     {
         $arr_sql = parent::_generateCreateTable('"' . $name . '"', $arr, $primary, $keys, $if_not_exists);
-        
+
         if (is_array($primary) and count($primary) == 1) {
             $primary = current($primary);
         }
-        
+
         if (is_array($primary)) {
             //ALTER TABLE  `quickbooks_ident` ADD PRIMARY KEY (  `qb_action` ,  `unique_id` )
             //$arr_sql[] = 'ALTER TABLE ' . $name . ' ADD PRIMARY KEY ( ' . implode(', ', $primary) . ' ) ';
@@ -848,7 +848,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
             $arr_sql[] = 'ALTER TABLE ONLY "' . $name . '" 
 				ADD CONSTRAINT "' . $name . '_pkey" PRIMARY KEY ("' . $primary . '");';
         }
-        
+
         foreach ($keys as $key) {
             if (is_array($key)) {		// compound key
                 $arr_sql[] = 'CREATE INDEX "' . implode('_', $key) . '_' . $name . '_index" ON "' . $name . '" USING btree ("' . implode('", "', $key) . '")';
@@ -856,10 +856,10 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
                 $arr_sql[] = 'CREATE INDEX "' . $key . '_' . $name . '_index" ON "' . $name . '" USING btree ("' . $key . '")';
             }
         }
-        
+
         return $arr_sql;
     }
-    
+
     public function foldsToLower()
     {
         return true;
@@ -875,7 +875,7 @@ class QuickBooks_Driver_Sql_Pgsql extends QuickBooks_Driver_Sql
     public function insert($table, $object, $discov_and_resync = true)
     {
         $this->last_insert_table = $table;
-        
+
         return parent::insert($table, $object, $discov_and_resync);
     }
 }

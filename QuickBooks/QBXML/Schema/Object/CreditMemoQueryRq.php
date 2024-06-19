@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_CreditMemoQueryRq extends QuickBooks_QBXML_
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -61,10 +61,10 @@ class QuickBooks_QBXML_Schema_Object_CreditMemoQueryRq extends QuickBooks_QBXML_
   'IncludeRetElement' => 'STRTYPE',
   'OwnerID' => 'GUIDTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -94,10 +94,10 @@ class QuickBooks_QBXML_Schema_Object_CreditMemoQueryRq extends QuickBooks_QBXML_
   'IncludeRetElement' => 50,
   'OwnerID' => 0,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -128,7 +128,7 @@ class QuickBooks_QBXML_Schema_Object_CreditMemoQueryRq extends QuickBooks_QBXML_
   'OwnerID' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -158,10 +158,10 @@ class QuickBooks_QBXML_Schema_Object_CreditMemoQueryRq extends QuickBooks_QBXML_
   'IncludeRetElement' => 4,
   'OwnerID' => 2,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -191,10 +191,10 @@ class QuickBooks_QBXML_Schema_Object_CreditMemoQueryRq extends QuickBooks_QBXML_
   'IncludeRetElement' => true,
   'OwnerID' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -206,7 +206,7 @@ class QuickBooks_QBXML_Schema_Object_CreditMemoQueryRq extends QuickBooks_QBXML_
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -236,7 +236,7 @@ class QuickBooks_QBXML_Schema_Object_CreditMemoQueryRq extends QuickBooks_QBXML_
   23 => 'IncludeRetElement',
   24 => 'OwnerID',
 ];
-            
+
         return $paths;
     }
 }

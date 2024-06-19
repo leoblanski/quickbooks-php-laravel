@@ -30,36 +30,36 @@ class QuickBooks_Encryption_Blowfish extends QuickBooks_Encryption
 {
     public function __construct()
     {
-        
+
     }
-    
+
     public function setIV()
     {
-        
+
     }
-    
+
     public function getIV()
     {
-        
+
     }
-    
+
     public function setMode()
     {
-        
+
     }
-    
+
     public function getMode()
     {
-        
+
     }
-    
+
     public function encrypt()
     {
-        
+
     }
-    
+
     public function decrypt()
     {
-        
+
     }
 }

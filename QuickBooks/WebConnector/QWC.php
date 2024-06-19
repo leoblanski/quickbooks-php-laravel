@@ -39,23 +39,23 @@ class QuickBooks_WebConnector_QWC
     protected $_appdisplayname;
     protected $_appuniquename;
     protected $_appid;
-    
-    const SUPPORTED_DEFAULT = '';
-    const SUPPORTED_ALL = '0x0';
-    const SUPPORTED_SIMPLESTART = '0x1';
-    const SUPPORTED_PRO = '0x2';
-    const SUPPORTED_PREMIER = '0x4';
-    const SUPPORTED_ENTERPRISE = '0x8';
 
-    const PERSONALDATA_DEFAULT = '';
-    const PERSONALDATA_NOTNEEDED = 'pdpNotNeeded';
-    const PERSONALDATA_OPTIONAL = 'pdpOptional';
-    const PERSONALDATA_REQUIRED = 'pdpRequired';
+    public const SUPPORTED_DEFAULT = '';
+    public const SUPPORTED_ALL = '0x0';
+    public const SUPPORTED_SIMPLESTART = '0x1';
+    public const SUPPORTED_PRO = '0x2';
+    public const SUPPORTED_PREMIER = '0x4';
+    public const SUPPORTED_ENTERPRISE = '0x8';
 
-    const UNATTENDEDMODE_DEFAULT = '';
-    const UNATTENDEDMODE_REQUIRED = 'umpRequired';
-    const UNATTENDEDMODE_OPTIONAL = 'umpOptional';
-    
+    public const PERSONALDATA_DEFAULT = '';
+    public const PERSONALDATA_NOTNEEDED = 'pdpNotNeeded';
+    public const PERSONALDATA_OPTIONAL = 'pdpOptional';
+    public const PERSONALDATA_REQUIRED = 'pdpRequired';
+
+    public const UNATTENDEDMODE_DEFAULT = '';
+    public const UNATTENDEDMODE_REQUIRED = 'umpRequired';
+    public const UNATTENDEDMODE_OPTIONAL = 'umpOptional';
+
     /**
      * Generate a valid QuickBooks Web Connector *.QWC file
      *
@@ -115,7 +115,7 @@ class QuickBooks_WebConnector_QWC
         $this->_appuniquename = $appuniquename;
         $this->_appid = $appid;
     }
-    
+
     public function http($filename = 'quickbooks.qwc')
     {
         header('Content-type: text/xml');
@@ -123,10 +123,10 @@ class QuickBooks_WebConnector_QWC
         print($this->generate());
         return true;
     }
-    
+
     public function save($where)
     {
-        
+
     }
 
     /**
@@ -153,7 +153,7 @@ class QuickBooks_WebConnector_QWC
         $appdisplayname = $this->_appdisplayname;
         $appuniquename = $this->_appuniquename;
         $appid = $this->_appid;
-    
+
         /*
         AppDisplayName
         AppUniqueName
@@ -175,17 +175,17 @@ class QuickBooks_WebConnector_QWC
             - umpOptional
         CertURL
         */
-        
+
         if ($run_every_n_seconds and
             !is_numeric($run_every_n_seconds)) {
             $run_every_n_seconds = QuickBooks_Utilities::intervalToSeconds($run_every_n_seconds);
         }
-            
+
         $ownerid = '{' . trim($ownerid, '{}') . '}';
         $fileid = '{' . trim($fileid, '{}') . '}';
-            
+
         $xml = '';
-        
+
         $xml .= '<?xml version="1.0"?>' . QUICKBOOKS_CRLF;
         $xml .= '<QBWCXML>' . QUICKBOOKS_CRLF;
         $xml .= "\t" . '<AppName>' . htmlspecialchars($name) . '</AppName>' . QUICKBOOKS_CRLF;
@@ -197,33 +197,33 @@ class QuickBooks_WebConnector_QWC
         $xml .= "\t" . '<OwnerID>' . $ownerid . '</OwnerID>' . QUICKBOOKS_CRLF;
         $xml .= "\t" . '<FileID>' . $fileid . '</FileID>' . QUICKBOOKS_CRLF;
         $xml .= "\t" . '<QBType>' . $qbtype . '</QBType>' . QUICKBOOKS_CRLF;
-            
+
         if ($personaldata != QuickBooks_WebConnector_QWC::PERSONALDATA_DEFAULT) {
             $xml .= "\t" . '<PersonalDataPref>' . $personaldata . '</PersonalDataPref>' . QUICKBOOKS_CRLF;
         }
-            
+
         if ($unattendedmode != QuickBooks_WebConnector_QWC::UNATTENDEDMODE_DEFAULT) {
             $xml .= "\t" . '<UnattendedModePref>' . $unattendedmode . '</UnattendedModePref>' . QUICKBOOKS_CRLF;
         }
-            
+
         if ($authflags != QuickBooks_WebConnector_QWC::SUPPORTED_DEFAULT) {
             $xml .= "\t" . '<AuthFlags>' . $authflags . '</AuthFlags>' . QUICKBOOKS_CRLF;
         }
-            
+
         if ($notify) {
             $xml .= "\t" . '<Notify>true</Notify>' . QUICKBOOKS_CRLF;
         } else {
             $xml .= "\t" . '<Notify>false</Notify>' . QUICKBOOKS_CRLF;
         }
-            
+
         if ($appdisplayname) {
             $xml .= "\t" . '<AppDisplayName>' . $appdisplayname . '</AppDisplayName>' . QUICKBOOKS_CRLF;
         }
-            
+
         if ($appuniquename) {
             $xml .= "\t" . '<AppUniqueName>' . $appuniquename . '</AppUniqueName>' . QUICKBOOKS_CRLF;
         }
-            
+
         if ((int) $run_every_n_seconds > 0 and (int) $run_every_n_seconds < 60) {
             $xml .= "\t" . '<Scheduler>' . QUICKBOOKS_CRLF;
             $xml .= "\t" . "\t" . '<RunEveryNSeconds>' . (int) $run_every_n_seconds . '</RunEveryNSeconds>' . QUICKBOOKS_CRLF;
@@ -233,18 +233,18 @@ class QuickBooks_WebConnector_QWC
             $xml .= "\t" . "\t" . '<RunEveryNMinutes>' . floor($run_every_n_seconds / 60) . '</RunEveryNMinutes>' . QUICKBOOKS_CRLF;
             $xml .= "\t" . '</Scheduler>' . QUICKBOOKS_CRLF;
         }
-            
+
         if ($readonly) {
             $xml .= "\t" . '<IsReadOnly>true</IsReadOnly>' . QUICKBOOKS_CRLF;
         } else {
             $xml .= "\t" . '<IsReadOnly>false</IsReadOnly>' . QUICKBOOKS_CRLF;
         }
-            
+
         $xml .= '</QBWCXML>';
-            
+
         return trim($xml);
     }
-    
+
     /**
      * Alias of QuickBooks_QWC::generate()
      */
@@ -252,7 +252,7 @@ class QuickBooks_WebConnector_QWC
     {
         return $this->generate();
     }
-        
+
     /**
      * Generate a random File ID string
      *
@@ -265,7 +265,7 @@ class QuickBooks_WebConnector_QWC
     {
         return QuickBooks_WebConnector_QWC::_guid($surround);
     }
-    
+
     /**
      * Generate a random GUID string
      *
@@ -276,7 +276,7 @@ class QuickBooks_WebConnector_QWC
     {
         return QuickBooks_WebConnector_QWC::_guid($surround);
     }
-    
+
     /**
      * Generate a GUID
      *
@@ -301,10 +301,10 @@ class QuickBooks_WebConnector_QWC
         if ($surround) {
             $guid = '{' . $guid . '}';
         }
-            
+
         return $guid;
     }
-    
+
     /**
      * Generate a random Owner ID string
      *

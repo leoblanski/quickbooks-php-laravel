@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -45,10 +45,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel TxnLineID' => 'IDTYPE',
   'DataExtDel OtherDataExtType' => 'ENUMTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -62,10 +62,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel TxnLineID' => 0,
   'DataExtDel OtherDataExtType' => 0,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -80,7 +80,7 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel OtherDataExtType' => false,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -94,10 +94,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel TxnLineID' => 3,
   'DataExtDel OtherDataExtType' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -111,10 +111,10 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel TxnLineID' => false,
   'DataExtDel OtherDataExtType' => false,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -126,7 +126,7 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -140,7 +140,7 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   7 => 'DataExtDel TxnLineID',
   8 => 'DataExtDel OtherDataExtType',
 ];
-            
+
         return $paths;
     }
 }

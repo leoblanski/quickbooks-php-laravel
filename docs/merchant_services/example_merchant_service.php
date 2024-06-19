@@ -168,7 +168,7 @@ $amount = 295.0;
 if ($Transaction = $MS->authorize($Card, $amount)) {
     print('Card authorized!' . "\n");
     print_r($Transaction);
-    
+
     // 	Every time the MerchantService class returns a $Transaction object to you,
     // 	you should store the returned $Transaction. You'll need the returned
     // 	$Transaction object (or at the very least the data contained therein) in
@@ -177,34 +177,34 @@ if ($Transaction = $MS->authorize($Card, $amount)) {
     //
     // 	There are several convienence methods to convert the $Transaction object to
     // 	more storage-friendly formats if you would prefer to use these:
-    
+
     // Get the transaction as a string which can later be turned back into a transaction object
     $str = $Transaction->serialize();
     print('Serialized transaction: ' . $str . "\n\n");
-    
+
     // Now convert it back to a transaction object
     $Transaction = QuickBooks_MerchantService_Transaction::unserialize($str);
-    
+
     // ... maybe you'd rather convert it to an array?
     $arr = $Transaction->toArray();
     print('Array transaction: ');
     print_r($arr);
     print("\n\n");
-    
+
     // ... and back again?
     $Transaction = QuickBooks_MerchantService_Transaction::fromArray($arr);
-    
+
     // ... or an XML document?
     $xml = $Transaction->toXML();
     print('XML transaction: ' . $xml . "\n\n");
-    
+
     // ... and back again?
     $Transaction = QuickBooks_MerchantService_Transaction::fromXML($xml);
-    
+
     // How about XML that can be used in a qbXML SalesReceiptAdd request?
     $qbxml = $Transaction->toQBXML();
     print('qbXML transaction info: ' . $qbxml . "\n\n");
-    
+
     // Now that that card has been authorized, let's actually capture the funds.
     //
     // You can just pass in the transaction if you want to capture for the same
@@ -213,14 +213,14 @@ if ($Transaction = $MS->authorize($Card, $amount)) {
     // the authorization.
     //
     // If you want to capture more than the authorization was for, use charge().
-    
+
     // Only capture $50.00
     // $amount = 50.0;
-    
+
     if ($Transaction = $MS->capture($Transaction, $amount)) {
         print('Card captured!' . "\n");
         print_r($Transaction);
-        
+
         // Let's print that qbXML bit again because it'll have more data now
         $qbxml = $Transaction->toQBXML();
         print('qbXML transaction info: ' . $qbxml . "\n\n");
@@ -238,10 +238,10 @@ exit;
 if ($Transaction = $MS->charge($Card, $amount)) {
     print('Card charged!' . "\n");
     print_r($Transaction);
-    
+
     print('Transaction array: ' . "\n");
     print_r($Transaction->toArray());
-    
+
     print("\n");
 } else {
     print('An error occured during charge: ' . $MS->errorNumber() . ': ' . $MS->errorMessage() . "\n");

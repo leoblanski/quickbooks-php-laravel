@@ -46,7 +46,7 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
     {
         return $this->set('ItemRef FullName', $name);
     }
-    
+
     //Use this one!
     public function setItemFullName($FullName)
     {
@@ -62,7 +62,7 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
     {
         return $this->get('ItemRef FullName');
     }
-    
+
     public function getItemFullName()
     {
         return $this->get('ItemRef FullName');
@@ -72,7 +72,7 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
     {
         return $this->setDesc($descrip);
     }
-    
+
     public function getDescription()
     {
         return $this->getDesc();
@@ -87,7 +87,7 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
     {
         return $this->set('Quantity', (float) $quan);
     }
-    
+
     public function getQuantity()
     {
         return $this->get('Quantity');
@@ -124,7 +124,7 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
     public function asXML($root = null, $parent = null, $object = null)
     {
         $this->_cleanup();
-        
+
         switch ($parent) {
             case QUICKBOOKS_ADD_CREDITMEMO:
                 $root = 'CreditMemoLineAdd';
@@ -135,7 +135,7 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
                 $parent = null;
                 break;
         }
-        
+
         return parent::asXML($root, $parent, $object);
     }
 
@@ -148,10 +148,10 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
     public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      * Tell the type of object this is
      *

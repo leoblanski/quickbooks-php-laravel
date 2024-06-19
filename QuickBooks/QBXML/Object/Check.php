@@ -51,7 +51,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: AccountRef ListID, datatype:
-    
+
     /**
      * Set the AccountRef ListID for the Check
      *
@@ -90,7 +90,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: AccountRef FullName, datatype:
-    
+
     /**
      * Set the AccountRef FullName for the Check
      *
@@ -113,7 +113,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: PayeeEntityRef ListID, datatype:
-    
+
     /**
      * Set the PayeeEntityRef ListID for the Check
      *
@@ -152,7 +152,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: PayeeEntityRef FullName, datatype:
-    
+
     /**
      * Set the PayeeEntityRef FullName for the Check
      *
@@ -175,7 +175,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: RefNumber, datatype: STRTYPE
-    
+
     /**
      * Set the RefNumber for the Check
      *
@@ -198,7 +198,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: TxnDate, datatype: DATETYPE
-    
+
     /**
      * Set the TxnDate for the Check
      *
@@ -237,7 +237,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
         return $this->getTxnDate($format = null);
     }
     // Path: Memo, datatype: STRTYPE
-    
+
     /**
      * Set the Memo for the Check
      *
@@ -260,7 +260,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: IsToBePrinted, datatype: BOOLTYPE
-    
+
     /**
      * Set the IsToBePrinted for the Check
      *
@@ -283,7 +283,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: IsTaxIncluded, datatype: BOOLTYPE
-    
+
     /**
      * Set the IsTaxIncluded for the Check
      *
@@ -306,7 +306,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: SalesTaxCodeRef ListID, datatype:
-    
+
     /**
      * Set the SalesTaxCodeRef ListID for the Check
      *
@@ -345,7 +345,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     }
 
     // Path: SalesTaxCodeRef FullName, datatype:
-    
+
     /**
      * Set the SalesTaxCodeRef FullName for the Check
      *
@@ -376,17 +376,17 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     {
         return $this->addListItem('ItemGroupLine', $obj);
     }
-    
+
     public function addExpenseLine($obj)
     {
         return $this->addListItem('ExpenseLine', $obj);
     }
-    
+
     public function addAddCheckToTxn($obj)
     {
         return $this->addListItem('AddCheckToTxn', $obj);
     }
-    
+
     public function setAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $postalcode = '', $country = '', $note = '')
     {
         return $this->_setAddress('', $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note);
@@ -408,41 +408,41 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     {
         switch ($request) {
             case 'CheckAddRq':
-                
+
                 if (isset($this->_object['ItemLine'])) {
                     $this->_object['ItemLineAdd'] = $this->_object['ItemLine'];
                 }
-                
+
                 if (isset($this->_object['ItemGroupLine'])) {
                     $this->_object['ItemGroupLineAdd'] = $this->_object['ItemGroupLine'];
                 }
-                
+
                 if (isset($this->_object['ExpenseLine'])) {
                     $this->_object['ExpenseLineAdd'] = $this->_object['ExpenseLine'];
                 }
-                
+
                 if (isset($this->_object['AddCheckToTxn'])) {
                     $this->_object['AddCheckToTxnAdd'] = $this->_object['AddCheckToTxn'];
                 }
-                
+
                 break;
             case 'CheckModRq':
-                
+
                 break;
         }
-        
+
         return parent::asList($request);
     }
-    
+
     public function asXML($root = null, $parent = null, $object = null)
     {
         if (is_null($object)) {
             $object = $this->_object;
         }
-        
+
         switch ($root) {
             case QUICKBOOKS_ADD_CHECK:
-                
+
                 if (!empty($object['ItemLineAdd'])) {
                     foreach ($object['ItemLineAdd'] as $key => $obj) {
                         $obj->setOverride('ItemLineAdd');
@@ -454,19 +454,19 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
                         $obj->setOverride('ItemGroupLineAdd');
                     }
                 }
-                
+
                 if (!empty($object['ExpenseLineAdd'])) {
                     foreach ($object['ExpenseLineAdd'] as $key => $obj) {
                         $obj->setOverride('ExpenseLineAdd');
                     }
                 }
-                
+
                 if (!empty($object['ApplyCheckToTxnAdd'])) {
                     foreach ($object['ApplyCheckToTxnAdd'] as $key => $obj) {
                         $obj->setOverride('ApplyCheckToTxnAdd');
                     }
                 }
-                
+
                 break;
             case QUICKBOOKS_MOD_CHECK:
                 if (isset($object['ItemLine'])) {
@@ -474,10 +474,10 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
                 }
                 break;
         }
-        
+
         return parent::asXML($root, $parent, $object);
     }
-    
+
     /**
      *
      */
@@ -486,7 +486,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
         $this->_cleanup();
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      *
      *
@@ -500,15 +500,15 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
         $this->_cleanup();
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      *
      */
     protected function _cleanup()
     {
-        
+
     }
-    
+
     /**
      * Tell what type of object this is
      *

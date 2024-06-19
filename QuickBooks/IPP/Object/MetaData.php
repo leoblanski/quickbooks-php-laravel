@@ -8,7 +8,7 @@ class QuickBooks_IPP_Object_MetaData extends QuickBooks_IPP_Object
     {
         return $this->getDateType('LastUpdatedTime', $format);
     }
-    
+
     protected function _order()
     {
         return [

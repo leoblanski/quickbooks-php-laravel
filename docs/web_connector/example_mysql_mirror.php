@@ -70,20 +70,20 @@ $dsn = 'mysql://root:root@localhost/quickbooks_sql';
 //	schema and set up the username/password, etc.)
 if (!QuickBooks_Utilities::initialized($dsn)) {
     header('Content-Type: text/plain');
-    
+
     // It takes a really long time to build the schema...
     set_time_limit(0);
-    
+
     $driver_options = [
         ];
-        
+
     $init_options = [
         'quickbooks_sql_enabled' => true,
         ];
-        
+
     QuickBooks_Utilities::initialize($dsn, $driver_options, $init_options);
     QuickBooks_Utilities::createUser($dsn, $username, $password);
-    
+
     exit;
 }
 
@@ -183,19 +183,19 @@ $ops = [
     QUICKBOOKS_OBJECT_SALESTAXCODE,
     QUICKBOOKS_OBJECT_CUSTOMER,
     QUICKBOOKS_OBJECT_VENDOR,
-    
+
     QUICKBOOKS_OBJECT_INVENTORYITEM,
-    
+
     QUICKBOOKS_OBJECT_TEMPLATE,
-    
+
     QUICKBOOKS_OBJECT_CUSTOMERTYPE,
     QUICKBOOKS_OBJECT_VENDORTYPE,
     QUICKBOOKS_OBJECT_ESTIMATE,
     QUICKBOOKS_OBJECT_INVOICE,
     QUICKBOOKS_OBJECT_CLASS,
-    
+
     QUICKBOOKS_OBJECT_INVOICE,
-    
+
     /*
     QUICKBOOKS_OBJECT_INVENTORYITEM,
     QUICKBOOKS_OBJECT_NONINVENTORYITEM,
@@ -206,9 +206,9 @@ $ops = [
     QUICKBOOKS_OBJECT_PRICELEVEL,
     QUICKBOOKS_OBJECT_ITEM,
     */
-    
+
     QUICKBOOKS_OBJECT_PAYMENTMETHOD,
-    
+
     QUICKBOOKS_OBJECT_COMPANY,
     QUICKBOOKS_OBJECT_HOST,
     QUICKBOOKS_OBJECT_PREFERENCES,

@@ -32,7 +32,7 @@ class QuickBooks_WebConnector_Result_ClientVersion extends QuickBooks_WebConnect
      * @var string	The response string
      */
     public $clientVersionResult;
-    
+
     /**
      * Create a new result object
      *

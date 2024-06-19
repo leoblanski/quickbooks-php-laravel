@@ -35,27 +35,27 @@ class QuickBooks_QBXML_Object_Invoice_SalesTaxLine extends QuickBooks_QBXML_Obje
     {
         parent::__construct($arr);
     }
-    
+
     public function setAmount($amount)
     {
         return $this->setAmountType('Amount', $amount);
     }
-    
+
     public function setRate($rate)
     {
         return $this->set('Rate', $rate);
     }
-    
+
     public function setAccountListID($ListID)
     {
         return $this->set('AccountRef ListID', $ListID);
     }
-    
+
     public function setAccountName($name)
     {
         return $this->set('AccountRef FullName', $name);
     }
-        
+
     /**
      *
      *
@@ -63,20 +63,20 @@ class QuickBooks_QBXML_Object_Invoice_SalesTaxLine extends QuickBooks_QBXML_Obje
      */
     protected function _cleanup()
     {
-        
+
         return true;
     }
-    
+
     /**
      *
      */
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     public function asXML($root = null, $parent = null, $object = null)
     {
         switch ($parent) {
@@ -89,10 +89,10 @@ class QuickBooks_QBXML_Object_Invoice_SalesTaxLine extends QuickBooks_QBXML_Obje
                 $parent = null;
                 break;
         }
-        
+
         return parent::asXML($root, $parent, $object);
     }
-    
+
     /**
      *
      *
@@ -104,10 +104,10 @@ class QuickBooks_QBXML_Object_Invoice_SalesTaxLine extends QuickBooks_QBXML_Obje
     public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      * Tell the type of object this is
      *

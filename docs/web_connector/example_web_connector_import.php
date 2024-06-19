@@ -173,16 +173,16 @@ if (!QuickBooks_Utilities::initialized($dsn)) {
             if (!trim($sql)) {
                 continue;
             }
-            
+
             mysql_query($sql) or die(trigger_error(mysql_error()));
         }
     } else {
         die('Could not locate "./example.sql" to create the demo SQL schema!');
     }
-    
+
     // Create the database tables
     QuickBooks_Utilities::initialize($dsn);
-    
+
     // Add the default authentication username/password
     QuickBooks_Utilities::createUser($dsn, $user, $pass);
 }
@@ -215,13 +215,13 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
     // Fetch the queue instance
     $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
     $date = '1983-01-02 12:01:01';
-    
+
     // Set up the invoice imports
     if (!_quickbooks_get_last_run($user, QUICKBOOKS_IMPORT_INVOICE)) {
         // And write the initial sync time
         _quickbooks_set_last_run($user, QUICKBOOKS_IMPORT_INVOICE, $date);
     }
-    
+
     // Do the same for customers
     if (!_quickbooks_get_last_run($user, QUICKBOOKS_IMPORT_CUSTOMER)) {
         _quickbooks_set_last_run($user, QUICKBOOKS_IMPORT_CUSTOMER, $date);
@@ -231,12 +231,12 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
     if (!_quickbooks_get_last_run($user, QUICKBOOKS_IMPORT_SALESORDER)) {
         _quickbooks_set_last_run($user, QUICKBOOKS_IMPORT_SALESORDER, $date);
     }
-    
+
     // ... and for items
     if (!_quickbooks_get_last_run($user, QUICKBOOKS_IMPORT_ITEM)) {
         _quickbooks_set_last_run($user, QUICKBOOKS_IMPORT_ITEM, $date);
     }
-    
+
     // Make sure the requests get queued up
     //$Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, 1, QB_PRIORITY_SALESORDER, null, $user);
     //$Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, 1, QB_PRIORITY_INVOICE, null, $user);
@@ -267,11 +267,11 @@ function _quickbooks_get_last_run($user, $action)
 function _quickbooks_set_last_run($user, $action, $force = null)
 {
     $value = date('Y-m-d') . 'T' . date('H:i:s');
-    
+
     if ($force) {
         $value = date('Y-m-d', strtotime($force)) . 'T' . date('H:i:s', strtotime($force));
     }
-    
+
     return QuickBooks_Utilities::configWrite(QB_QUICKBOOKS_DSN, $user, md5(__FILE__), QB_QUICKBOOKS_CONFIG_LAST . '-' . $action, $value);
 }
 
@@ -293,11 +293,11 @@ function _quickbooks_get_current_run($user, $action)
 function _quickbooks_set_current_run($user, $action, $force = null)
 {
     $value = date('Y-m-d') . 'T' . date('H:i:s');
-    
+
     if ($force) {
         $value = date('Y-m-d', strtotime($force)) . 'T' . date('H:i:s', strtotime($force));
     }
-    
+
     return QuickBooks_Utilities::configWrite(QB_QUICKBOOKS_DSN, $user, md5(__FILE__), QB_QUICKBOOKS_CONFIG_CURR . '-' . $action, $value);
 }
 
@@ -313,17 +313,17 @@ function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $ex
         // This is the first request in a new batch
         $last = _quickbooks_get_last_run($user, $action);
         _quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
-        
+
         // Set the current run to $last
         _quickbooks_set_current_run($user, $action, $last);
     } else {
         // This is a continuation of a batch
         $attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
         $attr_iterator = ' iterator="Continue" ';
-        
+
         $last = _quickbooks_get_current_run($user, $action);
     }
-    
+
     // Build the request
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="' . $version . '"?>
@@ -339,7 +339,7 @@ function _quickbooks_invoice_import_request($requestID, $user, $action, $ID, $ex
 				</InvoiceQueryRq>	
 			</QBXMLMsgsRq>
 		</QBXML>';
-        
+
     return $xml;
 }
 
@@ -350,11 +350,11 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 {
     if (!empty($idents['iteratorRemainingCount'])) {
         // Queue up another request
-        
+
         $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
         $Queue->enqueue(QUICKBOOKS_IMPORT_INVOICE, null, QB_PRIORITY_INVOICE, [ 'iteratorID' => $idents['iteratorID'] ], $user);
     }
-    
+
     // This piece of the response from QuickBooks is now stored in $xml. You
     //	can process the qbXML response in $xml in any way you like. Save it to
     //	a file, stuff it in a database, parse it and stuff the records in a
@@ -362,7 +362,7 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
     //
     // The following example shows how to use the built-in XML parser to parse
     //	the response and stuff it into a database.
-    
+
     // Import all of the records
     $errnum = 0;
     $errmsg = '';
@@ -370,7 +370,7 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
     if ($Doc = $Parser->parse($errnum, $errmsg)) {
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML/QBXMLMsgsRs/InvoiceQueryRs');
-        
+
         foreach ($List->children() as $Invoice) {
             $arr = [
                 'TxnID' => $Invoice->getChildDataAt('InvoiceRet TxnID'),
@@ -386,13 +386,13 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
                 'ShipAddress_PostalCode' => $Invoice->getChildDataAt('InvoiceRet ShipAddress PostalCode'),
                 'BalanceRemaining' => $Invoice->getChildDataAt('InvoiceRet BalanceRemaining'),
                 ];
-            
+
             QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing invoice #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
-            
+
             foreach ($arr as $key => $value) {
                 $arr[$key] = mysql_real_escape_string($value);
             }
-            
+
             // Store the invoices in MySQL
             mysql_query('
 				REPLACE INTO
@@ -402,15 +402,15 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
 				) VALUES (
 					'" . implode("', '", array_values($arr)) . "'
 				)") or die(trigger_error(mysql_error()));
-            
+
             // Remove any old line items
             mysql_query("DELETE FROM qb_example_invoice_lineitem WHERE TxnID = '" . mysql_real_escape_string($arr['TxnID']) . "' ") or die(trigger_error(mysql_error()));
-            
+
             // Process the line items
             foreach ($Invoice->children() as $Child) {
                 if ($Child->name() == 'InvoiceLineRet') {
                     $InvoiceLine = $Child;
-                    
+
                     $lineitem = [
                         'TxnID' => $arr['TxnID'],
                         'TxnLineID' => $InvoiceLine->getChildDataAt('InvoiceLineRet TxnLineID'),
@@ -420,11 +420,11 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
                         'Quantity' => $InvoiceLine->getChildDataAt('InvoiceLineRet Quantity'),
                         'Rate' => $InvoiceLine->getChildDataAt('InvoiceLineRet Rate'),
                         ];
-                    
+
                     foreach ($lineitem as $key => $value) {
                         $lineitem[$key] = mysql_real_escape_string($value);
                     }
-                    
+
                     // Store the lineitems in MySQL
                     mysql_query('
 						INSERT INTO
@@ -438,7 +438,7 @@ function _quickbooks_invoice_import_response($requestID, $user, $action, $ID, $e
             }
         }
     }
-    
+
     return true;
 }
 
@@ -454,17 +454,17 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
         // This is the first request in a new batch
         $last = _quickbooks_get_last_run($user, $action);
         _quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
-        
+
         // Set the current run to $last
         _quickbooks_set_current_run($user, $action, $last);
     } else {
         // This is a continuation of a batch
         $attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
         $attr_iterator = ' iterator="Continue" ';
-        
+
         $last = _quickbooks_get_current_run($user, $action);
     }
-    
+
     // Build the request
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="' . $version . '"?>
@@ -477,7 +477,7 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
 				</CustomerQueryRq>	
 			</QBXMLMsgsRq>
 		</QBXML>';
-        
+
     return $xml;
 }
 
@@ -488,11 +488,11 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 {
     if (!empty($idents['iteratorRemainingCount'])) {
         // Queue up another request
-        
+
         $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
         $Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, null, QB_PRIORITY_CUSTOMER, [ 'iteratorID' => $idents['iteratorID'] ], $user);
     }
-    
+
     // This piece of the response from QuickBooks is now stored in $xml. You
     //	can process the qbXML response in $xml in any way you like. Save it to
     //	a file, stuff it in a database, parse it and stuff the records in a
@@ -500,7 +500,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
     //
     // The following example shows how to use the built-in XML parser to parse
     //	the response and stuff it into a database.
-    
+
     // Import all of the records
     $errnum = 0;
     $errmsg = '';
@@ -508,7 +508,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
     if ($Doc = $Parser->parse($errnum, $errmsg)) {
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML/QBXMLMsgsRs/CustomerQueryRs');
-        
+
         foreach ($List->children() as $Customer) {
             $arr = [
                 'ListID' => $Customer->getChildDataAt('CustomerRet ListID'),
@@ -526,13 +526,13 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
                 'ShipAddress_State' => $Customer->getChildDataAt('CustomerRet ShipAddress State'),
                 'ShipAddress_PostalCode' => $Customer->getChildDataAt('CustomerRet ShipAddress PostalCode'),
                 ];
-            
+
             QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing customer ' . $arr['FullName'] . ': ' . print_r($arr, true));
-            
+
             foreach ($arr as $key => $value) {
                 $arr[$key] = mysql_real_escape_string($value);
             }
-            
+
             // Store the invoices in MySQL
             mysql_query('
 				REPLACE INTO
@@ -544,7 +544,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
 				)") or die(trigger_error(mysql_error()));
         }
     }
-    
+
     return true;
 }
 
@@ -560,17 +560,17 @@ function _quickbooks_salesorder_import_request($requestID, $user, $action, $ID, 
         // This is the first request in a new batch
         $last = _quickbooks_get_last_run($user, $action);
         _quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
-        
+
         // Set the current run to $last
         _quickbooks_set_current_run($user, $action, $last);
     } else {
         // This is a continuation of a batch
         $attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
         $attr_iterator = ' iterator="Continue" ';
-        
+
         $last = _quickbooks_get_current_run($user, $action);
     }
-    
+
     // Build the request
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="' . $version . '"?>
@@ -586,7 +586,7 @@ function _quickbooks_salesorder_import_request($requestID, $user, $action, $ID, 
 				</SalesOrderQueryRq>	
 			</QBXMLMsgsRq>
 		</QBXML>';
-        
+
     return $xml;
 }
 
@@ -597,11 +597,11 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 {
     if (!empty($idents['iteratorRemainingCount'])) {
         // Queue up another request
-        
+
         $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
         $Queue->enqueue(QUICKBOOKS_IMPORT_SALESORDER, null, QB_PRIORITY_SALESORDER, [ 'iteratorID' => $idents['iteratorID'] ], $user);
     }
-    
+
     // This piece of the response from QuickBooks is now stored in $xml. You
     //	can process the qbXML response in $xml in any way you like. Save it to
     //	a file, stuff it in a database, parse it and stuff the records in a
@@ -609,7 +609,7 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
     //
     // The following example shows how to use the built-in XML parser to parse
     //	the response and stuff it into a database.
-    
+
     // Import all of the records
     $errnum = 0;
     $errmsg = '';
@@ -617,7 +617,7 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
     if ($Doc = $Parser->parse($errnum, $errmsg)) {
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML/QBXMLMsgsRs/SalesOrderQueryRs');
-        
+
         foreach ($List->children() as $SalesOrder) {
             $arr = [
                 'TxnID' => $SalesOrder->getChildDataAt('SalesOrderRet TxnID'),
@@ -633,13 +633,13 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
                 'ShipAddress_PostalCode' => $SalesOrder->getChildDataAt('SalesOrderRet ShipAddress PostalCode'),
                 'BalanceRemaining' => $SalesOrder->getChildDataAt('SalesOrderRet BalanceRemaining'),
                 ];
-            
+
             QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing sales order #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
-            
+
             foreach ($arr as $key => $value) {
                 $arr[$key] = mysql_real_escape_string($value);
             }
-            
+
             // Store the invoices in MySQL
             mysql_query('
 				REPLACE INTO
@@ -649,15 +649,15 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
 				) VALUES (
 					'" . implode("', '", array_values($arr)) . "'
 				)") or die(trigger_error(mysql_error()));
-            
+
             // Remove any old line items
             mysql_query("DELETE FROM qb_example_salesorder_lineitem WHERE TxnID = '" . mysql_real_escape_string($arr['TxnID']) . "' ") or die(trigger_error(mysql_error()));
-            
+
             // Process the line items
             foreach ($SalesOrder->children() as $Child) {
                 if ($Child->name() == 'SalesOrderLineRet') {
                     $SalesOrderLine = $Child;
-                    
+
                     $lineitem = [
                         'TxnID' => $arr['TxnID'],
                         'TxnLineID' => $SalesOrderLine->getChildDataAt('SalesOrderLineRet TxnLineID'),
@@ -667,11 +667,11 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
                         'Quantity' => $SalesOrderLine->getChildDataAt('SalesOrderLineRet Quantity'),
                         'Rate' => $SalesOrderLine->getChildDataAt('SalesOrderLineRet Rate'),
                         ];
-                    
+
                     foreach ($lineitem as $key => $value) {
                         $lineitem[$key] = mysql_real_escape_string($value);
                     }
-                    
+
                     // Store the lineitems in MySQL
                     mysql_query('
 						INSERT INTO
@@ -685,7 +685,7 @@ function _quickbooks_salesorder_import_response($requestID, $user, $action, $ID,
             }
         }
     }
-    
+
     return true;
 }
 
@@ -701,17 +701,17 @@ function _quickbooks_item_import_request($requestID, $user, $action, $ID, $extra
         // This is the first request in a new batch
         $last = _quickbooks_get_last_run($user, $action);
         _quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
-        
+
         // Set the current run to $last
         _quickbooks_set_current_run($user, $action, $last);
     } else {
         // This is a continuation of a batch
         $attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
         $attr_iterator = ' iterator="Continue" ';
-        
+
         $last = _quickbooks_get_current_run($user, $action);
     }
-    
+
     // Build the request
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="' . $version . '"?>
@@ -724,7 +724,7 @@ function _quickbooks_item_import_request($requestID, $user, $action, $ID, $extra
 				</ItemQueryRq>	
 			</QBXMLMsgsRq>
 		</QBXML>';
-        
+
     return $xml;
 }
 
@@ -735,11 +735,11 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 {
     if (!empty($idents['iteratorRemainingCount'])) {
         // Queue up another request
-        
+
         $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
         $Queue->enqueue(QUICKBOOKS_IMPORT_ITEM, null, QB_PRIORITY_ITEM, [ 'iteratorID' => $idents['iteratorID'] ], $user);
     }
-    
+
     // Import all of the records
     $errnum = 0;
     $errmsg = '';
@@ -747,11 +747,11 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
     if ($Doc = $Parser->parse($errnum, $errmsg)) {
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML/QBXMLMsgsRs/ItemQueryRs');
-        
+
         foreach ($List->children() as $Item) {
             $type = substr(substr($Item->name(), 0, -3), 4);
             $ret = $Item->name();
-            
+
             $arr = [
                 'ListID' => $Item->getChildDataAt($ret . ' ListID'),
                 'TimeCreated' => $Item->getChildDataAt($ret . ' TimeCreated'),
@@ -772,7 +772,7 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
                 'QuantityOnSalesOrder' => $Item->getChildDataAt($ret . ' QuantityOnSalesOrder'),
                 'TaxRate' => $Item->getChildDataAt($ret . ' TaxRate'),
                 ];
-            
+
             $look_for = [
                 'SalesPrice' => [ 'SalesOrPurchase Price', 'SalesAndPurchase SalesPrice', 'SalesPrice' ],
                 'SalesDesc' => [ 'SalesOrPurchase Desc', 'SalesAndPurchase SalesDesc', 'SalesDesc' ],
@@ -781,26 +781,26 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
                 'PrefVendor_ListID' => [ 'SalesAndPurchase PrefVendorRef ListID', 'PrefVendorRef ListID' ],
                 'PrefVendor_FullName' => [ 'SalesAndPurchase PrefVendorRef FullName', 'PrefVendorRef FullName' ],
                 ];
-            
+
             foreach ($look_for as $field => $look_here) {
                 if (!empty($arr[$field])) {
                     break;
                 }
-                
+
                 foreach ($look_here as $look) {
                     $arr[$field] = $Item->getChildDataAt($ret . ' ' . $look);
                 }
             }
-            
+
             QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing ' . $type . ' Item ' . $arr['FullName'] . ': ' . print_r($arr, true));
-            
+
             foreach ($arr as $key => $value) {
                 $arr[$key] = mysql_real_escape_string($value);
             }
-            
+
             //print_r(array_keys($arr));
             //trigger_error(print_r(array_keys($arr), true));
-            
+
             // Store the customers in MySQL
             mysql_query('
 				REPLACE INTO
@@ -812,7 +812,7 @@ function _quickbooks_item_import_response($requestID, $user, $action, $ID, $extr
 				)") or die(trigger_error(mysql_error()));
         }
     }
-    
+
     return true;
 }
 
@@ -828,17 +828,17 @@ function _quickbooks_purchaseorder_import_request($requestID, $user, $action, $I
         // This is the first request in a new batch
         $last = _quickbooks_get_last_run($user, $action);
         _quickbooks_set_last_run($user, $action);			// Update the last run time to NOW()
-        
+
         // Set the current run to $last
         _quickbooks_set_current_run($user, $action, $last);
     } else {
         // This is a continuation of a batch
         $attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
         $attr_iterator = ' iterator="Continue" ';
-        
+
         $last = _quickbooks_get_current_run($user, $action);
     }
-    
+
     // Build the request
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="' . $version . '"?>
@@ -854,7 +854,7 @@ function _quickbooks_purchaseorder_import_request($requestID, $user, $action, $I
 				</PurchaseOrderQueryRq>	
 			</QBXMLMsgsRq>
 		</QBXML>';
-        
+
     return $xml;
 }
 
@@ -865,11 +865,11 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 {
     if (!empty($idents['iteratorRemainingCount'])) {
         // Queue up another request
-        
+
         $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
         $Queue->enqueue(QUICKBOOKS_IMPORT_PURCHASEORDER, null, QB_PRIORITY_PURCHASEORDER, [ 'iteratorID' => $idents['iteratorID'] ], $user);
     }
-    
+
     // This piece of the response from QuickBooks is now stored in $xml. You
     //	can process the qbXML response in $xml in any way you like. Save it to
     //	a file, stuff it in a database, parse it and stuff the records in a
@@ -877,7 +877,7 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
     //
     // The following example shows how to use the built-in XML parser to parse
     //	the response and stuff it into a database.
-    
+
     // Import all of the records
     $errnum = 0;
     $errmsg = '';
@@ -885,7 +885,7 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
     if ($Doc = $Parser->parse($errnum, $errmsg)) {
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML/QBXMLMsgsRs/PurchaseOrderQueryRs');
-        
+
         foreach ($List->children() as $PurchaseOrder) {
             $arr = [
                 'TxnID' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet TxnID'),
@@ -895,20 +895,20 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
                 'Customer_ListID' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet CustomerRef ListID'),
                 'Customer_FullName' => $PurchaseOrder->getChildDataAt('PurchaseOrderRet CustomerRef FullName'),
                 ];
-            
+
             QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, 'Importing purchase order #' . $arr['RefNumber'] . ': ' . print_r($arr, true));
-            
+
             foreach ($arr as $key => $value) {
                 $arr[$key] = mysql_real_escape_string($value);
             }
-            
+
             // Process all child elements of the Purchase Order
             foreach ($PurchaseOrder->children() as $Child) {
                 if ($Child->name() == 'PurchaseOrderLineRet') {
                     // Loop through line items
-                    
+
                     $PurchaseOrderLine = $Child;
-                    
+
                     $lineitem = [
                         'TxnID' => $arr['TxnID'],
                         'TxnLineID' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet TxnLineID'),
@@ -918,24 +918,24 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
                         'Quantity' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Quantity'),
                         'Rate' => $PurchaseOrderLine->getChildDataAt('PurchaseOrderLineRet Rate'),
                         ];
-                    
+
                     QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - line item #' . $lineitem['TxnLineID'] . ': ' . print_r($lineitem, true));
                 } elseif ($Child->name() == 'DataExtRet') {
                     // Loop through custom fields
-                    
+
                     $DataExt = $Child;
-                    
+
                     $dataext = [
                         'DataExtName' => $Child->getChildDataAt('DataExtRet DataExtName'),
                         'DataExtValue' => $Child->getChildDataAt('DataExtRet DataExtValue'),
                         ];
-                    
+
                     QuickBooks_Utilities::log(QB_QUICKBOOKS_DSN, ' - custom field "' . $dataext['DataExtName'] . '": ' . $dataext['DataExtValue']);
                 }
             }
         }
     }
-    
+
     return true;
 }
 
@@ -949,7 +949,7 @@ function _quickbooks_purchaseorder_import_response($requestID, $user, $action, $
 function _quickbooks_error_e500_notfound($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)
 {
     $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-    
+
     if ($action == QUICKBOOKS_IMPORT_INVOICE) {
         return true;
     } elseif ($action == QUICKBOOKS_IMPORT_CUSTOMER) {
@@ -961,7 +961,7 @@ function _quickbooks_error_e500_notfound($requestID, $user, $action, $ID, $extra
     } elseif ($action == QUICKBOOKS_IMPORT_PURCHASEORDER) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -989,7 +989,7 @@ function _quickbooks_error_catchall($requestID, $user, $action, $ID, $extra, &$e
     //$message .= 'Error: ' . $err . "\r\n";
     $message .= 'Error number: ' . $errnum . "\r\n";
     $message .= 'Error message: ' . $errmsg . "\r\n";
-    
+
     mail(
         QB_QUICKBOOKS_MAILTO,
         'QuickBooks error occured!',

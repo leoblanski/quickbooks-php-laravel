@@ -80,10 +80,10 @@ $dsn = 'mysql://root:root@localhost/quickbooks_pos_server';
 if (!QuickBooks_Utilities::initialized($dsn)) {
     // Initialize creates the neccessary database schema for queueing up requests and logging
     QuickBooks_Utilities::initialize($dsn);
-    
+
     // This creates a username and password which is used by the Web Connector to authenticate
     QuickBooks_Utilities::createUser($dsn, $user, $pass);
-    
+
     // We're going to queue up a request to add a customer, just as a test...
     $primary_key_of_your_customer = 5;
 
@@ -133,7 +133,7 @@ function _quickbooks_pos_customer_add_request($requestID, $user, $action, $ID, $
 				</CustomerAddRq>
 			</QBPOSXMLMsgsRq>
 		</QBPOSXML>';
-    
+
     return $xml;
 }
 
@@ -149,7 +149,7 @@ function _quickbooks_pos_customer_add_response($requestID, $user, $action, $ID, 
     //	later. (You'll need to refer to the customer by either ListID or Name
     //	in other requests, say, to update the customer or to add an invoice for
     //	the customer.
-    
+
     /*
     mysql_query("UPDATE your_customer_table SET quickbooks_listid = '" . mysql_escape_string($idents['ListID']) . "' WHERE your_customer_ID_field = " . (int) $ID);
     */

@@ -32,7 +32,7 @@ class QuickBooks_WebConnector_Result_Authenticate extends QuickBooks_WebConnecto
      * @var array
      */
     public $authenticateResult;
-    
+
     /**
      * Create a new result object
      *
@@ -42,11 +42,11 @@ class QuickBooks_WebConnector_Result_Authenticate extends QuickBooks_WebConnecto
     public function __construct($ticket, $status, $wait_before_next_update = null, $min_run_every_n_seconds = null)
     {
         $this->authenticateResult = [ $ticket, $status ];
-        
+
         if ((int) $wait_before_next_update) {
             $this->authenticateResult[] = (int) $wait_before_next_update;
         }
-        
+
         if ((int) $min_run_every_n_seconds) {
             $this->authenticateResult[] = (int) $min_run_every_n_seconds;
         }

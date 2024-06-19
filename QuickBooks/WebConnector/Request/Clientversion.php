@@ -27,7 +27,7 @@ QuickBooks_Loader::load('/QuickBooks/WebConnector/Request.php');
 class QuickBooks_WebConnector_Request_ClientVersion extends QuickBooks_WebConnector_Request
 {
     public $strVersion;
-    
+
     public function __construct($version = null)
     {
         $this->strVersion = $version;

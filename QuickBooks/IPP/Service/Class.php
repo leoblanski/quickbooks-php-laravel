@@ -25,7 +25,7 @@ class QuickBooks_IPP_Service_Class extends QuickBooks_IPP_Service
         $xml = null;
         return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CLASS, $xml);
     }
-    
+
     /**
      * Get a customer by ID
      *
@@ -39,7 +39,7 @@ class QuickBooks_IPP_Service_Class extends QuickBooks_IPP_Service
         $xml = null;
         return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_CLASS, $IDType, $xml);
     }
-    
+
     /**
      * Add a new class to QuickBooks
      *

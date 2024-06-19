@@ -31,7 +31,7 @@ class QuickBooks_WebConnector_Request_ConnectionError extends QuickBooks_WebConn
     public $ticket;
     public $hresult;
     public $message;
-    
+
     public function __construct($ticket = null, $hresult = null, $message = null)
     {
         $this->ticket = $ticket;

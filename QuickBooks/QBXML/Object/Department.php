@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of the department
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of the department
      *
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      * @param string $ListID
      * @return boolean
@@ -78,7 +78,7 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name of the department
      *
@@ -109,7 +109,7 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
     {
         return $this->set('FullName', $name);
     }
-    
+
     /**
      * Set this department active or not
      *
@@ -118,9 +118,9 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
      */
     public function setIsActive($value)
     {
-        return $this->set('IsActive', (boolean) $value);
+        return $this->set('IsActive', (bool) $value);
     }
-    
+
     /**
      * Tell whether or not this department object is active
      *
@@ -130,7 +130,7 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
     {
         return $this->get('IsActive');
     }
-    
+
     /**
      * Perform any needed clean-up of the object data members
      *
@@ -140,7 +140,7 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this department object
      *
@@ -168,10 +168,10 @@ class QuickBooks_QBXML_Object_Department extends QuickBooks_QBXML_Object
     public function asQBXML($request, $version = null, $locale = null, $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $version, $locale, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

@@ -57,10 +57,10 @@ $dsn = 'mysql://root:root@localhost/quickbooks_server';
 if (!QuickBooks_Utilities::initialized($dsn)) {
     // Initialize creates the neccessary database schema for queueing up requests and logging
     QuickBooks_Utilities::initialize($dsn);
-    
+
     // This creates a username and password which is used by the Web Connector to authenticate
     QuickBooks_Utilities::createUser($dsn, $user, $pass);
-    
+
     // Queueing up a test request
     $primary_key_of_your_customer = 5;
     $Queue = new QuickBooks_WebConnector_Queue($dsn);
@@ -78,7 +78,7 @@ $response = $Server->handle(true, true);
 function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
     // We're just testing, so we'll just use a static test request:
-     
+
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="2.0"?>
 		<QBXML>
@@ -106,7 +106,7 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 				</CustomerAddRq>
 			</QBXMLMsgsRq>
 		</QBXML>';
-    
+
     return $xml;
 }
 

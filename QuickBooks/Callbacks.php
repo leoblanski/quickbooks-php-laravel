@@ -53,13 +53,13 @@ define('QUICKBOOKS_CALLBACKS_TYPE_HOOK_INSTANCE', 'instanceof-hook');
  */
 class QuickBooks_Callbacks
 {
-    const TYPE_NONE = 'none';
+    public const TYPE_NONE = 'none';
 
-    const TYPE_FUNCTION = 'function';
+    public const TYPE_FUNCTION = 'function';
 
-    const TYPE_STATIC_METHOD = 'static-method';
+    public const TYPE_STATIC_METHOD = 'static-method';
 
-    const TYPE_OBJECT_METHOD = 'object-method';
+    public const TYPE_OBJECT_METHOD = 'object-method';
 
     /**
      *
@@ -460,9 +460,9 @@ class QuickBooks_Callbacks
         //print('which: ' . $which . "\n");
 
         if (isset($map[$action])) {
-            $tmp =& $map[$action];
+            $tmp = & $map[$action];
         } elseif (isset($map['*'])) {
-            $tmp =& $map['*'];
+            $tmp = & $map['*'];
         } else {
             $tmp = null;
         }

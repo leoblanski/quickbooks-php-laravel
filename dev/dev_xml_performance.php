@@ -387,10 +387,10 @@ $errmsg = '';
 if ($Parser->validate($errnum, $errmsg)) {
     // Parse it into a document
     $Doc = $Parser->parse($errnum, $errmsg);
-        
+
     // Get the root node from the document
     $Root = $Doc->getRoot();
-    
+
     $fp = fopen('dev_xml_performance.' . $Parser->backend() . '.txt', 'w+');
     fwrite($fp, print_r($Root, true));
     fclose($fp);

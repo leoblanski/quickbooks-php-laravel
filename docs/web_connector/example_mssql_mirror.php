@@ -33,21 +33,21 @@ $dsn = 'mssql://kpalmer:password@192.168.18.128/test';
 // If the database has not yet been initialized, we need to initialize it
 if (!QuickBooks_Utilities::initialized($dsn)) {
     header('Content-Type: text/plain');
-    
+
     // It takes a really long time to build the schema...
     set_time_limit(0);
-    
+
     $driver_options = [
         ];
-        
+
     $init_options = [
         'quickbooks_sql_enabled' => true,
         //'quickbooks_sql_debug' => true,
         ];
-        
+
     QuickBooks_Utilities::initialize($dsn, $driver_options, $init_options);
     QuickBooks_Utilities::createUser($dsn, $username, $password);
-    
+
     exit;
 }
 

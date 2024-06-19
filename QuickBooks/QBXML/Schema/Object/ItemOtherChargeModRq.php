@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeModRq extends QuickBooks_QBX
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'ItemOtherChargeMod';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -66,10 +66,10 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeModRq extends QuickBooks_QBX
   'SalesAndPurchaseMod PrefVendorRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -104,10 +104,10 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeModRq extends QuickBooks_QBX
   'SalesAndPurchaseMod PrefVendorRef FullName' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -143,7 +143,7 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeModRq extends QuickBooks_QBX
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -178,10 +178,10 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeModRq extends QuickBooks_QBX
   'SalesAndPurchaseMod PrefVendorRef FullName' => 999.99,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -216,10 +216,10 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeModRq extends QuickBooks_QBX
   'SalesAndPurchaseMod PrefVendorRef FullName' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -231,7 +231,7 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeModRq extends QuickBooks_QBX
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -266,7 +266,7 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeModRq extends QuickBooks_QBX
   28 => 'SalesAndPurchaseMod PrefVendorRef FullName',
   29 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

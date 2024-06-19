@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of this customer record
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of this customer record
      *
@@ -63,7 +63,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
                 $this->setNameAsFirstLast();
             }
         }
-    
+
         return $this->get('Name');
     }
 
@@ -100,7 +100,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
         if (!$this->exists('FullName')) {
             $this->setFullName($this->get('Name'));
         }
-    
+
         return $this->get('FullName');
     }
 
@@ -119,10 +119,10 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
         if (is_null($last)) {
             $last = '';
         }
-                                                              
+
         return $this->set('Name', $first .' '. $last);
     }
-  
+
     /**
      * Set the first name of this customer
      *
@@ -133,7 +133,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->set('FirstName', $fname);
     }
-    
+
     /**
      * Get the first name of this customer
      *
@@ -143,7 +143,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->get('FirstName');
     }
-    
+
     /**
      * Set the last name of this customer
      *
@@ -154,7 +154,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->set('LastName', $lname);
     }
-    
+
     /**
      * Get the last name of this customer
      *
@@ -164,33 +164,33 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->get('LastName');
     }
-    
+
     public function setMiddleName($mname)
     {
         return $this->set('MiddleName', $mname);
     }
-    
+
     public function getMiddleName()
     {
         return $this->get('MiddleName');
     }
-    
+
     public function getEmployeeAddress($part = null, $defaults = [])
     {
         return $this->_getXYZAddress('Employee', '', $part, $defaults);
     }
-    
+
     public function setEmployeeAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $province = '', $postalcode = '', $country = '', $note = '')
     {
         return $this->_setXYZAddress('Employee', '', $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $province, $postalcode, $country, $note);
     }
-    
+
     protected function _setXYZAddress($pre, $post, $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $province, $postalcode, $country, $note)
     {
         for ($i = 1; $i <= 5; $i++) {
             $this->set($pre . 'Address' . $post . ' Addr' . $i, ${'addr' . $i});
         }
-        
+
         $this->set($pre . 'Address' . $post . ' City', $city);
         $this->set($pre . 'Address' . $post . ' State', $state);
         $this->set($pre . 'Address' . $post . ' Province', $province);
@@ -198,16 +198,16 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
         $this->set($pre . 'Address' . $post . ' Country', $country);
         $this->set($pre . 'Address' . $post . ' Note', $note);
     }
-    
+
     protected function _getXYZAddress($pre, $post, $part = null, $defaults = [])
     {
         if (!is_null($part)) {
             return $this->get($pre . 'Address' . $post . ' ' . $part);
         }
-        
+
         return $this->getArray($pre . 'Address' . $post . ' *', $defaults);
     }
-    
+
     /**
      *
      *
@@ -223,7 +223,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->get('Phone');
     }
-    
+
     /**
      * Set the alternate phone number for this customer
      *
@@ -239,7 +239,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->get('AltPhone');
     }
-    
+
     /**
      * Set the fax number for this customer
      *
@@ -255,7 +255,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->get('Fax');
     }
-    
+
     /**
      * Set the e-mail address for this customer
      *
@@ -271,7 +271,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->get('Email');
     }
-    
+
     /**
      * Set the salutation for this customer
      *
@@ -282,7 +282,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->set('Salutation', $salut);
     }
-    
+
     /**
      *
      *
@@ -292,57 +292,57 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     {
         return $this->get('Salutation');
     }
-    
+
     public function setNotes($notes)
     {
         return $this->set('Notes', $notes);
     }
-    
+
     public function getNotes()
     {
         return $this->get('Notes');
     }
-    
+
     public function setMobile($mobile)
     {
         return $this->set('Mobile', $mobile);
     }
-    
+
     public function getMobile()
     {
         return $this->get('Mobile');
     }
-    
+
     public function setPager($pager)
     {
         return $this->set('Pager', $pager);
     }
-    
+
     public function getPager()
     {
         return $this->get('Pager');
     }
-    
+
     public function setGender($gender)
     {
         return $this->set('Gender', $gender);
     }
-    
+
     public function getGender()
     {
         return $this->get('Gender');
     }
-    
+
     public function setBirthDate($date)
     {
         return $this->setDateType('BirthDate', $date);
     }
-    
+
     public function getBirthDate($format = 'Y-m-d')
     {
         return $this->getDateType('BirthDate', $format);
     }
-    
+
     /**
      *
      *
@@ -350,20 +350,20 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
      */
     protected function _cleanup()
     {
-        
+
         return true;
     }
-    
+
     /**
      *
      */
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -376,10 +376,10 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
     public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

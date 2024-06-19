@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID
      *
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      * Set the name
      *
@@ -61,7 +61,7 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name
      *
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-    
+
     /**
      * Set this as active or not
      *
@@ -92,12 +92,12 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
     {
         return $this->getBooleanType('IsActive');
     }
-    
+
     public function getPaymentMethodType()
     {
         return $this->get('PaymentMethodType');
     }
-    
+
     /**
      * Perform any needed clean-up of the object data members
      *
@@ -107,7 +107,7 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this object
      *
@@ -118,10 +118,10 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -134,10 +134,10 @@ class QuickBooks_QBXML_Object_PaymentMethod extends QuickBooks_QBXML_Object
     public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

@@ -1,4 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
+
+defined('SYSPATH') or die('No direct script access.');
 
 /**
  * QuickBooks Kohana Integration Example
@@ -12,7 +14,6 @@
  */
 class Model_Qbdata extends ORM
 {
-
     public function __construct()
     {
         //link up this model to our qb_data database

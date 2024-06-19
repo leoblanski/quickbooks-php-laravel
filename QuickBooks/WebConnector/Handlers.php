@@ -171,8 +171,8 @@ define('QUICKBOOKS_HANDLERS_HOOK_PERCENT', 'QuickBooks_Handlers::percent');
  */
 class QuickBooks_WebConnector_Handlers
 {
-    const HOOK_AUTHENTICATE = QUICKBOOKS_HANDLERS_HOOK_AUTHENTICATE;
-    const HOOK_LOGINSUCCESS = QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS;
+    public const HOOK_AUTHENTICATE = QUICKBOOKS_HANDLERS_HOOK_AUTHENTICATE;
+    public const HOOK_LOGINSUCCESS = QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS;
 
     /**
      * Driver object instance for backend of SOAP server
@@ -331,15 +331,15 @@ class QuickBooks_WebConnector_Handlers
             $config['deny_remote_addr'] = [ $config['deny_remote_addr'] ];
         }
 
-        $config['autoadd_missing_requestid'] = (boolean) $config['autoadd_missing_requestid'];
-        $config['check_valid_requestid'] = (boolean) $config['check_valid_requestid'];
-        $config['map_application_identifiers'] = (boolean) $config['map_application_identifiers'];
-        $config['convert_unix_newlines'] = (boolean) $config['convert_unix_newlines'];
+        $config['autoadd_missing_requestid'] = (bool) $config['autoadd_missing_requestid'];
+        $config['check_valid_requestid'] = (bool) $config['check_valid_requestid'];
+        $config['map_application_identifiers'] = (bool) $config['map_application_identifiers'];
+        $config['convert_unix_newlines'] = (bool) $config['convert_unix_newlines'];
 
-        $config['deny_concurrent_logins'] = (boolean) $config['deny_concurrent_logins'];
+        $config['deny_concurrent_logins'] = (bool) $config['deny_concurrent_logins'];
         $config['deny_concurrent_timeout'] = (int) max(1, $config['deny_concurrent_timeout']);
 
-        $config['deny_reallyfast_logins'] = (boolean) $config['deny_reallyfast_logins'];
+        $config['deny_reallyfast_logins'] = (bool) $config['deny_reallyfast_logins'];
         $config['deny_reallyfast_timeout'] = (int) max(1, $config['deny_reallyfast_timeout']);
 
         return $config;
@@ -550,7 +550,7 @@ class QuickBooks_WebConnector_Handlers
                 if ((int) $customauth_wait_before_next_update) {
                     $wait_before_next_update = (int) $customauth_wait_before_next_update;
                 } elseif ((int) $wait_before_next_update) {
-                    
+
                 } elseif ((int) $this->_config['qbwc_wait_before_next_update']) {
                     $wait_before_next_update = (int) $this->_config['qbwc_wait_before_next_update'];
                 }
@@ -558,7 +558,7 @@ class QuickBooks_WebConnector_Handlers
                 if ((int) $customauth_min_run_every_n_seconds) {
                     $min_run_every_n_seconds = (int) $customauth_min_run_every_n_seconds;
                 } elseif ((int) $min_run_every_n_seconds) {
-                    
+
                 } elseif ((int) $this->_config['qbwc_min_run_every_n_seconds']) {
                     $min_run_every_n_seconds = (int) $this->_config['qbwc_min_run_every_n_seconds'];
                 }

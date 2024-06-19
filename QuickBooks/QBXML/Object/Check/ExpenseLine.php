@@ -31,7 +31,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: AccountRef ListID, datatype:
-    
+
     /**
      * Set the AccountRef ListID for the Check
      *
@@ -65,7 +65,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: AccountRef FullName, datatype:
-    
+
     /**
      * Set the AccountRef FullName for the Check
      *
@@ -88,7 +88,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: Amount, datatype:
-    
+
     /**
      * Set the Amount for the Check
      *
@@ -111,7 +111,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: TaxAmount, datatype:
-    
+
     /**
      * Set the TaxAmount for the Check
      *
@@ -134,7 +134,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: Memo, datatype: STRTYPE
-    
+
     /**
      * Set the Memo for the Check
      *
@@ -157,7 +157,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: CustomerRef ListID, datatype:
-    
+
     /**
      * Set the CustomerRef ListID for the Check
      *
@@ -191,7 +191,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: CustomerRef FullName, datatype:
-    
+
     /**
      * Set the CustomerRef FullName for the Check
      *
@@ -214,7 +214,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: ClassRef ListID, datatype:
-    
+
     /**
      * Set the ClassRef ListID for the Check
      *
@@ -248,7 +248,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: ClassRef FullName, datatype:
-    
+
     /**
      * Set the ClassRef FullName for the Check
      *
@@ -271,7 +271,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: SalesTaxCodeRef ListID, datatype:
-    
+
     /**
      * Set the SalesTaxCodeRef ListID for the Check
      *
@@ -305,7 +305,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: SalesTaxCodeRef FullName, datatype:
-    
+
     /**
      * Set the SalesTaxCodeRef FullName for the Check
      *
@@ -328,7 +328,7 @@ class QuickBooks_QBXML_Object_Check_ExpenseLine extends QuickBooks_QBXML_Object
     }
 
     // Path: BillableStatus, datatype:
-    
+
     /**
      * Set the BillableStatus for the Check
      *

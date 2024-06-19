@@ -28,43 +28,43 @@ class QuickBooks_QBXML_Schema_Object_Template extends QuickBooks_QBXML_Schema_Ob
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '_qbxmlWrapper';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths = '_dataTypePaths';
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths = '_maxLengthPaths';
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths = '_isOptionalPaths';
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths = '_sinceVersionPaths';
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths = '_isRepeatablePaths';
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -76,11 +76,11 @@ class QuickBooks_QBXML_Schema_Object_Template extends QuickBooks_QBXML_Schema_Ob
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths = '_reorderPaths';
-            
+
         return $paths;
     }
 }

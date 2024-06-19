@@ -16,16 +16,16 @@
 class QuickBooks_IPP_Entitlement
 {
     protected $_entitlement_id;
-    
+
     protected $_name;
-    
+
     protected $_term_id;
-    
+
     protected $_term;
 
-    const TERM_ON = 'On';
-    const TERM_OFF = 'Off';
-    
+    public const TERM_ON = 'On';
+    public const TERM_OFF = 'Off';
+
     public function __construct($entitlement_id, $name, $term)
     {
         $this->_entitlement_id = $entitlement_id;
@@ -52,22 +52,22 @@ class QuickBooks_IPP_Entitlement
     {
         return $this->_term;
     }
-    
+
     public function getEntitlementId()
     {
         return $this->_entitlement_id;
     }
-    
+
     public function getName()
     {
         return $this->_name;
     }
-    
+
     public function getTermId()
     {
         return $this->_term_id;
     }
-    
+
     public function getTerm()
     {
         return $this->_term;

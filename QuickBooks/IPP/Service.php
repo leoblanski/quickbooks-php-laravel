@@ -81,7 +81,7 @@ abstract class QuickBooks_IPP_Service
     {
         $IPP = $Context->IPP();
 
-        return $IPP->useIDSParser((boolean) $true_or_false);
+        return $IPP->useIDSParser((bool) $true_or_false);
     }
 
     protected function _entitlements($Context, $realmID)

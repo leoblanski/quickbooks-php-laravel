@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_AccountModRq extends QuickBooks_QBXML_Schem
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'AccountMod';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -52,10 +52,10 @@ class QuickBooks_QBXML_Schema_Object_AccountModRq extends QuickBooks_QBXML_Schem
   'TaxLineID' => 'INTTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -76,10 +76,10 @@ class QuickBooks_QBXML_Schema_Object_AccountModRq extends QuickBooks_QBXML_Schem
   'TaxLineID' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -101,7 +101,7 @@ class QuickBooks_QBXML_Schema_Object_AccountModRq extends QuickBooks_QBXML_Schem
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -122,10 +122,10 @@ class QuickBooks_QBXML_Schema_Object_AccountModRq extends QuickBooks_QBXML_Schem
   'TaxLineID' => 7,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -146,10 +146,10 @@ class QuickBooks_QBXML_Schema_Object_AccountModRq extends QuickBooks_QBXML_Schem
   'TaxLineID' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -161,7 +161,7 @@ class QuickBooks_QBXML_Schema_Object_AccountModRq extends QuickBooks_QBXML_Schem
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -182,7 +182,7 @@ class QuickBooks_QBXML_Schema_Object_AccountModRq extends QuickBooks_QBXML_Schem
   14 => 'TaxLineID',
   15 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

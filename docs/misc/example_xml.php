@@ -53,13 +53,13 @@ $errmsg = '';
 if ($Parser->validate($errnum, $errmsg)) {
     // Parse it into a document
     $Doc = $Parser->parse($errnum, $errmsg);
-        
+
     // Get the root node from the document
     $Root = $Doc->getRoot();
-    
+
     // Now fetch some stuff from the parsed document
     print('Hello there ' . $Root->getChildDataAt('Tag1 NestedTag AnotherTag') . "\n");
-    
+
     print_r($Root->getChildAttributesAt('Tag1 NestedTag'));
     print("\n");
     print('Root tag name is: ' . $Root->name() . "\n");
@@ -100,9 +100,9 @@ $errmsg = '';
 if ($Parser->validate($errnum, $errmsg)) {
     $Doc = $Parser->parse($errnum, $errmsg);
     $Root = $Doc->getRoot();
-    
+
     $List = $Root->getChildAt('Animals');
-    
+
     foreach ($List->children() as $Animal) {
         $name = $Animal->getChildDataAt('Animal Name');
         $note = $Animal->getChildDataAt('Animal Note');

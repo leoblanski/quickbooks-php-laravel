@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -73,10 +73,10 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReturnColumns' => 'ENUMTYPE',
   'ReportBasis' => 'ENUMTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -118,10 +118,10 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReturnColumns' => 0,
   'ReportBasis' => 0,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -164,7 +164,7 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReportBasis' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -206,10 +206,10 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReturnColumns' => 999.99,
   'ReportBasis' => 2.1,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -251,10 +251,10 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReturnColumns' => false,
   'ReportBasis' => false,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -266,7 +266,7 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -308,7 +308,7 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   35 => 'ReturnColumns',
   36 => 'ReportBasis',
 ];
-            
+
         return $paths;
     }
 }

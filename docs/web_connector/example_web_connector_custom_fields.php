@@ -86,7 +86,7 @@ $callback_options = [];
 if (!QuickBooks_Utilities::initialized($dsn)) {
     // Initialize creates the neccessary database schema for queueing up requests and logging
     QuickBooks_Utilities::initialize($dsn);
-    
+
     // This creates a username and password which is used by the Web Connector to authenticate
     QuickBooks_Utilities::createUser($dsn, $user, $pass);
 }
@@ -108,7 +108,7 @@ function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_da
 {
     // Fetch the queue instance
     $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
-        
+
     // Queue request
     $Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1);
 }
@@ -126,7 +126,7 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
         $attr_iteratorID = ' iteratorID="' . $extra['iteratorID'] . '" ';
         $attr_iterator = ' iterator="Continue" ';
     }
-    
+
     // Build the request
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="' . $version . '"?>
@@ -173,7 +173,7 @@ function _quickbooks_customer_import_request($requestID, $user, $action, $ID, $e
 				</CustomerQueryRq>	
 			</QBXMLMsgsRq>
 		</QBXML>';
-    
+
     return $xml;
 }
 
@@ -187,7 +187,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
         $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
         $Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, null, 0, [ 'iteratorID' => $idents['iteratorID'] ]);
     }
-    
+
     // This piece of the response from QuickBooks is now stored in $xml. You
     //	can process the qbXML response in $xml in any way you like. Save it to
     //	a file, stuff it in a database, parse it and stuff the records in a
@@ -195,7 +195,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
     //
     // The following example shows how to use the built-in XML parser to parse
     //	the response and stuff it into a database.
-    
+
     // Import all of the records
     $errnum = 0;
     $errmsg = '';
@@ -203,7 +203,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
     if ($Doc = $Parser->parse($errnum, $errmsg)) {
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML/QBXMLMsgsRs/CustomerQueryRs');
-        
+
         foreach ($List->children() as $Customer) {
             $values = [
                 'ListID' => $Customer->getChildDataAt('CustomerRet ListID'),
@@ -211,7 +211,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
                 'FirstName' => $Customer->getChildDataAt('CustomerRet FirstName'),
                 'LastName' => $Customer->getChildDataAt('CustomerRet LastName'),
                 ];
-                
+
             foreach ($Customer->children() as $Node) {
                 // Be careful! Custom field names are case sensitive!
                 if ($Node->name() === 'DataExtRet' and
@@ -219,12 +219,12 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
                     $values['Your Custom Field Names Goes Here'] = $Node->getChildDataAt('DataExtRet DataExtValue');
                 }
             }
-            
+
             // Do something with that data...
             // mysql_query("INSERT INTO ... ");
         }
     }
-    
+
     return true;
 }
 
@@ -240,7 +240,7 @@ function _quickbooks_error_e500_notfound($requestID, $user, $action, $ID, $extra
     if ($action == QUICKBOOKS_IMPORT_CUSTOMER) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -268,7 +268,7 @@ function _quickbooks_error_catchall($requestID, $user, $action, $ID, $extra, &$e
     //$message .= 'Error: ' . $err . "\r\n";
     $message .= 'Error number: ' . $errnum . "\r\n";
     $message .= 'Error message: ' . $errmsg . "\r\n";
-    
+
     // Do something to handle the error
     // mail( ... );
 }

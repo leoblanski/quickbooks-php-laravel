@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetModRq extends QuickBooks_QBXM
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'ItemFixedAssetMod';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -62,10 +62,10 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetModRq extends QuickBooks_QBXM
   'YearEndBookValue' => 'AMTTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -96,10 +96,10 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetModRq extends QuickBooks_QBXM
   'YearEndBookValue' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -131,7 +131,7 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetModRq extends QuickBooks_QBXM
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -162,10 +162,10 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetModRq extends QuickBooks_QBXM
   'YearEndBookValue' => 999.99,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -196,10 +196,10 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetModRq extends QuickBooks_QBXM
   'YearEndBookValue' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -211,7 +211,7 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetModRq extends QuickBooks_QBXM
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -242,7 +242,7 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetModRq extends QuickBooks_QBXM
   24 => 'YearEndBookValue',
   25 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

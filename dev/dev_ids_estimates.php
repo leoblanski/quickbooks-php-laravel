@@ -24,27 +24,27 @@ $list = $Service->findAll($Context, $realmID);
 foreach ($list as $Estimate) {
     print('Estimate ' . $Estimate->getId() . ' / #' . $Estimate->getHeader()->getDocNumber() . ' is to be emailed: ' . $Estimate->getHeader()->getToBeEmailed() . "\n");
     print('	Should we email it? ');
-    
+
     if ($Estimate->getHeader()->getToBeEmailed()) {
         print('YES');
     } else {
         print('NO');
     }
-    
+
     print("\n");
-    
+
     for ($i = 0; $i < 10; $i++) {
         $Line = $Estimate->getLine($i);
-        
+
         if ($Line) {
             print($Line->getDescription() . '   $ ' . $Line->getUnitPrice() . ' x ' . $Line->getQuantity() . "\n");
             //print_r($Line);
         }
     }
-    
+
     print("\n");
     print("\n");
-    
+
     $ID = $Estimate->getId();
     break;
 }

@@ -39,7 +39,7 @@ class QuickBooks_Utilities
         // Some DSN strings look like this:		filesystem:///path/to/file
         //	parse_url() will not parse this *unless* we provide some sort of hostname (in this case, null)
         $dsn = str_replace(':///', '://null/', $dsn);
-            
+
         $defaults = array_merge([
             'scheme' => '',
             'host' => '',
@@ -50,21 +50,21 @@ class QuickBooks_Utilities
             'query' => '',
             'fragment' => '',
             ], $defaults);
-            
+
         $parse = array_merge($defaults, parse_url($dsn));
-        
+
         $parse['user'] = urldecode($parse['user']);
         $parse['pass'] = urldecode($parse['pass']);
-        
+
         if (is_null($part)) {
             return $parse;
         } elseif (isset($parse[$part])) {
             return $parse[$part];
         }
-            
+
         return null;
     }
-    
+
     /**
      * Mask certain sensitive data from occuring in output/logs
      *
@@ -81,21 +81,21 @@ class QuickBooks_Utilities
             '<AppID>',
             '<strPassword>',
             ];
-        
+
         foreach ($masks as $key) {
             if (substr($key, 0, 1) == '<') {
                 // It's an XML tag
                 $contents = QuickBooks_Utilities::_extractTagContents(trim($key, '<> '), $message);
-                
+
                 $masked = str_repeat('x', min(strlen($contents), 12)) . substr($contents, 12);
-                
+
                 $message = str_replace($key . $contents . '</' . trim($key, '<> ') . '>', $key . $masked . '</' . trim($key, '<> ') . '>', $message);
             }
         }
-        
+
         return $message;
     }
-    
+
     /**
      * @deprecated		Use QuickBooks_XML::extractTagContents() instead
      */
@@ -104,7 +104,7 @@ class QuickBooks_Utilities
         $tmp = QuickBooks_XML::extractTagContents($tag, $data);
         return $tmp;
     }
-    
+
     /**
      * Write a message to the log (via the back-end driver)
      *
@@ -116,13 +116,13 @@ class QuickBooks_Utilities
     public static function log($dsn, $msg, $lvl = QUICKBOOKS_LOG_NORMAL)
     {
         $Driver = QuickBooks_Utilities::driverFactory($dsn);
-        
+
         // Mask important data
         $msg = QuickBooks_Utilities::mask($msg);
-        
+
         return $Driver->log($msg, null, $lvl);
     }
-    
+
     /**
      *
      *                1        2       3
@@ -159,17 +159,17 @@ class QuickBooks_Utilities
     public static function extractRequestID($xml)
     {
         $look = [
-            
+
             ];
-        
+
         if (false !== ($start = strpos($xml, ' requestID="')) and
             false !== ($end = strpos($xml, '"', $start + 12))) {
             return substr($xml, $start + 12, $end - $start - 12);
         }
-        
+
         return false;
     }
-    
+
     /**
      * Create a requestID string from action and ident parts
      *
@@ -181,7 +181,7 @@ class QuickBooks_Utilities
     {
         return base64_encode($action . '|' . $ident);
     }
-    
+
     /**
      * Parse a requestID string into it's action and ident parts
      *
@@ -193,20 +193,20 @@ class QuickBooks_Utilities
     public static function parseRequestID($requestID, &$action, &$ident)
     {
         $tmp = explode('|', base64_decode($requestID));
-        
+
         if (count($tmp) == 2) {
             $action = $tmp[0];
             $ident = $tmp[1];
-            
+
             return true;
         }
-        
+
         $action = null;
         $ident = null;
-        
+
         return false;
     }
-    
+
     /**
      * Create an instance of a driver class from a DSN connection string *or* a connection resource
      *
@@ -240,10 +240,10 @@ class QuickBooks_Utilities
         if ($Driver = QuickBooks_Utilities::driverFactory($dsn)) {
             return $Driver->configWrite($user, $module, $key, $value, $type, $opts);
         }
-        
+
         return false;
     }
-    
+
     /**
      *
      *
@@ -258,10 +258,10 @@ class QuickBooks_Utilities
         if ($Driver = QuickBooks_Utilities::driverFactory($dsn)) {
             return $Driver->configRead($user, $module, $key, $type, $opts);
         }
-        
+
         return false;
     }
-    
+
     /**
      * Convert a time interval to a number of seconds (i.e.: "1 hour" => 600, "3 hours" => 1800, "2 minutes" => 120, etc.)
      *
@@ -282,9 +282,9 @@ class QuickBooks_Utilities
                 'month' => 60 * 60 * 24 * 30,
                 'year' => 60 * 60 * 24 * 365,
                 ];
-                
+
             $interval = strtolower(trim($interval));
-                
+
             $justletters = true;
             $count = strlen($interval);
             for ($i = 0; $i < $count; $i++) {
@@ -292,22 +292,22 @@ class QuickBooks_Utilities
                     $justletters = false;
                 }
             }
-                
+
             if ($justletters) {
                 $interval = '1 ' . $interval;
             }
-                
+
             foreach ($intervals as $str => $multiplier) {
                 if (false !== strpos($interval, ' ' . $str)) {
                     $interval = ((int) $interval) * $multiplier;
                 }
             }
         }
-        
+
         // If it's not an integer yet, cast it!
         return (int) $interval;
     }
-        
+
     /**
      * Check if a given IP address lies within a CIDR range
      *
@@ -318,13 +318,13 @@ class QuickBooks_Utilities
     protected static function _checkCIDR($remoteaddr, $CIDR)
     {
         $remoteaddr_long = ip2long($remoteaddr);
-        
+
         list($net, $mask) = split('/', $CIDR);
         $ip_net = ip2long($net);
         $ip_mask = ~((1 << (32 - $mask)) - 1);
-        
+
         $remoteaddr_net = $remoteaddr_long & $ip_mask;
-        
+
         return $remoteaddr_net == $ip_net;
     }
 
@@ -339,56 +339,56 @@ class QuickBooks_Utilities
     public static function checkRemoteAddress($remoteaddr, $arr_allow, $arr_deny)
     {
         $allowed = true;
-        
+
         if (count($arr_allow)) {
             // only allow these addresses
             $allowed = false;
-            
+
             foreach ($arr_allow as $allow) {
                 if (false !== strpos($allow, '/')) {
                     // CIDR notation
-                    
+
                     if (QuickBooks_Utilities::_checkCIDR($remoteaddr, $allow)) {
                         $allowed = true;
                         break;
                     }
                 } elseif (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $allow)) {
                     // IPv4 address
-                    
+
                     if ($remoteaddr == $allow) {
                         $allowed = true;
                         break;
                     }
                 }
             }
-            
+
             if (!$allowed) {
                 return false;
             }
         }
-        
+
         if (count($arr_deny)) {
             // do *not* allow these addresses
             foreach ($arr_deny as $deny) {
                 if (false !== strpos($deny, '/')) {
                     // CIDR notation
-                    
+
                     if (QuickBooks_Utilities::_checkCIDR($remoteaddr, $deny)) {
                         return false;
                     }
                 } elseif (ereg('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$', $deny)) {
                     // IPv4 address
-                    
+
                     if ($remoteaddr == $deny) {
                         return false;
                     }
                 }
             }
         }
-        
+
         return $allowed;
     }
-    
+
     /**
      * Create a user for the QuickBooks Web Connector SOAP server
      *
@@ -403,10 +403,10 @@ class QuickBooks_Utilities
     public static function createUser($dsn, $username, $password, $company_file = null, $wait_before_next_update = null, $min_run_every_n_seconds = null)
     {
         $driver = QuickBooks_Utilities::driverFactory($dsn);
-        
+
         return $driver->authCreate($username, $password, $company_file, $wait_before_next_update, $min_run_every_n_seconds);
     }
-    
+
     /**
      * Disable a user for the QuickBooks Web Connector SOAP server
      *
@@ -417,10 +417,10 @@ class QuickBooks_Utilities
     public static function disableUser($dsn, $username)
     {
         $driver = QuickBooks_Utilities::driverFactory($dsn);
-        
+
         return $driver->authDisable($username);
     }
-    
+
     /**
      * Generate a unique hash from a bunch of variables
      *
@@ -435,7 +435,7 @@ class QuickBooks_Utilities
     {
         return md5(serialize($mixed1) . serialize($mixed2) . serialize($mixed3) . serialize($mixed4) . serialize($mixed5));
     }
-    
+
     /**
      * Create a mapping between a QuickBooks object and an object in your own database/application
      *
@@ -449,10 +449,10 @@ class QuickBooks_Utilities
     public static function createMapping($dsn, $user, $object_type, $TxnID_or_ListID, $app_ID, $editsequence = '')
     {
         $Driver = QuickBooks_Utilities::driverFactory($dsn);
-        
+
         return $Driver->identMap($user, $object_type, $app_ID, $TxnID_or_ListID, $editsequence);
     }
-    
+
     /**
      *
      *
@@ -465,11 +465,11 @@ class QuickBooks_Utilities
     public static function fetchApplicationID($dsn, $user, $object_type, $TxnID_or_ListID)
     {
         $Driver = QuickBooks_Utilities::driverFactory($dsn);
-        
+
         $extra = null;
         return $Driver->identToApplication($user, $object_type, $TxnID_or_ListID, $extra);
     }
-    
+
     /**
      *
      */
@@ -478,10 +478,10 @@ class QuickBooks_Utilities
         if (QuickBooks_Utilities::fetchApplicationID($dsn, $user, $object_type, $TxnID_or_ListID)) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      *
      * @param string $object_type	A QuickBooks object-type constant, i.e.: QUICKBOOKS_OBJECT_CUSTOMER, QUICKBOOKS_OBJECT_INVOICE, etc.
@@ -491,12 +491,12 @@ class QuickBooks_Utilities
     public static function fetchQuickbooksID($dsn, $user, $object_type, $webapp_ID)
     {
         $Driver = QuickBooks_Utilities::driverFactory($dsn);
-        
+
         $editseq = null;
         $extra = null;
         return $Driver->identToQuickBooks($user, $object_type, $webapp_ID, $editseq, $extra);
     }
-    
+
     /**
      *
      *
@@ -505,13 +505,13 @@ class QuickBooks_Utilities
     public static function fetchQuickBooksEditSequence($dsn, $user, $object_type, $webapp_ID)
     {
         $Driver = QuickBooks_Utilities::driverFactory($dsn);
-        
+
         $editseq = null;
         $extra = null;
         $Driver->identToQuickBooks($user, $object_type, $webapp_ID, $editseq, $extra);
         return $editseq;
     }
-    
+
     /**
      * Fetches extra data stored along with the mapping of a QuickBooks ListID or TxnID to application primary key
      *
@@ -524,14 +524,14 @@ class QuickBooks_Utilities
     public static function fetchQuickBooksExtra($dsn, $user, $object_type, $webapp_ID)
     {
         $Driver = QuickBooks_Utilities::driverFactory($dsn);
-        
+
         $editseq = null;
         $extra = null;
         $Driver->identToQuickBooks($user, $object_type, $webapp_ID, $editseq, $extra);
-        
+
         return $extra;
     }
-    
+
     /**
      * Alias of {@link QuickBooks_Utilities::fetchQuickBooksEditSequence()}
      */
@@ -539,7 +539,7 @@ class QuickBooks_Utilities
     {
         return QuickBooks_Utilities::fetchQuickBooksEditSequence($dsn, $user, $object_type, $webapp_ID);
     }
-    
+
     /**
      * Tell whether or not a given object has a ListID or TxnID associated with it
      *
@@ -560,10 +560,10 @@ class QuickBooks_Utilities
         if (QuickBooks_Utilities::fetchQuickBooksID($dsn, $user, $object_type, $app_ID)) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * Initialize the backend driver
      *
@@ -577,10 +577,10 @@ class QuickBooks_Utilities
     public static function initialize($dsn, $driver_options = [], $init_options = [])
     {
         $Driver = QuickBooks_Utilities::driverFactory($dsn, $driver_options);
-        
+
         return $Driver->initialize($init_options);
     }
-    
+
     /**
      * Tell whether or not a driver has been initialized
      *
@@ -591,10 +591,10 @@ class QuickBooks_Utilities
     public static function initialized($dsn, $driver_options = [])
     {
         $Driver = QuickBooks_Utilities::driverFactory($dsn, $driver_options);
-        
+
         return $Driver->initialized();
     }
-    
+
     /**
      *
      *
@@ -606,13 +606,13 @@ class QuickBooks_Utilities
                 strlen($date) > 6) {
                 return date('Y-m-d', $date);
             }
-            
+
             return date('Y-m-d', strtotime($date));
         }
-        
+
         return date('Y-m-d');
     }
-    
+
     /**
      *
      *
@@ -625,13 +625,13 @@ class QuickBooks_Utilities
                 strlen($datetime) > 6) {
                 return date('Y-m-d', $datetime) . 'T' . date('H:i:s', $datetime);
             }
-            
+
             return date('Y-m-d', strtotime($datetime)) . 'T' . date('H:i:s', strtotime($datetime));
         }
-        
+
         return date('Y-m-d') . 'T' . date('H:i:s');
     }
-        
+
     /**
      * Tell if a pattern matches a string or not (Windows-compatible version of www.php.net/fnmatch)
      *
@@ -644,14 +644,14 @@ class QuickBooks_Utilities
         if (function_exists('fnmatch')) {
             return fnmatch($pattern, $str, FNM_CASEFOLD);
         }
-        
+
         $arr = [
             '\*' => '.*',
             '\?' => '.'
             ];
         return preg_match('#^' . strtr(preg_quote($pattern, '#'), $arr) . '$#i', $str);
     }
-    
+
     /**
      * List all of the QuickBooks object types supported by the framework
      *
@@ -663,22 +663,22 @@ class QuickBooks_Utilities
     public static function listObjects($filter = null, $return_keys = false, $order_for_mapping = false)
     {
         static $cache = [];
-        
+
         $crunch = $filter . '[' . $return_keys . '[' . $order_for_mapping;
-        
+
         if (isset($cache[$crunch])) {
             return $cache[$crunch];
         }
-        
+
         $constants = [];
-            
+
         foreach (get_defined_constants() as $constant => $value) {
             if (substr($constant, 0, strlen('QUICKBOOKS_OBJECT_')) == 'QUICKBOOKS_OBJECT_' and
                 substr_count($constant, '_') == 2) {
                 if (!$return_keys) {
                     $constant = $value;
                 }
-                
+
                 if ($filter) {
                     if (QuickBooks_Utilities::fnmatch($filter, $constant)) {
                         $constants[] = $constant;
@@ -688,19 +688,19 @@ class QuickBooks_Utilities
                 }
             }
         }
-            
+
         if ($order_for_mapping) {
             // Sort with the very longest values first, to the shortest values last
             usort($constants, function ($a, $b) { return strlen($a) > strlen($b) ? -1 : 1; });
         } else {
             sort($constants);
         }
-            
+
         $cache[$crunch] = $constants;
-            
+
         return $constants;
     }
-        
+
     /**
      * Convert a QuickBooks action to a QuickBooks object type (i.e.: QUICKBOOKS_ADD_CUSTOMER gets converted to QUICKBOOKS_OBJECT_CUSTOMER)
      *
@@ -710,14 +710,14 @@ class QuickBooks_Utilities
     public static function actionToObject($action)
     {
         static $cache = [];
-        
+
         if (isset($cache[$action])) {
             //print('returning cached [' . $action . ']' . "\n");
             return $cache[$action];
         }
-        
+
         $types = QuickBooks_Utilities::listObjects(null, false, true);
-        
+
         foreach ($types as $type) {
             if (QuickBooks_Utilities::fnmatch('*' . $type . '*', $action)) {
                 $cache[$action] = $type;
@@ -725,7 +725,7 @@ class QuickBooks_Utilities
                 return $type;
             }
         }
-            
+
         return null;
     }
 
@@ -750,10 +750,10 @@ class QuickBooks_Utilities
             mt_rand(0, 65535),
             mt_rand(0, 65535)
         );
-            
+
         return $guid;
     }
-        
+
     /**
      * Try to guess the queueing priority for this action
      *
@@ -766,45 +766,45 @@ class QuickBooks_Utilities
         // low priorities up here (*lots* of dependencies)
         static $priorities = [
             QUICKBOOKS_DELETE_TRANSACTION,
-            
+
             QUICKBOOKS_VOID_TRANSACTION,
-        
+
             QUICKBOOKS_DEL_DATAEXT,
             QUICKBOOKS_MOD_DATAEXT,
             QUICKBOOKS_ADD_DATAEXT,
-        
+
             QUICKBOOKS_MOD_JOURNALENTRY,
             QUICKBOOKS_ADD_JOURNALENTRY,
-        
+
             QUICKBOOKS_MOD_RECEIVEPAYMENT,
             QUICKBOOKS_ADD_RECEIVEPAYMENT,
-            
+
             QUICKBOOKS_MOD_BILLPAYMENTCHECK,
             QUICKBOOKS_ADD_BILLPAYMENTCHECK,
-            
+
             //QUICKBOOKS_MOD_BILLPAYMENTCREDITCARD,
             QUICKBOOKS_ADD_BILLPAYMENTCREDITCARD,
-            
+
             QUICKBOOKS_MOD_BILL,
             QUICKBOOKS_ADD_BILL,
-            
+
             QUICKBOOKS_MOD_PURCHASEORDER,
             QUICKBOOKS_ADD_PURCHASEORDER,
-            
+
             QUICKBOOKS_MOD_INVOICE,
             QUICKBOOKS_ADD_INVOICE,
-            
+
             QUICKBOOKS_MOD_SALESORDER,
             QUICKBOOKS_ADD_SALESORDER,
-            
+
             QUICKBOOKS_MOD_ESTIMATE,
             QUICKBOOKS_ADD_ESTIMATE,
-            
+
             QUICKBOOKS_ADD_INVENTORYADJUSTMENT,
 
             QUICKBOOKS_ADD_CREDITMEMO,
             QUICKBOOKS_MOD_CREDITMEMO,
-            
+
             QUICKBOOKS_ADD_ITEMRECEIPT,
             QUICKBOOKS_MOD_ITEMRECEIPT,
 
@@ -813,55 +813,55 @@ class QuickBooks_Utilities
 
             QUICKBOOKS_ADD_SALESTAXITEM,
             QUICKBOOKS_MOD_SALESTAXITEM,
-            
+
             QUICKBOOKS_ADD_DISCOUNTITEM,
             QUICKBOOKS_MOD_DISCOUNTITEM,
-            
+
             QUICKBOOKS_ADD_OTHERCHARGEITEM,
             QUICKBOOKS_MOD_OTHERCHARGEITEM,
-            
+
             QUICKBOOKS_MOD_NONINVENTORYITEM,
             QUICKBOOKS_ADD_NONINVENTORYITEM,
-            
+
             QUICKBOOKS_MOD_INVENTORYITEM,
             QUICKBOOKS_ADD_INVENTORYITEM,
-            
+
             QUICKBOOKS_MOD_INVENTORYASSEMBLYITEM,
             QUICKBOOKS_ADD_INVENTORYASSEMBLYITEM,
-            
+
             QUICKBOOKS_MOD_SERVICEITEM,
             QUICKBOOKS_ADD_SERVICEITEM,
-            
+
             QUICKBOOKS_MOD_PAYMENTITEM,
             QUICKBOOKS_ADD_PAYMENTITEM,
-            
+
             QUICKBOOKS_MOD_SALESREP,
             QUICKBOOKS_ADD_SALESREP,
-            
+
             QUICKBOOKS_MOD_EMPLOYEE,
             QUICKBOOKS_ADD_EMPLOYEE,
-            
+
             //QUICKBOOKS_MOD_SALESTAXCODE, 		// The SDK doesn't support this
             QUICKBOOKS_ADD_SALESTAXCODE,
-            
+
             QUICKBOOKS_MOD_VENDOR,
             QUICKBOOKS_ADD_VENDOR,
-            
+
             QUICKBOOKS_MOD_JOB,
             QUICKBOOKS_ADD_JOB,
-            
+
             QUICKBOOKS_MOD_CUSTOMER,
             QUICKBOOKS_ADD_CUSTOMER,
-            
+
             QUICKBOOKS_MOD_ACCOUNT,
             QUICKBOOKS_ADD_ACCOUNT,
-            
+
             //QUICKBOOKS_MOD_CLASS,		(does not exist in qbXML API)
             QUICKBOOKS_ADD_CLASS,
-            
+
             QUICKBOOKS_ADD_PAYMENTMETHOD,
             QUICKBOOKS_ADD_SHIPMETHOD,
-            
+
             // Queries
             QUICKBOOKS_QUERY_PURCHASEORDER,
             QUICKBOOKS_QUERY_ITEMRECEIPT,
@@ -871,25 +871,25 @@ class QuickBooks_Utilities
             QUICKBOOKS_QUERY_ESTIMATE,
             QUICKBOOKS_QUERY_RECEIVEPAYMENT,
             QUICKBOOKS_QUERY_CREDITMEMO,
-            
+
             QUICKBOOKS_QUERY_BILLPAYMENTCHECK,
             QUICKBOOKS_QUERY_BILLPAYMENTCREDITCARD,
             QUICKBOOKS_QUERY_BILLTOPAY,
             QUICKBOOKS_QUERY_BILL,
-            
+
             QUICKBOOKS_QUERY_CREDITCARDCHARGE,
             QUICKBOOKS_QUERY_CREDITCARDCREDIT,
             QUICKBOOKS_QUERY_CHECK,
             QUICKBOOKS_QUERY_CHARGE,
-            
+
             QUICKBOOKS_QUERY_DELETEDLISTS,		// This gets all items deleted in the last 90 days
             QUICKBOOKS_QUERY_DELETEDTXNS,		// This gets all transactions deleted in the last 90 days
-            
+
             QUICKBOOKS_QUERY_TIMETRACKING,
             QUICKBOOKS_QUERY_VENDORCREDIT,
-            
+
             QUICKBOOKS_QUERY_INVENTORYADJUSTMENT,
-            
+
             QUICKBOOKS_QUERY_ITEM,
             QUICKBOOKS_QUERY_DISCOUNTITEM,
             QUICKBOOKS_QUERY_SALESTAXITEM,
@@ -910,7 +910,7 @@ class QuickBooks_Utilities
             QUICKBOOKS_QUERY_WORKERSCOMPCODE,
 
             QUICKBOOKS_QUERY_UNITOFMEASURESET,
-            
+
             QUICKBOOKS_QUERY_JOURNALENTRY,
             QUICKBOOKS_QUERY_DEPOSIT,
 
@@ -927,15 +927,15 @@ class QuickBooks_Utilities
             QUICKBOOKS_QUERY_CLASS,
             QUICKBOOKS_QUERY_JOBTYPE,
             QUICKBOOKS_QUERY_VENDORTYPE,
-            
+
             QUICKBOOKS_QUERY_COMPANY,
-            
+
             QUICKBOOKS_IMPORT_RECEIVEPAYMENT,
-            
+
             QUICKBOOKS_IMPORT_PURCHASEORDER,
             QUICKBOOKS_IMPORT_ITEMRECEIPT,
             QUICKBOOKS_IMPORT_SALESRECEIPT,
-            
+
             // The ESTIMATE, then INVOICE, then SALES ORDER order is important,
             //	because we might have events which depend on the estimate being present
             //	when the invoice is imported, or the sales order being present when
@@ -943,25 +943,25 @@ class QuickBooks_Utilities
             QUICKBOOKS_IMPORT_INVOICE,
             QUICKBOOKS_IMPORT_SALESORDER,
             QUICKBOOKS_IMPORT_ESTIMATE,
-            
+
             QUICKBOOKS_IMPORT_BILLPAYMENTCHECK,
             QUICKBOOKS_IMPORT_BILLPAYMENTCREDITCARD,
             QUICKBOOKS_IMPORT_BILLTOPAY,
             QUICKBOOKS_IMPORT_BILL,
-            
+
             QUICKBOOKS_IMPORT_CREDITCARDCHARGE,
             QUICKBOOKS_IMPORT_CREDITCARDCREDIT,
             QUICKBOOKS_IMPORT_CHECK,
             QUICKBOOKS_IMPORT_CHARGE,
-            
+
             QUICKBOOKS_IMPORT_DELETEDLISTS,    // This gets all items deleted in the last 90 days.
             QUICKBOOKS_IMPORT_DELETEDTXNS,    // This gets all transactions deleted in the last 90 days.
-            
+
             QUICKBOOKS_IMPORT_TIMETRACKING,
             QUICKBOOKS_IMPORT_VENDORCREDIT,
-            
+
             QUICKBOOKS_IMPORT_INVENTORYADJUSTMENT,
-            
+
             QUICKBOOKS_IMPORT_ITEM,
             QUICKBOOKS_IMPORT_DISCOUNTITEM,
             QUICKBOOKS_IMPORT_SALESTAXITEM,
@@ -983,7 +983,7 @@ class QuickBooks_Utilities
             QUICKBOOKS_IMPORT_WORKERSCOMPCODE,
 
             QUICKBOOKS_IMPORT_UNITOFMEASURESET,
-            
+
             QUICKBOOKS_IMPORT_JOURNALENTRY,
             QUICKBOOKS_IMPORT_DEPOSIT,
 
@@ -1000,35 +1000,35 @@ class QuickBooks_Utilities
             QUICKBOOKS_IMPORT_CLASS,
             QUICKBOOKS_IMPORT_JOBTYPE,
             QUICKBOOKS_IMPORT_VENDORTYPE,
-            
+
             QUICKBOOKS_IMPORT_COMPANY,
         ];
         // high priorities down here (no dependencies OR queries)
-        
+
         // Now, let's space those priorities out a little bit, it gives us some
         //	wiggle room in case we need to add things inbetween the default
         //	priority values
         static $wiggled = false;
         $wiggle = 6;
-        
+
         if (!$wiggled) {
             $count = count($priorities);
             for ($i = $count - 1; $i >= 0; $i--) {
                 $priorities[$i * $wiggle] = $priorities[$i];
                 unset($priorities[$i]);
-                
+
                 // with a wiggle multiplier of 2...
                 // 	priority 25 goes to 50
                 // 	priority 24 goes to 48
                 // 	priority 23 goes to 46
                 // 	etc. etc. etc.
             }
-            
+
             $wiggled = true;
-            
+
             //print_r($priorities);
         }
-        
+
         if ($dependency) {
             //
             // This is a list of dependency modifications
@@ -1063,14 +1063,14 @@ class QuickBooks_Utilities
                     QUICKBOOKS_ADD_CUSTOMER => QuickBooks_Utilities::priorityForAction(QUICKBOOKS_ADD_CUSTOMER) - 1,
                     QUICKBOOKS_MOD_CUSTOMER => QuickBooks_Utilities::priorityForAction(QUICKBOOKS_MOD_CUSTOMER) - 1,
                     ],
-                    
+
                 // A *Bill VOID* has a slightly higher priority than a PurchaseOrderMod so that we can IsManuallyClosed POs (we'll get an error if we try to close it and a bill is dependent on it)
                 QUICKBOOKS_VOID_TRANSACTION => [
                     QUICKBOOKS_MOD_PURCHASEORDER => QuickBooks_Utilities::priorityForAction(QUICKBOOKS_MOD_PURCHASEORDER) + 1,
                     ],
                 ];
         }
-        
+
         // Check for dependency priorities
         if ($dependency and
             isset($dependencies[$action]) and
@@ -1081,11 +1081,11 @@ class QuickBooks_Utilities
             // Regular priority
             return $key;
         }
-        
+
         // Default priority
         return 999;
     }
-        
+
     /**
      * List all of the QuickBooks actions the framework supports
      *
@@ -1103,9 +1103,9 @@ class QuickBooks_Utilities
             'QUICKBOOKS_DEL_',
             'QUICKBOOKS_VOID_',
             ];
-            
+
         $constants = [];
-        
+
         //$inter_key = 'QUICKBOOKS_INTERACTIVE_MODE';
         //$inter_val = QUICKBOOKS_INTERACTIVE_MODE;
         /*
@@ -1131,14 +1131,14 @@ class QuickBooks_Utilities
             $constants[] = $inter_val;
         }
         */
-            
+
         foreach (get_defined_constants() as $constant => $value) {
             foreach ($startswith as $start) {
                 if (substr($constant, 0, strlen($start)) == $start) {
                     if (!$return_keys) {
                         $constant = $value;
                     }
-                    
+
                     if (!is_null($filter)) {
                         if (QuickBooks_Utilities::fnmatch($filter, $constant)) {
                             $constants[] = $constant;
@@ -1149,12 +1149,12 @@ class QuickBooks_Utilities
                 }
             }
         }
-            
+
         sort($constants);
-            
+
         return $constants;
     }
-    
+
     /**
      * Get the primary key within QuickBooks for this type of object (or this type of action)
      *
@@ -1173,7 +1173,7 @@ class QuickBooks_Utilities
     {
         // Make sure it's an object
         $object = QuickBooks_Utilities::actionToObject($object);
-        
+
         switch ($object) {
             case QUICKBOOKS_OBJECT_BILLPAYMENTCREDITCARD:
             case QUICKBOOKS_OBJECT_INVENTORYADJUSTMENT:
@@ -1205,7 +1205,7 @@ class QuickBooks_Utilities
                 return 'ListID';
         }
     }
-    
+
     /**
      * Alias of QuickBooks_Utilities::keyForObject()
      */
@@ -1213,7 +1213,7 @@ class QuickBooks_Utilities
     {
         return QuickBooks_Utilities::keyForObject($action);
     }
-            
+
     /**
      * Converts an action to a request (example: "CustomerAdd" to "CustomerAddRq")
      *
@@ -1224,7 +1224,7 @@ class QuickBooks_Utilities
     {
         return $action . 'Rq';
     }
-        
+
     /**
      * Converts an action to a response (example: "CustomerAdd" to "CustomerAddRs")
      *
@@ -1235,7 +1235,7 @@ class QuickBooks_Utilities
     {
         return $action . 'Rs';
     }
-        
+
     /**
      * Converts a request to an action (example: "CustomerAddRq" to "CustomerAdd")
      *
@@ -1246,7 +1246,7 @@ class QuickBooks_Utilities
     {
         return substr($request, 0, -2);
     }
-        
+
     /**
      * Converts an action to an XML Element (example: "CustomerAdd" to "CustomerRet")
      *
@@ -1257,7 +1257,7 @@ class QuickBooks_Utilities
     {
         return $object . 'Ret';
     }
-        
+
     /**
      * Converts an action to an XML Element (example: "CustomerAdd" to "CustomerRet")
      *
@@ -1268,7 +1268,7 @@ class QuickBooks_Utilities
     {
         return QuickBooks_Utilities::actionToObject($action) . 'Ret';
     }
-        
+
     /**
      * Converts an object type to the corresponding Query Action (example: "Customer" to "CustomerQuery")
      *
@@ -1279,7 +1279,7 @@ class QuickBooks_Utilities
     {
         return QuickBooks_Utilities::actionToObject($type) . 'Query';
     }
-        
+
     /**
      * Converts an object type to the corresponding Mod Action
      * Ex: Customer to CustomerMod
@@ -1288,7 +1288,7 @@ class QuickBooks_Utilities
     {
         return QuickBooks_Utilities::actionToObject($type) . 'Mod';
     }
-        
+
     /**
      * Converts an object type to the corresponding Add Action
      * Ex: Customer to CustomerAdd
@@ -1297,7 +1297,7 @@ class QuickBooks_Utilities
     {
         return QuickBooks_Utilities::actionToObject($type) . 'Add';
     }
-        
+
     /**
      * Converts an actrion to the corresponding Query Action
      * Ex: Customer to CustomerQuery
@@ -1306,7 +1306,7 @@ class QuickBooks_Utilities
     {
         return QuickBooks_Utilities::objectToQuery(QuickBooks_Utilities::actionToObject($action));
     }
-        
+
     /**
      * Converts an action to the corresponding Mod Action
      * Ex: Customer to CustomerQuery
@@ -1315,7 +1315,7 @@ class QuickBooks_Utilities
     {
         return QuickBooks_Utilities::objectToMod(QuickBooks_Utilities::actionToObject($action));
     }
-        
+
     /**
      * Converts a MySQL timestamp value to the timezone of the PHP server this script is running on.
      *
@@ -1379,7 +1379,7 @@ class QuickBooks_Utilities
         return $tempTime[0]." ".date("H:i:s", $newMysqlTime);
 
     }*/
-    
+
     /**
      * Compares a time reported from QuickBooks to a mysql datetime field
      * Ex: QB Time: 2009-01-23T08:33:56-05:00

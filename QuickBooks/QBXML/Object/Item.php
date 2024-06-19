@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_Item extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of the Class
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_Item extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of the Class
      *
@@ -80,7 +80,7 @@ class QuickBooks_QBXML_Object_Item extends QuickBooks_QBXML_Object
         if (is_null($last)) {
             $last = '';
         }
-     
+
         return $this->set('Name', $first .' '. $last);
     }
 
@@ -176,24 +176,24 @@ class QuickBooks_QBXML_Object_Item extends QuickBooks_QBXML_Object
 
     public function getFromModifiedDate()
     {
-        
+
     }
-    
+
     public function setFromModifiedDate($date)
     {
-        
+
     }
-    
+
     public function getToModifiedDate()
     {
-        
+
     }
-    
+
     public function setToModifiedDate($date)
     {
-        
+
     }
-    
+
     /**
      * Perform any needed clean-up of the object data members
      *
@@ -203,7 +203,7 @@ class QuickBooks_QBXML_Object_Item extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this Class object
      *
@@ -214,10 +214,10 @@ class QuickBooks_QBXML_Object_Item extends QuickBooks_QBXML_Object
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -230,10 +230,10 @@ class QuickBooks_QBXML_Object_Item extends QuickBooks_QBXML_Object
     public function asQBXML($request, $version = null, $locale = null, $root = null)
     {
         $this->_cleanup();
-    
+
         return parent::asQBXML($request, $version, $locale, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

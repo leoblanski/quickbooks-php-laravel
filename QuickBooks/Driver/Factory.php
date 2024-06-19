@@ -44,11 +44,11 @@ class QuickBooks_Driver_Factory
     public static function create($dsn_or_conn, $config = [], $hooks = [], $log_level = QUICKBOOKS_LOG_NORMAL)
     {
         static $instances = [];
-            
+
         if (!is_array($hooks)) {
             $hooks = [];
         }
-            
+
         // Do not serialize the $hooks because they might contain non-serializeable objects
         if (is_object($dsn_or_conn)) {
             $key = get_class($dsn_or_conn) . serialize($config) . $log_level;
@@ -64,26 +64,26 @@ class QuickBooks_Driver_Factory
             } else {
                 $scheme = QuickBooks_Utilities::parseDSN($dsn_or_conn, [], 'scheme');
             }
-                
+
             if (false !== strpos($scheme, 'sql')) {		// SQL drivers are subclassed... change class/scheme name
                 $scheme = 'Sql_' . ucfirst(strtolower($scheme));
             } else {
                 $scheme = ucfirst(strtolower($scheme));
             }
-                
+
             $class = 'QuickBooks_Driver_' . $scheme;
             $file = '/QuickBooks/Driver/' . str_replace(' ', '/', ucwords(str_replace('_', ' ', strtolower($scheme)))) . '.php';
 
             //print('class: ' . $class . "\n");
             //print('file: ' . $file . "\n");
-            
+
             QuickBooks_Loader::load($file);
-            
+
             if (class_exists($class)) {
                 $Driver = new $class($dsn_or_conn, $config);
                 $Driver->registerHooks($hooks);
                 $Driver->setLogLevel($log_level);
-                
+
                 /*
                 static $static = 0;
                 $static++;
@@ -91,19 +91,19 @@ class QuickBooks_Driver_Factory
                 mysql_query("INSERT INTO quickbooks_log ( msg, log_datetime ) VALUES ( 'Here is my " . $static . " key: " . $key . "', NOW() )");
                 //print_r($hooks);
                 */
-                
+
                 // @todo Ugh this is really ugly... maybe have $log_level passed in as a parameter? Not really a driver option at all?
                 //if (isset($config['log_level']))
                 //{
                 //	$driver->setLogLevel($config['log_level']);
                 //}
-                
+
                 $instances[$key] = $Driver;
             } else {
                 $instances[$key] = null;
             }
         }
-            
+
         return $instances[$key];
     }
 }

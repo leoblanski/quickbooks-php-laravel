@@ -19,7 +19,7 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 {
     // Grab the data from our MySQL database
     $arr = mysql_fetch_assoc(mysql_query('SELECT * FROM my_customer_table WHERE id = ' . (int) $ID));
-    
+
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="2.0"?>
 		<QBXML>
@@ -34,7 +34,7 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 				</CustomerAddRq>
 			</QBXMLMsgsRq>
 		</QBXML>';
-    
+
     return $xml;
 }
 

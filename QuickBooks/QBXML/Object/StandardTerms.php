@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of the termspwd
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of the terms
      *
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      * Set the name of the terms
      *
@@ -61,7 +61,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name of these terms
      *
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-    
+
     /**
      * Set this as active or not
      *
@@ -80,9 +80,9 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
      */
     public function setIsActive($value)
     {
-        return $this->set('IsActive', (boolean) $value);
+        return $this->set('IsActive', (bool) $value);
     }
-    
+
     /**
      * Tell whether or not this class object is active
      *
@@ -92,7 +92,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->get('IsActive');
     }
-    
+
     /**
      * Get the number of days until payment is due
      *
@@ -102,7 +102,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->get('StdDueDays');
     }
-    
+
     /**
      * Alias of QuickBooks_Object_StandardTerms::getStdDueDays()
      */
@@ -110,7 +110,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->getStdDueDays();
     }
-    
+
     /**
      * Set the number of days until payment is due
      *
@@ -121,7 +121,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->set('StdDueDays', (int) $days);
     }
-    
+
     /**
      * Alias of QuickBooks_Object_StandardTerms::setStdDueDays()
      */
@@ -129,7 +129,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->setStdDueDays($days);
     }
-    
+
     /**
      *
      */
@@ -137,42 +137,42 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return $this->get('StdDiscountDays');
     }
-    
+
     public function getStandardDiscountDays()
     {
         return $this->getStdDiscountDays();
     }
-    
+
     public function setStdDiscountDays($days)
     {
         return $this->set('StdDiscountDays', (int) $days);
     }
-    
+
     public function setStandardDiscountDays($days)
     {
         return $this->setStdDiscountDays($days);
     }
-    
+
     public function getDiscountPct()
     {
         return $this->get('DiscountPct');
     }
-    
+
     public function getDiscountPercent()
     {
         return $this->getDiscountPct();
     }
-    
+
     public function setDiscountPercent($percent)
     {
         return $this->setDiscountPct($percent);
     }
-    
+
     public function setDiscountPct($percent)
     {
         return $this->set('DiscountPct', (float) $percent);
     }
-    
+
     /**
      * Perform any needed clean-up of the object data members
      *
@@ -182,7 +182,7 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this Class object
      *
@@ -193,10 +193,10 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -209,10 +209,10 @@ class QuickBooks_QBXML_Object_StandardTerms extends QuickBooks_QBXML_Object
     public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

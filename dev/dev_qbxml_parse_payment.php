@@ -2,7 +2,7 @@
 
 require_once '../QuickBooks.php';
 
-$qbxml='<ReceivePaymentRet>
+$qbxml = '<ReceivePaymentRet>
     <TxnID>4ECE-1360116101</TxnID>
     <TimeCreated>2013-02-05T18:01:41-08:00</TimeCreated>
     <TimeModified>2013-02-05T18:01:41-08:00</TimeModified>

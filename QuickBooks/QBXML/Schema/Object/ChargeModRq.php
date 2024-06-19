@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -60,10 +60,10 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'ChargeMod OverrideItemAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -92,10 +92,10 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'ChargeMod OverrideItemAccountRef FullName' => 209,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -125,7 +125,7 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -154,10 +154,10 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'ChargeMod OverrideItemAccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -186,10 +186,10 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'ChargeMod OverrideItemAccountRef FullName' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -201,7 +201,7 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -230,7 +230,7 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   22 => 'ChargeMod OverrideItemAccountRef FullName',
   23 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

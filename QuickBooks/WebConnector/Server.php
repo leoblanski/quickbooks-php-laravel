@@ -78,43 +78,43 @@ class QuickBooks_WebConnector_Server
      * @var string
      */
     protected $_wsdl;
-    
+
     /**
      * The logging level
      * @var integer
      */
     protected $_loglevel;
-    
+
     /**
      * Driver instance object
      * @var object
      */
     protected $_driver;
-    
+
     /**
      * Server instance object
      * @var object
      */
     protected $_server;
-    
+
     /**
      * Registered hook functions for the server
      * @var array
      */
     protected $_hooks;
-    
+
     /**
      * An array of data to pass to every callback function
      * @var array
      */
     protected $_callback_config;
-    
+
     /**
      * The raw input to the script
      * @var string
      */
     protected $_input;
-    
+
     /**
      * Create a new QuickBooks SOAP server
      *
@@ -130,12 +130,12 @@ class QuickBooks_WebConnector_Server
     public function __construct($dsn_or_conn, $map, $onerror = [], $hooks = [], $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_BUILTIN, $wsdl = QUICKBOOKS_WSDL, $soap_options = [], $handler_options = [], $driver_options = [], $callback_options = [])
     {
         $soap_options = $this->_defaults($soap_options);
-        
+
         // If safe mode is turned on, this causes a NOTICE/WARNING to be issued...
         if (!ini_get('safe_mode')) {
             set_time_limit($soap_options['time_limit']);
         }
-        
+
         /*
         if ($soap_options['error_handler'])
         {
@@ -159,17 +159,17 @@ class QuickBooks_WebConnector_Server
 
         // WSDL location
         $this->_wsdl = $wsdl;
-        
+
         // Logging level
         $this->_loglevel = $log_level;
-        
+
         if ($this->_loglevel >= QUICKBOOKS_LOG_DEVELOP) {
             $this->_driver = QuickBooks_Utilities::driverFactory($dsn_or_conn, $driver_options, $hooks, $log_level);
         }
-        
+
         // SOAP server adapter class
         $this->_server = $this->_adapterFactory($soap, $wsdl, $soap_options, $log_level);
-        
+
         /*
         $this->_hooks = array();
         foreach ($hooks as $hook => $funcs)
@@ -183,23 +183,23 @@ class QuickBooks_WebConnector_Server
             $this->_hooks[$hook] = $funcs;
         }
         */
-        
+
         // Assign hooks
         $this->_hooks = $hooks;
-        
+
         // Assign callback configuration info
         $this->_callback_config = $callback_options;
-        
+
         // Raw input
         $input = file_get_contents('php://input');
-        
+
         $this->_input = $input;
-                
+
         // Base handlers
         // $dsn_or_conn, $map, $onerror, $hooks, $log_level, $input, $handler_config = array(), $driver_config = array()
         $this->_server->setClass('QuickBooks_WebConnector_Handlers', $dsn_or_conn, $map, $onerror, $hooks, $log_level, $input, $handler_options, $driver_options, $callback_options);
     }
-    
+
     /**
      * Get an adapter class instance
      *
@@ -212,19 +212,19 @@ class QuickBooks_WebConnector_Server
     protected function _adapterFactory($adapter, $wsdl, $soap_options, $loglevel)
     {
         $adapter = ucfirst(strtolower($adapter));
-        
+
         $file = '/QuickBooks/Adapter/Server/' . $adapter . '.php';
         $class = 'QuickBooks_Adapter_Server_' . $adapter;
-        
+
         QuickBooks_Loader::load($file);
-        
+
         if (class_exists($class)) {
             return new $class($wsdl, $soap_options);
         }
-        
+
         return null;
     }
-    
+
     /**
      * Merge configurations with the defaults
      *
@@ -241,9 +241,9 @@ class QuickBooks_WebConnector_Server
             'log_to_syslog' => null,
             'masking' => true,
             ];
-        
+
         $arr = array_merge($defaults, $arr);
-        
+
         return $arr;
     }
 
@@ -267,31 +267,31 @@ class QuickBooks_WebConnector_Server
                 if (!is_array($funcs)) {
                     $funcs = [ $funcs ];
                 }
-                
+
                 if (isset($arr1[$key])) {
                     if (!is_array($arr1[$key])) {
                         $arr1[$key] = [ $arr1[$key] ];
                     }
-                    
+
                     $arr1[$key] = array_merge($arr1[$key], $funcs);
                 } else {
                     $arr1[$key] = $funcs;
                 }
             }
-            
+
             return $arr1;
         } else {
             // *DO NOT* use array_merge() here, it screws things up!!!
             //return array_merge($arr1, $arr2);
-            
+
             foreach ($arr2 as $key => $value) {
                 $arr1[$key] = $value;
             }
-            
+
             return $arr1;
         }
     }
-    
+
     /**
      * Send the correct HTTP headers for this request
      *
@@ -306,10 +306,10 @@ class QuickBooks_WebConnector_Server
         } else {
             header('Content-Type: text/plain');
         }
-        
+
         return true;
     }
-    
+
     /**
      * Log a message to the error/debug log
      *
@@ -321,16 +321,16 @@ class QuickBooks_WebConnector_Server
     protected function _log($msg, $ticket, $level = QUICKBOOKS_LOG_NORMAL)
     {
         $Driver = $this->_driver;
-        
+
         $msg = QuickBooks_Utilities::mask($msg);
-        
+
         if ($Driver) {
             return $Driver->log($msg, $ticket, $level);
         }
-        
+
         return false;
     }
-    
+
     /**
      * Handle the SOAP request
      *
@@ -342,13 +342,13 @@ class QuickBooks_WebConnector_Server
     {
         // Get the raw input
         $input = $this->_input;
-        
+
         //
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->_headers();
-            
+
             $output_buffering = false;
-            
+
             /*
             if (isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_PREHANDLE]))
             {
@@ -358,37 +358,37 @@ class QuickBooks_WebConnector_Server
                 }
             }
             */
-            
+
             $hook_data = [
                 'input' => $input,
                 ];
-            
+
             $err = '';
             $this->_callHooks(QUICKBOOKS_SERVER_HOOK_PREHANDLE, null, null, null, $err, $hook_data);
             //QuickBooks_Callbacks::callHook($this->_driver, $this->_hooks, QUICKBOOKS_SERVER_HOOK_PREHANDLE, null, null, null, $err, $hook_data, $this->_callback_config, __FILE__, __LINE__);
-            
+
             if ($this->_loglevel >= QUICKBOOKS_LOG_DEVELOP) {
                 if (function_exists('apache_request_headers')) {
                     $headers = '';
                     foreach (apache_request_headers() as $header => $value) {
                         $headers .= $header . ': ' . $value . "\n";
                     }
-                    
+
                     //$this->_driver->log('Incoming HTTP Headers: ' . $headers, null, QUICKBOOKS_LOG_DEVELOP);
                     $this->_log('Incoming HTTP Headers: ' . $headers, null, QUICKBOOKS_LOG_DEVELOP);
                 }
-                
+
                 //$this->_driver->log('Incoming SOAP Request: ' . $input, null, QUICKBOOKS_LOG_DEVELOP);
                 $this->_log('Incoming SOAP Request: ' . $input, null, QUICKBOOKS_LOG_DEVELOP);
             }
-            
+
             if ($return or isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE])) {
                 $output_buffering = true;
                 ob_start();
             }
-            
+
             $this->_server->handle($input);
-            
+
             if ($return or
                 isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE]) or
                 $this->_loglevel >= QUICKBOOKS_LOG_DEVELOP) {
@@ -397,7 +397,7 @@ class QuickBooks_WebConnector_Server
                     $output = ob_get_contents();
                     ob_end_flush();
                 }
-                
+
                 /*
                 if (isset($this->_hooks[QUICKBOOKS_SERVER_HOOK_POSTHANDLE]))
                 {
@@ -407,26 +407,26 @@ class QuickBooks_WebConnector_Server
                     }
                 }
                 */
-                
+
                 $hook_data = [
                     'input' => $input,
                     'output' => $output,
                     ];
-                
+
                 $err = '';
                 $this->_callHooks(QUICKBOOKS_SERVER_HOOK_POSTHANDLE, null, null, null, $err, $hook_data);
                 //QuickBooks_Callbacks::callHook($this->_driver, $this->_hooks, QUICKBOOKS_SERVER_HOOK_POSTHANDLE, null, null, null, $err, $hook_data, $this->_callback_config);
-                
+
                 if ($this->_loglevel >= QUICKBOOKS_LOG_DEVELOP) {
                     //$this->_driver->log('Outgoing SOAP Response: ' . $output, null, QUICKBOOKS_LOG_DEVELOP);
                     $this->_log('Outgoing SOAP Response: ' . $output, null, QUICKBOOKS_LOG_DEVELOP);
                 }
-                
+
                 if ($return) {
                     return $output;
                 }
             }
-            
+
             return;
         } elseif (isset($_GET['WSDL']) or isset($_GET['wsdl'])) {
             if ($contents = file_get_contents($this->_wsdl)) {
@@ -443,7 +443,7 @@ class QuickBooks_WebConnector_Server
             print("\n");
             print('Use the QuickBooks Web Connector to access this SOAP server.' . "\n");
             print("\n");
-            
+
             if ($debug) {
                 print(get_class($this) . str_replace(__CLASS__, '', __METHOD__) . '() parameters: ' . "\n");
                 print(' - $return = ' . $return . "\n");
@@ -451,26 +451,26 @@ class QuickBooks_WebConnector_Server
                 print("\n");
                 print('Misc. information: ' . "\n");
                 print(' - Logging: ' . $this->_loglevel . "\n");
-                
+
                 if (function_exists('date_default_timezone_get')) {
                     print(' - Timezone: ' . date_default_timezone_get() . ' (Auto-set: ');
-                    
+
                     if (QUICKBOOKS_TIMEZONE_AUTOSET) {
                         print('Yes');
                     }
-                    
+
                     print(')' . "\n");
                 }
                 print(' - Current Date/Time: ' . date('Y-m-d H:i:s') . "\n");
                 print(' - Error Reporting: ' . error_reporting() . "\n");
-                
+
                 print("\n");
                 print('SOAP adapter: ' . "\n");
                 print(' - ' . get_class($this->_server) . "\n");
                 print("\n");
                 print('Registered handler functions: ' . "\n");
                 print_r($this->_server->getFunctions());
-                
+
                 /*
                 print("\n");
                 print('Registered hooks: ' . "\n");
@@ -491,7 +491,7 @@ class QuickBooks_WebConnector_Server
                     }
                 }
                 */
-                
+
                 print("\n");
                 print('Detected input: ' . "\n");
                 print($input);
@@ -500,11 +500,11 @@ class QuickBooks_WebConnector_Server
                 print('Timestamp: ' . "\n");
                 print(' - ' . date('Y-m-d H:i:s') . ' -- process ' . round(microtime(true) - QUICKBOOKS_TIMESTAMP, 5) . "\n");
             }
-            
+
             return;
         }
     }
-    
+
     /**
      *
      *
@@ -531,7 +531,7 @@ class QuickBooks_WebConnector_Server
             $this->_callback_config
         );
     }
-    
+
     /**
      * Get debugging information from the SOAP server
      *

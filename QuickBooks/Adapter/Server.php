@@ -35,7 +35,7 @@ interface QuickBooks_Adapter_Server
      * @param array $soap_options	Any SOAP configuration options to pass to the server class
      */
     public function __construct($wsdl, $soap_options);
-    
+
     /**
      * Handle a SOAP request
      *
@@ -43,14 +43,14 @@ interface QuickBooks_Adapter_Server
      * @return boolean
      */
     public function handle($raw_http_input);
-    
+
     /**
      * Return a list of implemented SOAP methods/functions
      *
      * @return array
      */
     public function getFunctions();
-    
+
     /**
      * Set a class whose methods will handle various SOAP methods/functions
      *

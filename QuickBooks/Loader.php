@@ -33,29 +33,29 @@ class QuickBooks_Loader
     public static function load($file, $autoload = true)
     {
         //print('loading file [' . $file . ']' . "\n");
-        
+
         if ($autoload and
             QuickBooks_Loader::_autoload()) {
             return true;
         }
-        
+
         static $loaded = [];
-        
+
         if (isset($loaded[$file])) {
             return true;
         }
-        
+
         $loaded[$file] = true;
-        
+
         if (QUICKBOOKS_LOADER_REQUIREONCE) {
             require_once QUICKBOOKS_BASEDIR . $file;
         } else {
             require QUICKBOOKS_BASEDIR . $file;
         }
-        
+
         return true;
     }
-    
+
     /**
      *
      */
@@ -64,25 +64,25 @@ class QuickBooks_Loader
         if (!QUICKBOOKS_LOADER_AUTOLOADER) {
             return false;
         }
-        
+
         static $done = false;
         static $auto = false;
-        
+
         if (!$done) {
             $done = true;
-            
+
             if (function_exists('spl_autoload_register')) {
                 // Register the autoloader, and return TRUE
                 spl_autoload_register([ 'QuickBooks_Loader', '__autoload' ]);
-                
+
                 $auto = true;
                 return true;
             }
         }
-        
+
         return $auto;
     }
-    
+
     /**
      *
      */
@@ -93,7 +93,7 @@ class QuickBooks_Loader
             QuickBooks_Loader::load($file, false);
         }
     }
-    
+
     /**
      * Import (require_once) a bunch of PHP files from a particular PHP directory
      *
@@ -112,10 +112,10 @@ class QuickBooks_Loader
                     //require_once $dir . '/' . $file;
                 }
             }
-            
+
             return closedir($dh);
         }
-        
+
         return false;
     }
 }

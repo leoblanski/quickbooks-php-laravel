@@ -60,30 +60,30 @@ class Quickbooks_Payments
      * No error occurred
      * @var integer
      */
-    const OK = QUICKBOOKS_ERROR_OK;
+    public const OK = QUICKBOOKS_ERROR_OK;
 
     /**
      * No error occurred
      * @var integer
      */
-    const ERROR_OK = QUICKBOOKS_ERROR_OK;
+    public const ERROR_OK = QUICKBOOKS_ERROR_OK;
 
-    const ERROR_AUTH = -2000;
-    const ERROR_HTTP = -2001;
+    public const ERROR_AUTH = -2000;
+    public const ERROR_HTTP = -2001;
 
-    const ERROR_DECLINE = -2002;
+    public const ERROR_DECLINE = -2002;
 
-    const STATUS_DECLINED = 'DECLINED';
+    public const STATUS_DECLINED = 'DECLINED';
 
-    const URL_CHARGE = '/quickbooks/v4/payments/charges';
-    const URL_TOKEN = '/quickbooks/v4/payments/tokens';
+    public const URL_CHARGE = '/quickbooks/v4/payments/charges';
+    public const URL_TOKEN = '/quickbooks/v4/payments/tokens';
     //const URL_ACCOUNT = '/quickbooks/v4/customers/<id>/bank-accounts';
-    const URL_CARD = '/quickbooks/v4/customers/<id>/cards';
-    const URL_ECHECK = '/quickbooks/v4/payments/echecks';
-    const URL_REFUND = '/quickbooks/v4/payments/charges/<id>/refunds';
+    public const URL_CARD = '/quickbooks/v4/customers/<id>/cards';
+    public const URL_ECHECK = '/quickbooks/v4/payments/echecks';
+    public const URL_REFUND = '/quickbooks/v4/payments/charges/<id>/refunds';
 
-    const BASE_SANDBOX = 'https://sandbox.api.intuit.com';
-    const BASE_PRODUCTION = 'https://api.intuit.com';
+    public const BASE_SANDBOX = 'https://sandbox.api.intuit.com';
+    public const BASE_PRODUCTION = 'https://api.intuit.com';
 
     protected $_sandbox = false;
     protected $_debug = false;

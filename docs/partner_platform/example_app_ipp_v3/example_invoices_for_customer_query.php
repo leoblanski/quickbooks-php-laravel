@@ -31,7 +31,7 @@ if (count($customers)) {
         print("\n\n\n\n");
         exit;
         */
-        
+
         if (count($invoices)) {
             foreach ($invoices as $Invoice) {
                 print(' &nbsp; &nbsp; Invoice #' . $Invoice->getDocNumber() . ' on date ' . $Invoice->getTxnDate() . '<br>');

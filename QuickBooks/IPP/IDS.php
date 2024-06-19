@@ -22,172 +22,172 @@
  */
 class QuickBooks_IPP_IDS
 {
-    const FLAVOR_DESKTOP = 'QBD';
+    public const FLAVOR_DESKTOP = 'QBD';
 
-    const FLAVOR_ONLINE = 'QBO';
+    public const FLAVOR_ONLINE = 'QBO';
 
-    const OPTYPE_SYNCSTATUS = 'SyncStatus';
+    public const OPTYPE_SYNCSTATUS = 'SyncStatus';
 
-    const OPTYPE_ADD = 'Add';
+    public const OPTYPE_ADD = 'Add';
 
-    const OPTYPE_MOD = 'Mod';
+    public const OPTYPE_MOD = 'Mod';
 
-    const OPTYPE_DELETE = 'Delete';
+    public const OPTYPE_DELETE = 'Delete';
 
-    const OPTYPE_VOID = 'Void';
+    public const OPTYPE_VOID = 'Void';
 
-    const OPTYPE_PDF = 'PDF';
+    public const OPTYPE_PDF = 'PDF';
 
-    const OPTYPE_DOWNLOAD = 'DOWNLOAD';
+    public const OPTYPE_DOWNLOAD = 'DOWNLOAD';
 
-    const OPTYPE_QUERY = 'Query';
+    public const OPTYPE_QUERY = 'Query';
 
-    const OPTYPE_CDC = 'ChangeDataCapture';
+    public const OPTYPE_CDC = 'ChangeDataCapture';
 
-    const OPTYPE_ENTITLEMENTS = 'Entitlements';
-    
-    const OPTYPE_SEND = 'Send';
-    
+    public const OPTYPE_ENTITLEMENTS = 'Entitlements';
+
+    public const OPTYPE_SEND = 'Send';
+
     /**
      * This is not a real operation type in IDS terms, but is neccessary to distinguish between queries and findById in QuickBooks Online in IDS v2.
      */
-    const OPTYPE_FINDBYID = '_findById_';
+    public const OPTYPE_FINDBYID = '_findById_';
 
-    const OPTYPE_REPORT = 'Report';
+    public const OPTYPE_REPORT = 'Report';
 
-    const DOMAIN_NG = 'ng';
+    public const DOMAIN_NG = 'ng';
 
-    const DOMAIN_QB = 'qb';
+    public const DOMAIN_QB = 'qb';
 
-    const VERSION_1 = 'v1';
+    public const VERSION_1 = 'v1';
 
-    const VERSION_2 = 'v2';
+    public const VERSION_2 = 'v2';
 
-    const VERSION_3 = 'v3';
+    public const VERSION_3 = 'v3';
 
-    const VERSION_LATEST = 'v3';
+    public const VERSION_LATEST = 'v3';
 
-    const URL_V3 = 'https://quickbooks.api.intuit.com/v3';
+    public const URL_V3 = 'https://quickbooks.api.intuit.com/v3';
 
-    const URL_V3_SANDBOX = 'https://sandbox-quickbooks.api.intuit.com/v3';
+    public const URL_V3_SANDBOX = 'https://sandbox-quickbooks.api.intuit.com/v3';
 
     /**
      * Default BASEURL for QuickBooks Desktop (QuickBooks Online requires you to fetch a specific BASEURL)
      */
-    const BASEURL_DESKTOP = 'https://services.intuit.com/sb';
+    public const BASEURL_DESKTOP = 'https://services.intuit.com/sb';
 
-    const RESOURCE_REPORT_ACCOUNTBALANCES = 'ReportAccountBalances';
+    public const RESOURCE_REPORT_ACCOUNTBALANCES = 'ReportAccountBalances';
 
-    const RESOURCE_REPORT_BALANCESHEET = 'ReportBalanceSheet';
+    public const RESOURCE_REPORT_BALANCESHEET = 'ReportBalanceSheet';
 
-    const RESOURCE_REPORT_BALANCESHEETSTD = 'ReportBalanceSheetStd';
+    public const RESOURCE_REPORT_BALANCESHEETSTD = 'ReportBalanceSheetStd';
 
-    const RESOURCE_REPORT_CUSTOMERSWHOOWEME = 'ReportCustomersWhoOweMe';
+    public const RESOURCE_REPORT_CUSTOMERSWHOOWEME = 'ReportCustomersWhoOweMe';
 
-    const RESOURCE_REPORT_INCOMEBREAKDOWN = 'ReportIncomeBreakdown';
+    public const RESOURCE_REPORT_INCOMEBREAKDOWN = 'ReportIncomeBreakdown';
 
-    const RESOURCE_REPORT_PROFITANDLOSS = 'ReportProfitAndLoss';
+    public const RESOURCE_REPORT_PROFITANDLOSS = 'ReportProfitAndLoss';
 
-    const RESOURCE_REPORT_SALESSUMMARY = 'ReportSalesSummary';
+    public const RESOURCE_REPORT_SALESSUMMARY = 'ReportSalesSummary';
 
-    const RESOURCE_REPORT_TOPCUSTOMERSBYSALES = 'ReportTopCustomersBySales';
+    public const RESOURCE_REPORT_TOPCUSTOMERSBYSALES = 'ReportTopCustomersBySales';
 
-    const RESOURCE_PURCHASE = 'Purchase';
+    public const RESOURCE_PURCHASE = 'Purchase';
 
-    const RESOURCE_ACCOUNT = 'Account';
+    public const RESOURCE_ACCOUNT = 'Account';
 
-    const RESOURCE_BILL = 'Bill';
+    public const RESOURCE_BILL = 'Bill';
 
-    const RESOURCE_DEPOSIT = 'Deposit';
+    public const RESOURCE_DEPOSIT = 'Deposit';
 
-    const RESOURCE_BILLPAYMENT = 'BillPayment';
+    public const RESOURCE_BILLPAYMENT = 'BillPayment';
 
-    const RESOURCE_BILLPAYMENTCREDITCARD = 'BillPaymentCreditCard';
+    public const RESOURCE_BILLPAYMENTCREDITCARD = 'BillPaymentCreditCard';
 
-    const RESOURCE_CHANGEDATADELETED = 'ChangeDataDeleted';
+    public const RESOURCE_CHANGEDATADELETED = 'ChangeDataDeleted';
 
-    const RESOURCE_CHANGEDATACAPTURE = 'ChangeDataCapture';
+    public const RESOURCE_CHANGEDATACAPTURE = 'ChangeDataCapture';
 
-    const RESOURCE_CHECK = 'Check';
+    public const RESOURCE_CHECK = 'Check';
 
-    const RESOURCE_CLASS = 'Class';
+    public const RESOURCE_CLASS = 'Class';
 
-    const RESOURCE_COMPANY = 'Company';
+    public const RESOURCE_COMPANY = 'Company';
 
-    const RESOURCE_COMPANYMETADATA = 'CompanyMetaData';
+    public const RESOURCE_COMPANYMETADATA = 'CompanyMetaData';
 
-    const RESOURCE_CREDITMEMO = 'CreditMemo';
+    public const RESOURCE_CREDITMEMO = 'CreditMemo';
 
-    const RESOURCE_CUSTOMER = 'Customer';
+    public const RESOURCE_CUSTOMER = 'Customer';
 
-    const RESOURCE_DEPARTMENT = 'Department';
+    public const RESOURCE_DEPARTMENT = 'Department';
 
-    const RESOURCE_DISCOUNT = 'Discount';
+    public const RESOURCE_DISCOUNT = 'Discount';
 
-    const RESOURCE_DOWNLOAD = 'Download';
+    public const RESOURCE_DOWNLOAD = 'Download';
 
-    const RESOURCE_EMPLOYEE = 'Employee';
+    public const RESOURCE_EMPLOYEE = 'Employee';
 
-    const RESOURCE_ESTIMATE = 'Estimate';
+    public const RESOURCE_ESTIMATE = 'Estimate';
 
-    const RESOURCE_INVOICE = 'Invoice';
+    public const RESOURCE_INVOICE = 'Invoice';
 
-    const RESOURCE_INVENTORYADJUSTMENT = 'InventoryAdjustment';
+    public const RESOURCE_INVENTORYADJUSTMENT = 'InventoryAdjustment';
 
-    const RESOURCE_ITEM = 'Item';
+    public const RESOURCE_ITEM = 'Item';
 
-    const RESOURCE_ITEMCONSOLIDATED = 'ItemConsolidated';
+    public const RESOURCE_ITEMCONSOLIDATED = 'ItemConsolidated';
 
-    const RESOURCE_ITEMRECEIPT = 'ItemReceipt';
+    public const RESOURCE_ITEMRECEIPT = 'ItemReceipt';
 
-    const RESOURCE_PAYROLLITEM = 'PayrollItem';
+    public const RESOURCE_PAYROLLITEM = 'PayrollItem';
 
-    const RESOURCE_JOB = 'Job';
+    public const RESOURCE_JOB = 'Job';
 
-    const RESOURCE_JOURNALENTRY = 'JournalEntry';
+    public const RESOURCE_JOURNALENTRY = 'JournalEntry';
 
-    const RESOURCE_PAYMENT = 'Payment';
+    public const RESOURCE_PAYMENT = 'Payment';
 
-    const RESOURCE_PAYMENTMETHOD = 'PaymentMethod';
+    public const RESOURCE_PAYMENTMETHOD = 'PaymentMethod';
 
-    const RESOURCE_PREFERENCES = 'Preferences';
+    public const RESOURCE_PREFERENCES = 'Preferences';
 
-    const RESOURCE_PURCHASEORDER = 'PurchaseOrder';
+    public const RESOURCE_PURCHASEORDER = 'PurchaseOrder';
 
-    const RESOURCE_REFUNDRECEIPT = 'RefundReceipt';
+    public const RESOURCE_REFUNDRECEIPT = 'RefundReceipt';
 
-    const RESOURCE_SALESORDER = 'SalesOrder';
+    public const RESOURCE_SALESORDER = 'SalesOrder';
 
-    const RESOURCE_SALESRECEIPT = 'SalesReceipt';
+    public const RESOURCE_SALESRECEIPT = 'SalesReceipt';
 
-    const RESOURCE_SALESREP = 'SalesRep';
+    public const RESOURCE_SALESREP = 'SalesRep';
 
-    const RESOURCE_SALESTAX = 'SalesTax';
+    public const RESOURCE_SALESTAX = 'SalesTax';
 
-    const RESOURCE_SALESTAXCODE = 'SalesTaxCode';
+    public const RESOURCE_SALESTAXCODE = 'SalesTaxCode';
 
-    const RESOURCE_SHIPMETHOD = 'ShipMethod';
+    public const RESOURCE_SHIPMETHOD = 'ShipMethod';
 
-    const RESOURCE_TIMEACTIVITY = 'TimeActivity';
+    public const RESOURCE_TIMEACTIVITY = 'TimeActivity';
 
-    const RESOURCE_TAXAGENCY = 'TaxAgency';
+    public const RESOURCE_TAXAGENCY = 'TaxAgency';
 
     /**
      * IDS v2 - QuickBooks Desktop
      */
-    const RESOURCE_TERM = 'Term';
+    public const RESOURCE_TERM = 'Term';
 
     /**
      * IDS v2 - QuickBooks Online
      */
-    const RESOURCE_SALESTERM = 'Sales-Term';
+    public const RESOURCE_SALESTERM = 'Sales-Term';
 
-    const RESOURCE_UOM = 'UOM';
-    const RESOURCE_UNITOFMEASURE = 'UOM';
+    public const RESOURCE_UOM = 'UOM';
+    public const RESOURCE_UNITOFMEASURE = 'UOM';
 
-    const RESOURCE_VENDOR = 'Vendor';
+    public const RESOURCE_VENDOR = 'Vendor';
 
-    const RESOURCE_VENDORCREDIT = 'VendorCredit';
+    public const RESOURCE_VENDORCREDIT = 'VendorCredit';
 
     /**
      *

@@ -32,7 +32,7 @@ class QuickBooks_WebConnector_Result_InteractiveDone extends QuickBooks_WebConne
      * @var string
      */
     public $interactiveDoneResult;
-    
+
     /**
      * Create a new result object
      *

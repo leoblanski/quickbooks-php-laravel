@@ -50,10 +50,10 @@ class QuickBooks_Driver_Singleton
             //$instance = QuickBooks_Utilities::driverFactory($dsn_or_conn, $options, $hooks, $log_level);
             $instance = QuickBooks_Driver_Factory::create($dsn_or_conn, $options, $hooks, $log_level);
         }
-        
+
         return $instance;
     }
-    
+
     /**
      *
      *
@@ -63,7 +63,7 @@ class QuickBooks_Driver_Singleton
         if ($obj = QuickBooks_Driver_Singleton::getInstance($dsn_or_conn, $options, $hooks, $log_level)) {
             return true;
         }
-        
+
         return false;
     }
 }

@@ -32,7 +32,7 @@ class QuickBooks_XML_Document
      * @var QuickBooks_XML_Node
      */
     protected $_root;
-    
+
     /**
      *
      *
@@ -52,7 +52,7 @@ class QuickBooks_XML_Document
     {
         return $this->_root;
     }
-    
+
     /**
      * Return the children of the root node (For backward compatability *only*! DO NOT use this function in new code!)
      *
@@ -62,7 +62,7 @@ class QuickBooks_XML_Document
     {
         return $this->_root->children();
     }
-    
+
     /**
      * Return the XML object as an XML string
      *

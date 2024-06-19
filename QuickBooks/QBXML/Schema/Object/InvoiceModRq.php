@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'InvoiceMod';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -144,10 +144,10 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other2' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -260,10 +260,10 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other2' => 29,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -377,7 +377,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -490,10 +490,10 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other2' => 6,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -606,10 +606,10 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other2' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -621,7 +621,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -735,7 +735,7 @@ class QuickBooks_QBXML_Schema_Object_InvoiceModRq extends QuickBooks_QBXML_Schem
   'InvoiceLineGroupMod InvoiceLineMod Other2',
   'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

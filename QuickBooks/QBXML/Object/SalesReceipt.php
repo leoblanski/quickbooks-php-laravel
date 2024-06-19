@@ -59,7 +59,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Alias of {@link QuickBooks_Object_SalesReceipt::setTxnID()}
      */
@@ -72,7 +72,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->getTxnID();
     }
-    
+
     /**
      * Set the transaction ID of the SalesReceipt object
      *
@@ -88,7 +88,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->get('TxnID');
     }
-    
+
     /**
      * Set the customer ListID
      *
@@ -99,7 +99,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->set('CustomerRef ListID', $ListID);
     }
-    
+
     /**
      * Set the customer ApplicationID (auto-replaced by the API with a ListID)
      *
@@ -110,7 +110,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->set('CustomerRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_CUSTOMER, QUICKBOOKS_LISTID, $value));
     }
-    
+
     /**
      * Set the customer name
      *
@@ -121,12 +121,12 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->set('CustomerRef FullName', $name);
     }
-    
+
     public function setCustomerFullName($FullName)
     {
         return $this->setFullNameType('CustomerRef FullName', null, null, $FullName);
     }
-    
+
     /**
      * Get the customer ListID
      *
@@ -136,7 +136,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->get('CustomerRef ListID');
     }
-    
+
     /**
      * Get the customer name
      *
@@ -146,7 +146,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->get('CustomerRef FullName');
     }
-    
+
     /**
      * Get the customer application ID
      *
@@ -156,7 +156,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->extractApplicationID($this->get('CustomerRef ' . QUICKBOOKS_API_APPLICATIONID));
     }
-    
+
     /*
     public function setDiscountLineAmount($amount)
     {
@@ -188,17 +188,17 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 
     }
     */
-    
+
     public function setSalesTaxItemFullName($FullName)
     {
         return $this->setItemSalesTaxFullName($FullName);
     }
-    
+
     public function setItemSalesTaxFullName($FullName)
     {
         return $this->setFullNameType('ItemSalesTaxRef FullName', null, null, $FullName);
     }
-    
+
     public function setClassListID($ListID)
     {
         return $this->set('ClassRef ListID', $ListID);
@@ -208,7 +208,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->get('ClassRef ListID');
     }
-    
+
     public function setClassApplicationID($value)
     {
         return $this->set('ClassRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_CLASS, QUICKBOOKS_LISTID, $value));
@@ -229,27 +229,27 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->set('ShipMethodRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_SHIPMETHOD, QUICKBOOKS_LISTID, $value));
     }
-    
+
     public function setShipMethodName($name)
     {
         return $this->set('ShipMethodRef FullName', $name);
     }
-    
+
     public function setShipMethodListID($ListID)
     {
         return $this->set('ShipMethodRef ListID', $ListID);
     }
-    
+
     public function getShipMethodName()
     {
         return $this->get('ShipMethodRef FullName');
     }
-    
+
     public function getShipMethodListID()
     {
         return $this->get('ShipMethodRef ListID');
     }
-    
+
     /**
      * Set an invoice as pending
      *
@@ -260,22 +260,22 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->setBooleanType('IsPending', $pending);
     }
-    
+
     public function getIsPending()
     {
         return $this->getBooleanType('IsPending');
     }
-    
+
     public function setCheckNumber($check)
     {
         return $this->set('CheckNumber', $check);
     }
-    
+
     public function getCheckNumber()
     {
         return $this->get('CheckNumber');
     }
-    
+
     public function setPaymentMethodApplicationID($value)
     {
         return $this->set('PaymentMethodRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_PAYMENTMETHOD, QUICKBOOKS_LISTID, $value));
@@ -285,37 +285,37 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->get('PaymentMethodRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     public function setPaymentMethodListID($ListID)
     {
         return $this->set('PaymentMethodRef ListID', $ListID);
     }
-    
+
     public function setPaymentMethodName($name)
     {
         return $this->set('PaymentMethodRef FullName', $name);
     }
-    
+
     public function getPaymentMethodListID()
     {
         return $this->get('PaymentMethodRef ListID');
     }
-    
+
     public function getPaymentMethodName()
     {
         return $this->get('PaymentMethodRef FullName');
     }
-    
+
     public function setDueDate($date)
     {
         return $this->setDateType('DueDate', $date);
     }
-    
+
     public function getDueDate($format = null)
     {
         return $this->getDateType('DueDate', $format);
     }
-    
+
     public function setSalesRepApplicationID($value)
     {
         return $this->set('SalesRepRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_SALESREP, QUICKBOOKS_LISTID, $value));
@@ -325,47 +325,47 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->get('SalesRepRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     public function setSalesRepListID($ListID)
     {
         return $this->set('SalesRepRef ListID', $ListID);
     }
-    
+
     public function setSalesRepName($name)
     {
         return $this->set('SalesRepRef FullName', $name);
     }
-    
+
     public function getSalesRepListID()
     {
         return $this->get('SalesRepRef ListID');
     }
-    
+
     public function getSalesRepName()
     {
         return $this->get('SalesRepRef FullName');
     }
-    
+
     public function setIsToBePrinted($printed)
     {
         return $this->setBooleanType('IsToBePrinted', $printed);
     }
-    
+
     public function getIsToBePrinted()
     {
         return $this->getBooleanType('IsToBePrinted');
     }
-    
+
     public function setIsToBeEmailed($emailed)
     {
         return $this->setBooleanType('IsToBeEmailed', $emailed);
     }
-    
+
     public function getIsToBeEmailed()
     {
         return $this->getBooleanType('IsToBeEmailed');
     }
-    
+
     /**
      * Get the ship method application ID
      *
@@ -375,32 +375,32 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->extractApplicationID($this->get('ShipMethodRef ' . QUICKBOOKS_API_APPLICATIONID));
     }
-    
+
     public function setDepositToAccountApplicationID($value)
     {
         return $this->set('DepositToAccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
     }
-    
+
     public function setDepositToAccountListID($ListID)
     {
         return $this->set('DepositToAccountRef ListID', $ListID);
     }
-    
+
     public function setDepositToAccountName($name)
     {
         return $this->set('DepositToAccountRef FullName', $name);
     }
-    
+
     public function getDepositToAccountListID()
     {
         return $this->get('DepositToAccountRef ListID');
     }
-    
+
     public function getDepositToAccountName()
     {
         return $this->get('DepositToAccountRef FullName');
     }
-    
+
     /**
      * Get the ARAccount application ID
      *
@@ -410,7 +410,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->extractApplicationID($this->get('DepositToAccountRef ' . QUICKBOOKS_API_APPLICATIONID));
     }
-    
+
     /**
      * Set the transaction date
      *
@@ -427,10 +427,10 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 
         return $this->set('TxnDate', $date);
         */
-        
+
         return $this->setDateType('TxnDate', $date);
     }
-    
+
     /**
      * Alias of {@link QuickBooks_Object_Invoice::setTxnDate()}
      */
@@ -443,7 +443,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->getDateType('TxnDate', $format);
     }
-    
+
     public function getTransactionDate($format = null)
     {
         return $this->getTxnDate($format);
@@ -465,10 +465,10 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
 
         return $this->set('ShipDate', $date);
         */
-        
+
         return $this->setDateType('ShipDate', $date);
     }
-        
+
     /**
      * Get the shipping date
      *
@@ -478,10 +478,10 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     public function getShipDate($format = null)
     {
         //return date($format, strtotime($this->get('ShipDate')));
-        
+
         return $this->getDateType('ShipDate', $format);
     }
-    
+
     /**
      * Set the reference number
      *
@@ -502,27 +502,27 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->get('RefNumber');
     }
-        
+
     public function setMemo($memo)
     {
         return $this->set('Memo', $memo);
     }
-    
+
     public function getMemo()
     {
         return $this->get('Memo');
     }
-    
+
     public function getFOB()
     {
         return $this->get('FOB');
     }
-    
+
     public function setFOB($fob)
     {
         return $this->set('FOB', $fob);
     }
-    
+
     public function setLinkToTxnID($TxnID)
     {
         return $this->set('LinkToTxnID', $TxnID);
@@ -532,7 +532,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->get('LinkToTxnID');
     }
-    
+
     /**
      *
      *
@@ -542,10 +542,10 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         $lines = $this->get('SalesReceiptLine');
         $lines[] = $obj;
-        
+
         return $this->set('SalesReceiptLine', $lines);
     }
-    
+
     /**
      *
      */
@@ -553,7 +553,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->getList('SalesReceiptLine');
     }
-    
+
     /**
      *
      */
@@ -561,7 +561,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->getListItem('SalesReceiptLine', $i);
     }
-    
+
     /**
      * Add a discount line (only supported by Online Edition as of 8.0)
      *
@@ -583,7 +583,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->addListItem('SalesTaxLine', $obj);
     }
-    
+
     /**
      * Add a shipping line (only supported by Online Edition as of 8.0)
      *
@@ -594,7 +594,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     {
         return $this->addListItem('ShippingLine', $obj);
     }
-        
+
     /**
      * Get an shipping address as an array (or a specific portion of the address as a string)
      *
@@ -607,10 +607,10 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
         if (!is_null($part)) {
             return $this->get('ShipAddress ' . $part);
         }
-        
+
         return $this->getArray('ShipAddress *', $defaults);
     }
-    
+
     /**
      * Set the shipping address for the invoice
      *
@@ -632,7 +632,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
         for ($i = 1; $i <= 5; $i++) {
             $this->set('ShipAddress Addr' . $i, ${'addr' . $i});
         }
-        
+
         $this->set('ShipAddress City', $city);
         $this->set('ShipAddress State', $state);
         $this->set('ShipAddress Province', $province);
@@ -640,7 +640,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
         $this->set('ShipAddress Country', $country);
         $this->set('ShipAddress Note', $note);
     }
-    
+
     /**
      * Get the billing address
      *
@@ -653,10 +653,10 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
         if (!is_null($part)) {
             return $this->get('BillAddress ' . $part);
         }
-        
+
         return $this->getArray('BillAddress *', $defaults);
     }
-    
+
     /**
      * Set the billing address for the invoice
      *
@@ -678,7 +678,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
         for ($i = 1; $i <= 5; $i++) {
             $this->set('BillAddress Addr' . $i, ${'addr' . $i});
         }
-        
+
         $this->set('BillAddress City', $city);
         $this->set('BillAddress State', $state);
         $this->set('BillAddress Province', $province);
@@ -686,17 +686,17 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
         $this->set('BillAddress Country', $country);
         $this->set('BillAddress Note', $note);
     }
-        
+
     public function setOther($other)
     {
         return $this->set('Other', $other);
     }
-    
+
     public function getOther()
     {
         return $this->get('Other');
     }
-        
+
     /**
      *
      *
@@ -704,19 +704,19 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
      */
     protected function _cleanup()
     {
-        
+
         return true;
     }
-    
+
     public function asList($request)
     {
         switch ($request) {
             case 'SalesReceiptAddRq':
-                
+
                 if (isset($this->_object['SalesReceiptLine'])) {
                     $this->_object['SalesReceiptLineAdd'] = $this->_object['SalesReceiptLine'];
                 }
-                
+
                 if (isset($this->_object['ShippingLine'])) {
                     $this->_object['ShippingLineAdd'] = $this->_object['ShippingLine'];
                 }
@@ -728,60 +728,60 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
                 if (isset($this->_object['DiscountLine'])) {
                     $this->_object['DiscountLineAdd'] = $this->_object['DiscountLine'];
                 }
-                
+
                 break;
             case 'SalesReceiptModRq':
-                
+
                 if (isset($this->_object['SalesReceiptLine'])) {
                     $this->_object['SalesReceiptLineMod'] = $this->_object['SalesReceiptLine'];
                 }
-                
+
                 break;
         }
-        
+
         return parent::asList($request);
     }
-    
+
     public function asXML($root = null, $parent = null, $object = null)
     {
         //print('INVOICE got called asXML: ' . $root . ', ' . $parent . "\n");
         //print('sales receipt got called as: {' . $root . '}, {' . QUICKBOOKS_ADD_SALESRECEIPT . "}\n");
         //exit;
-        
+
         if (is_null($object)) {
             $object = $this->_object;
         }
-        
+
         switch ($root) {
             case QUICKBOOKS_ADD_SALESRECEIPT:
-                
+
                 //if (isset($this->_object['InvoiceLine']))
                 //{
                 //	$this->_object['InvoiceLineAdd'] = $this->_object['InvoiceLine'];
                 //}
-                
+
                 foreach ($object['SalesReceiptLineAdd'] as $key => $obj) {
                     $obj->setOverride('SalesReceiptLineAdd');
                 }
-            
+
                 if (!empty($object['ShippingLineAdd'])) {
                     foreach ($object['ShippingLineAdd'] as $key => $obj) {
                         $obj->setOverride('ShippingLineAdd');
                     }
                 }
-                
+
                 if (!empty($object['DiscountLineAdd'])) {
                     foreach ($object['DiscountLineAdd'] as $key => $obj) {
                         $obj->setOverride('DiscountLineAdd');
                     }
                 }
-                
+
                 if (!empty($object['SalesTaxLineAdd'])) {
                     foreach ($object['SalesTaxLineAdd'] as $key => $obj) {
                         $obj->setOverride('SalesTaxLineAdd');
                     }
                 }
-                
+
                 break;
             case QUICKBOOKS_MOD_SALESRECEIPT:
                 if (isset($object['SalesReceiptLine'])) {
@@ -789,22 +789,22 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
                 }
                 break;
         }
-        
+
         //print_r($this->_object);
-        
+
         return parent::asXML($root, $parent, $object);
     }
-    
+
     /**
      *
      */
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      *
      *
@@ -816,10 +816,10 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
     public function asQBXML($request, $version = null, $locale = null, $root = null, $parent = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $version, $locale, $root);
     }
-    
+
     /**
      * Tell the type of object this is
      *

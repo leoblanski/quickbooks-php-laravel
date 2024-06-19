@@ -66,10 +66,10 @@ $handler_options = [
 if (!QuickBooks_Utilities::initialized($dsn)) {
     // Initialize creates the neccessary database schema for queueing up requests and logging
     QuickBooks_Utilities::initialize($dsn);
-    
+
     // This creates a username and password which is used by the Web Connector to authenticate
     QuickBooks_Utilities::createUser($dsn, $user, $pass);
-    
+
     // Queueing up a test request
     $primary_key_of_your_customer = 5;
     $Queue = new QuickBooks_WebConnector_Queue($dsn);
@@ -90,10 +90,10 @@ function _quickbooks_custom_auth($username, $password, &$qb_company_file)
         $password == 'rocks') {
         // Use this company file and auth successfully
         $qb_company_file = 'C:\path\to\the\file-function.QBW';
-        
+
         return true;
     }
-    
+
     // Login failure
     return false;
 }
@@ -131,7 +131,7 @@ class _QuickBooksClass
 function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
     // We're just testing, so we'll just use a static test request:
-     
+
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="2.0"?>
 		<QBXML>
@@ -159,7 +159,7 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 				</CustomerAddRq>
 			</QBXMLMsgsRq>
 		</QBXML>';
-    
+
     return $xml;
 }
 

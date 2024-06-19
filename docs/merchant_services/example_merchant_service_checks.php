@@ -73,7 +73,7 @@ $Check = new QuickBooks_MerchantService_CheckingAccount(
 $amount = 295.0;
 
 if ($Transaction = $MS->debitCheck($Check, $amount, QuickBooks_MerchantService::MODE_INTERNET)) {
-    
+
     print_r($Transaction);
 } else {
     print('An error occured during refund: ' . $MS->errorNumber() . ': ' . $MS->errorMessage() . "\n");

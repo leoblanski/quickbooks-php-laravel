@@ -24,7 +24,7 @@ class QuickBooks_IPP_Service_SalesReceipt extends QuickBooks_IPP_Service
     {
         return parent::_update($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SALESRECEIPT, $Object, $IDType);
     }
-    
+
     /**
      * Add a new sales receipt to IDS/QuickBooks
      *

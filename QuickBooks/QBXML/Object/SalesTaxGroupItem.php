@@ -28,17 +28,17 @@ class QuickBooks_QBXML_Object_SalesTaxGroupItem extends QuickBooks_QBXML_Object
     public function __construct($arr = [])
     {
         parent::__construct($arr);
-        
+
         // These two things occur because it's a repeatable element who name doesn't do the *Add, *Mod, *Ret thing, trash these
         if (isset($this->_object['ItemSalesTaxRef FullName'])) {
             unset($this->_object['ItemSalesTaxRef FullName']);
         }
-        
+
         if (isset($this->_object['ItemSalesTaxRef ListID'])) {
             unset($this->_object['ItemSalesTaxRef ListID']);
         }
     }
-    
+
     /**
      * Set the ListID for this item
      *
@@ -49,7 +49,7 @@ class QuickBooks_QBXML_Object_SalesTaxGroupItem extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID for this item
      *
@@ -59,7 +59,7 @@ class QuickBooks_QBXML_Object_SalesTaxGroupItem extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      * Set the name for this item
      *
@@ -70,17 +70,17 @@ class QuickBooks_QBXML_Object_SalesTaxGroupItem extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     public function getIsActive()
     {
         return $this->getBooleanType('IsActive', true);
     }
-    
+
     public function setIsActive($IsActive)
     {
         return $this->setBooleanType('IsActive', $IsActive);
     }
-        
+
     /**
      * Get the name for this item
      *
@@ -90,22 +90,22 @@ class QuickBooks_QBXML_Object_SalesTaxGroupItem extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-    
+
     public function setItemDesc($desc)
     {
         return $this->set('ItemDesc', $desc);
     }
-    
+
     public function getItemDesc($desc)
     {
         return $this->get('ItemDesc', $desc);
     }
-    
+
     public function setDescription($desc)
     {
         return $this->set('ItemDesc', $desc);
     }
-    
+
     public function getDescription()
     {
         return $this->get('ItemDesc');
@@ -115,17 +115,17 @@ class QuickBooks_QBXML_Object_SalesTaxGroupItem extends QuickBooks_QBXML_Object
     {
         return $this->addListItem('ItemSalesTaxRef', $obj);
     }
-    
+
     public function getItemSalesTaxRef($i)
     {
         return $this->getListItem('ItemSalesTaxRef', $i);
     }
-    
+
     public function listItemSalesTaxRefs()
     {
         return $this->getList('ItemSalesTaxRef');
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -139,7 +139,7 @@ class QuickBooks_QBXML_Object_SalesTaxGroupItem extends QuickBooks_QBXML_Object
     {
         return parent::asQBXML($request, $version, $locale, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

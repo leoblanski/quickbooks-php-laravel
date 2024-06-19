@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
     {
         return $this->set('VendorRef ListID', $ListID);
     }
-    
+
     /**
      * Set the customer ApplicationID (auto-replaced by the API with a ListID)
      *
@@ -61,7 +61,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
     {
         return $this->set('VendorRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_VENDOR, QUICKBOOKS_LISTID, $value));
     }
-    
+
     /**
      * Set the customer name
      *
@@ -72,7 +72,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
     {
         return $this->set('VendorRef FullName', $name);
     }
-    
+
     /**
      * Get the customer ListID
      *
@@ -94,7 +94,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
     }
 
     // Path: TxnDate, datatype: DATETYPE
-    
+
     /**
      * Set the TxnDate for the JournalEntry
      *
@@ -133,17 +133,17 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
         $this->getTxnDate($format = null);
     }
     // Path: RefNumber, datatype: STRTYPE
-    
+
     public function setDueDate($date)
     {
         return $this->setDateType('DueDate', $date);
     }
-    
+
     public function getDueDate($format = 'Y-m-d')
     {
         return $this->getDateType('DueDate', $format);
     }
-    
+
     /**
      * Set the RefNumber for the JournalEntry
      *
@@ -166,7 +166,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
     }
 
     // Path: Memo, datatype: STRTYPE
-    
+
     /**
      * Set the Memo for the JournalEntry
      *
@@ -187,36 +187,36 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
     {
         return $this->get('Memo');
     }
-    
+
     public function addExpenseLine($obj)
     {
         return $this->addListItem('ExpenseLine', $obj);
     }
-    
+
     public function addItemLine($obj)
     {
         return $this->addListItem('ItemLine', $obj);
     }
-    
+
     public function asList($request)
     {
         switch ($request) {
             case 'BillAddRq':
-                
+
                 if (isset($this->_object['ItemLine'])) {
                     $this->_object['ItemLineAdd'] = $this->_object['ItemLine'];
                 }
-                
+
                 if (isset($this->_object['ExpenseLine'])) {
                     $this->_object['ExpenseLineAdd'] = $this->_object['ExpenseLine'];
                 }
-                
+
                 break;
             case 'BillModRq':
-                
+
                 break;
         }
-        
+
         return parent::asList($request);
     }
 
@@ -225,40 +225,40 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
         if (is_null($object)) {
             $object = $this->_object;
         }
-        
+
         switch ($root) {
             case QUICKBOOKS_ADD_BILL:
-                
+
                 if (!empty($object['ItemLineAdd'])) {
                     foreach ($object['ItemLineAdd'] as $key => $obj) {
                         $obj->setOverride('ItemLineAdd');
                     }
                 }
-                
+
                 if (!empty($object['ExpenseLineAdd'])) {
                     foreach ($object['ExpenseLineAdd'] as $key => $obj) {
                         $obj->setOverride('ExpenseLineAdd');
                     }
                 }
-                    
+
                 break;
             case QUICKBOOKS_MOD_BILL:
-                
+
                 if (!empty($object['ItemLineMod'])) {
                     foreach ($object['ItemLineMod'] as $key => $obj) {
                         $obj->setOverride('ItemLineMod');
                     }
                 }
-                
+
                 if (!empty($object['ExpenseLineMod'])) {
                     foreach ($object['ExpenseLineMod'] as $key => $obj) {
                         $obj->setOverride('ExpenseLineMod');
                     }
                 }
-                
+
                 break;
         }
-        
+
         return parent::asXML($root, $parent, $object);
     }
 

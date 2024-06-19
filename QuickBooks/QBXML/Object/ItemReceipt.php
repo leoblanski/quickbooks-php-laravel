@@ -228,7 +228,7 @@ class QuickBooks_QBXML_Object_ItemReceipt extends QuickBooks_QBXML_Object
     {
         return $this->addListItem('ItemGroupLine', $obj);
     }
-    
+
     public function addExpenseLine($obj)
     {
         return $this->addListItem('ExpenseLine', $obj);
@@ -269,7 +269,7 @@ class QuickBooks_QBXML_Object_ItemReceipt extends QuickBooks_QBXML_Object
     {
         return $this->getList('ItemLine');
     }
-    
+
     /**
      * Gets the ItemGroupLine at @param $i
      *
@@ -356,7 +356,7 @@ class QuickBooks_QBXML_Object_ItemReceipt extends QuickBooks_QBXML_Object
         if (is_null($object)) {
             $object = $this->_object;
         }
-        
+
         switch ($root) {
             case QUICKBOOKS_ADD_ITEMRECEIPT:
                 if (isset($object['ItemLineAdd'])) {

@@ -28,30 +28,30 @@ class QuickBooks_QBXML_Schema_Object_CustomerMsgAddRq extends QuickBooks_QBXML_S
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
   'Name' => 'STRTYPE',
   'IsActive' => 'BOOLTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
   'Name' => 101,
   'IsActive' => 0,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -59,27 +59,27 @@ class QuickBooks_QBXML_Schema_Object_CustomerMsgAddRq extends QuickBooks_QBXML_S
   'IsActive' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
   'Name' => 999.99,
   'IsActive' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
   'Name' => false,
   'IsActive' => false,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -91,14 +91,14 @@ class QuickBooks_QBXML_Schema_Object_CustomerMsgAddRq extends QuickBooks_QBXML_S
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
             'Name',
             'IsActive',
             ];
-            
+
         return $paths;
     }
 }

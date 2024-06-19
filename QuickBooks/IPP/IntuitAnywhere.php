@@ -46,23 +46,23 @@ class QuickBooks_IPP_IntuitAnywhere
     protected $_last_request;
     protected $_last_response;
 
-    const URL_REQUEST_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_request_token';
-    const URL_ACCESS_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_access_token';
-    const URL_CONNECT_BEGIN = 'https://appcenter.intuit.com/Connect/Begin';
-    const URL_CONNECT_DISCONNECT = 'https://developer.api.intuit.com/v2/oauth2/tokens/revoke';
-    const URL_CONNECT_RECONNECT = 'https://appcenter.intuit.com/api/v1/Connection/Reconnect';
-    const URL_APP_MENU = 'https://appcenter.intuit.com/api/v1/Account/AppMenu';
+    public const URL_REQUEST_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_request_token';
+    public const URL_ACCESS_TOKEN = 'https://oauth.intuit.com/oauth/v1/get_access_token';
+    public const URL_CONNECT_BEGIN = 'https://appcenter.intuit.com/Connect/Begin';
+    public const URL_CONNECT_DISCONNECT = 'https://developer.api.intuit.com/v2/oauth2/tokens/revoke';
+    public const URL_CONNECT_RECONNECT = 'https://appcenter.intuit.com/api/v1/Connection/Reconnect';
+    public const URL_APP_MENU = 'https://appcenter.intuit.com/api/v1/Account/AppMenu';
 
-    const URL_DISCOVERY_SANDBOX = 'https://developer.api.intuit.com/.well-known/openid_sandbox_configuration';
-    const URL_DISCOVERY_PRODUCTION = 'https://developer.api.intuit.com/.well-known/openid_configuration';
+    public const URL_DISCOVERY_SANDBOX = 'https://developer.api.intuit.com/.well-known/openid_sandbox_configuration';
+    public const URL_DISCOVERY_PRODUCTION = 'https://developer.api.intuit.com/.well-known/openid_configuration';
 
-    const EXPIRY_EXPIRED = 'expired';
-    const EXPIRY_NOTYET = 'notyet';
-    const EXPIRY_SOON = 'soon';
-    const EXPIRY_UNKNOWN = 'unknown';
+    public const EXPIRY_EXPIRED = 'expired';
+    public const EXPIRY_NOTYET = 'notyet';
+    public const EXPIRY_SOON = 'soon';
+    public const EXPIRY_UNKNOWN = 'unknown';
 
-    const OAUTH_V1 = 'oauthv1';
-    const OAUTH_V2 = 'oauthv2';
+    public const OAUTH_V1 = 'oauthv1';
+    public const OAUTH_V2 = 'oauthv2';
 
     /**
      *
@@ -100,7 +100,7 @@ class QuickBooks_IPP_IntuitAnywhere
      */
     public function useDebugMode($true_or_false)
     {
-        $this->_debug = (boolean) $true_or_false;
+        $this->_debug = (bool) $true_or_false;
     }
 
     /**

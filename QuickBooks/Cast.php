@@ -20,14 +20,14 @@ class QuickBooks_Cast
 {
     public static function datatype($type_or_action, $field)
     {
-        
+
     }
-    
+
     public static function maxlength($type_or_action, $field)
     {
-        
+
     }
-    
+
     /**
      * Make sure all characters are ASCII (and thus will work with UTF-8)
      *
@@ -117,7 +117,7 @@ class QuickBooks_Cast
         return $str;
     }
     */
-    
+
     /**
      * Convert certain strings to their abbreviations
      *
@@ -172,10 +172,10 @@ class QuickBooks_Cast
             'University' => 'Univ.',
             'Western' => 'W.',
             ];
-            
+
         return str_ireplace(array_keys($abbrevs), array_values($abbrevs), $value);
     }
-    
+
     /**
      * Shorten a string to a specific length by truncating or abbreviating the string
      *
@@ -194,24 +194,24 @@ class QuickBooks_Cast
     protected static function _castTruncate($value, $length, $with_abbrevs = true)
     {
         //$value = QuickBooks_Cast::_castCharset($value);
-        
+
         if (strlen($value) > $length) {
             if ($with_abbrevs) {
                 $value = QuickBooks_Cast::_castAbbreviations($value);
             }
-            
+
             if (strlen($value) > $length) {
                 $value = substr($value, 0, $length);
             }
         }
-        
+
         // This breaks the UTF8 encoding
         //return utf8_encode($value);
-        
+
         // Just return the data
         return $value;
     }
-    
+
     /**
      *
      *
@@ -225,7 +225,7 @@ class QuickBooks_Cast
             ];
         return preg_match('#^' . strtr(preg_quote($pattern, '#'), $arr) . '$#i', $str);
     }
-    
+
     /**
      * Cast a value to ensure that it will fit in a particular field within QuickBooks
      *
@@ -244,22 +244,22 @@ class QuickBooks_Cast
     public static function cast($type_or_action, $field, $value, $use_abbrevs = true, $htmlspecialchars = true)
     {
         $type_or_action = strtolower($type_or_action);
-        
+
         static $files = [];
-        
+
         if (!count($files)) {
             $dh = opendir(dirname(__FILE__) . '/QBXML/Schema/Object');
             while (false !== ($file = readdir($dh))) {
                 if ($file{0} == '.' or substr($file, -6, 6) != 'Rq.php') {
                     continue;
                 }
-                
+
                 $files[] = $file;
             }
-            
+
             sort($files);
         }
-        
+
         /*
         if ($htmlspecialchars)
         {
@@ -280,43 +280,43 @@ class QuickBooks_Cast
             //$value = htmlspecialchars($value, ENT_QUOTES, null, false);
         }
         */
-        
+
         $types = [];
         $types3 = [];
         $types5 = [];
-        
+
         reset($files);
         foreach ($files as $file) {
             $substr = substr($file, 0, -4);
             $substrlower = strtolower($substr);
-            
+
             $types[$substrlower] = $substr;
-            
+
             $substr3 = substr($file, 0, -3 + -3);
             $substr3lower = strtolower($substr3);
-            
+
             $substr5 = substr($file, 0, -3 + -6);
             $substr5lower = strtolower($substr5);
-            
+
             if (!isset($types3[$substr3lower])) {
                 $types3[$substr3lower] = $substr;
             }
-            
+
             if (!isset($types5[$substr5lower])) {
                 $types5[$substr5lower] = $substr;
             }
         }
-        
+
         /*
         print('	looking for schema: ' . $type_or_action . "\n");
         print_r($types);
         print_r($types3);
         print_r($types5);
         */
-        
+
         $class = null;
         $schema = null;
-        
+
         if (isset($types[$type_or_action])) {
             QuickBooks_Loader::load('/QuickBooks/QBXML/Schema/Object/' . $types[$type_or_action] . '.php');
             $class = 'QuickBooks_QBXML_Schema_Object_' . $types[$type_or_action];
@@ -334,28 +334,28 @@ class QuickBooks_Cast
         //{
         //	return $value;
         //}
-        
+
         //print('	casting using schema: ' . get_class($schema) . "\n");
-        
+
         if ($class and $schema) {
             if (!$schema->exists($field) and false !== strpos($field, '_')) {
                 $field = str_replace('_', ' ', $field);
             }
-            
+
             if ($schema->exists($field)) {
                 switch ($schema->dataType($field)) {
                     case QUICKBOOKS_DATATYPE_STRING:
-                        
+
                         $maxlength = $schema->maxLength($field);
-                        
+
                         // Use only ASCII characters
                         //$value = QuickBooks_Cast::_castCharset($value);
-                        
+
                         // Make sure it'll fit in the allocated field length
                         if (is_int($maxlength) and $maxlength > 0) {
                             $value = QuickBooks_Cast::_castTruncate($value, $maxlength, $use_abbrevs);
                         }
-                        
+
                         break;
                     case QUICKBOOKS_DATATYPE_DATE:
                         if ($value) {
@@ -377,13 +377,13 @@ class QuickBooks_Cast
                         $value = (float) $value;
                         break;
                     case QUICKBOOKS_DATATYPE_BOOLEAN:
-                        
+
                         if ($value and $value !== 'false') {
                             $value = 'true';
                         } else {
                             $value = 'false';
                         }
-                        
+
                         break;
                     case QUICKBOOKS_DATATYPE_INTEGER:
                         $value = (int) $value;
@@ -391,7 +391,7 @@ class QuickBooks_Cast
                 }
             }
         }
-            
+
         /*
         if ($htmlspecialchars)
         {
@@ -412,10 +412,10 @@ class QuickBooks_Cast
             //$value = htmlspecialchars($value, ENT_QUOTES, null, false);
         }
         */
-        
+
         if ($htmlspecialchars) {
             //print("DECODING");
-            
+
             $entities = [
                 '&' => '&amp;',
                 '<' => '&lt;',
@@ -423,26 +423,26 @@ class QuickBooks_Cast
                 //'\'' => '&apos;',
                 '"' => '&quot;',
                 ];
-            
+
             // First, *unreplace* things so that we don't double escape them
             $value = str_replace(array_values($entities), array_keys($entities), $value);
-            
+
             // Then, replace XML entities
             $value = str_replace(array_keys($entities), array_values($entities), $value);
-            
+
             //$value = htmlspecialchars($value, ENT_QUOTES, null, false);
-            
+
             //print($value . "\n\n\n");
-        
+
             // UTF8 character handling, decode UTF8 to character decimal codes
             $value = QuickBooks_Cast::_decodeUTF8($value);
-            
+
             //die($value . "\n\n");
         }
-        
+
         return $value;
     }
-        
+
     /**
      * Test a string to see if it has 8 bit symbols in it
      *
@@ -457,10 +457,10 @@ class QuickBooks_Cast
         } else {
             $needle = '/[\200-\237]|\240|[\241-\377]/';
         }
-        
+
         return preg_match("$needle", $string);
     }
-        
+
     /**
      * Converts string from an encoded string to UTF8
      *
@@ -473,13 +473,13 @@ class QuickBooks_Cast
         if (!preg_match("'&#[0-9]+;'", $string)) {
             return $string;
         }
-        
+
         $string = preg_replace('/&#([0-9]+);/e', "QuickBooks_Cast_unicodetoutf8('\\1')", $string);
         // $string=preg_replace("/&#[xX]([0-9A-F]+);/e","unicodetoutf8(hexdec('\\1'))",$string);
-        
+
         return $string;
     }
-    
+
     /**
      * Decode a UTF-8 string to an entity encoded string
      *
@@ -492,40 +492,40 @@ class QuickBooks_Cast
         if (!QuickBooks_Cast::_is8Bit($string, 'utf-8')) {
             return $string;
         }
-        
+
         // decode four byte unicode characters
         $string = preg_replace_callback(
             "/([\360-\367])([\200-\277])([\200-\277])([\200-\277])/",
             function ($arr) {
-                $val = ((ord($arr[1])-240)*262144+(ord($arr[2])-128)*4096+(ord($arr[3])-128)*64+(ord($arr[4])-128));
+                $val = ((ord($arr[1]) - 240) * 262144 + (ord($arr[2]) - 128) * 4096 + (ord($arr[3]) - 128) * 64 + (ord($arr[4]) - 128));
                 return '&#' . $val . ';';
             },
             $string
         );
-            
+
         // decode three byte unicode characters
         $string = preg_replace_callback(
             "/([\340-\357])([\200-\277])([\200-\277])/",
             function ($arr) {
-                $val = ((ord($arr[1])-224)*4096+(ord($arr[2])-128)*64+(ord($arr[3])-128));
+                $val = ((ord($arr[1]) - 224) * 4096 + (ord($arr[2]) - 128) * 64 + (ord($arr[3]) - 128));
                 return '&#' . $val . ';';
             },
             $string
         );
-            
+
         // decode two byte unicode characters
         $string = preg_replace_callback(
             "/([\300-\337])([\200-\277])/",
             function ($arr) {
-                $val = ((ord($arr[1])-192)*64+(ord($arr[2])-128));
+                $val = ((ord($arr[1]) - 192) * 64 + (ord($arr[2]) - 128));
                 return '&#' . $val . ';';
             },
             $string
         );
-    
+
         // remove broken unicode
         $string = preg_replace("/[\200-\237]|\240|[\241-\377]/", '?', $string);
-    
+
         return $string;
     }
 }
@@ -609,6 +609,6 @@ function QuickBooks_Cast_unicodetoutf8($var)
         // there is no such symbol in utf-8
         $ret = '?';
     }
-    
+
     return $ret;
 }

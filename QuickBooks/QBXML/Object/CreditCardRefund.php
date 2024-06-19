@@ -67,17 +67,17 @@ class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
     {
         return $this->set('ARAccountRef ListID', $ListID);
     }
-    
+
     public function setARAccountName($name)
     {
         return $this->set('ARAccountRef FullName', $name);
     }
-    
+
     public function getARAccountListID()
     {
         return $this->get('ARAccountRef ListID');
     }
-    
+
     public function getARAccountName()
     {
         return $this->get('ARAccountRef FullName');
@@ -87,17 +87,17 @@ class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
     {
         return $this->set('PaymentMethodRef FullName', $name);
     }
-    
+
     public function getPaymentMethodName()
     {
         return $this->get('PaymentMethodRef FullName');
     }
-    
+
     public function setPaymentMethodListID($ListID)
     {
         return $this->set('PaymentMethodRef ListID', $ListID);
     }
-    
+
     public function getPaymentMethodListID()
     {
         return $this->get('PaymentMethodRef ListID');
@@ -127,12 +127,12 @@ class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
     {
         return $this->set('Memo', $memo);
     }
-    
+
     public function getMemo()
     {
         return $this->get('Memo');
     }
-    
+
     public function setRefundAppliedToTxnID($ID)
     {
         return $this->set('RefundAppliedToTxnAdd TxnID', $ID);
@@ -267,7 +267,7 @@ class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
         $b = $this->set('CreditCardInfo NameOnCard', $name);
         $b = $this->set('CreditCardInfo CreditCardAddress', $address);
         $b = $this->set('CreditCardInfo CreditCardPostalCode', $postalcode);
-        
+
         return $b;
     }
 
@@ -283,7 +283,7 @@ class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
         if (!is_null($part)) {
             return $this->get('CreditCardInfo ' . $part);
         }
-        
+
         return $this->getArray('CreditCardInfo *', $defaults);
     }
 
@@ -308,7 +308,7 @@ class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
         for ($i = 1; $i <= 5; $i++) {
             $this->set('Address Addr' . $i, ${'addr' . $i});
         }
-        
+
         $this->set('Address City', $city);
         $this->set('Address State', $state);
         $this->set('Address Province', $province);
@@ -329,7 +329,7 @@ class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
         if (!is_null($part)) {
             return $this->get('Address ' . $part);
         }
-        
+
         return $this->getArray('Address *', $defaults);
     }
 
@@ -366,7 +366,7 @@ class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
         $this->_cleanup();
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -379,7 +379,7 @@ class Quickbooks_QBXML_Object_CreditCardRefund extends QuickBooks_QBXML_Object
     public function asQBXML($request, $todo_for_empty_elements = null, $indent = "\t", $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
 

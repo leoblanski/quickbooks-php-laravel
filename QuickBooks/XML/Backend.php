@@ -26,7 +26,7 @@ interface QuickBooks_XML_Backend
      * @param string $xml
      */
     public function __construct($xml);
-    
+
     /**
      * Validate the XML string
      *
@@ -35,7 +35,7 @@ interface QuickBooks_XML_Backend
      * @return boolean
      */
     public function validate(&$errnum, &$errmsg);
-    
+
     /**
      * Parse an XML string
      *
@@ -44,7 +44,7 @@ interface QuickBooks_XML_Backend
      * @return QuickBooks_XML_Document
      */
     public function parse(&$errnum, &$errmsg);
-    
+
     /**
      * Load a new string to parse
      *

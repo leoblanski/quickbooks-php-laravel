@@ -29,7 +29,7 @@ class QuickBooks_IPP_Service_Purchase extends QuickBooks_IPP_Service
     {
         return parent::_update($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PURCHASE, $Object, $IDType);
     }
-    
+
     public function query($Context, $realm, $query)
     {
         return parent::_query($Context, $realm, $query);

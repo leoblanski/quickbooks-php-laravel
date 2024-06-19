@@ -30,7 +30,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: TxnLineID, datatype:
-    
+
     /**
      * Set the TxnLineID for the JournalEntry
      *
@@ -53,7 +53,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: AccountRef ListID, datatype:
-    
+
     /**
      * Set the AccountRef ListID for the JournalEntry
      *
@@ -87,7 +87,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: AccountRef FullName, datatype:
-    
+
     /**
      * Set the AccountRef FullName for the JournalEntry
      *
@@ -110,7 +110,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: Amount, datatype:
-    
+
     /**
      * Set the Amount for the JournalEntry
      *
@@ -133,7 +133,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: Memo, datatype: STRTYPE
-    
+
     /**
      * Set the Memo for the JournalEntry
      *
@@ -156,7 +156,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: EntityRef ListID, datatype: STRTYPE
-    
+
     /**
      * Set the EntityRef ListID for the JournalEntry
      *
@@ -190,7 +190,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: EntityRef FullName, datatype: STRTYPE
-    
+
     /**
      * Set the EntityRef FullName for the JournalEntry
      *
@@ -213,7 +213,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: ClassRef ListID, datatype: STRTYPE
-    
+
     /**
      * Set the ClassRef ListID for the JournalEntry
      *
@@ -247,7 +247,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: ClassRef FullName, datatype: STRTYPE
-    
+
     /**
      * Set the ClassRef FullName for the JournalEntry
      *
@@ -270,7 +270,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: ItemSalesTaxRef ListID, datatype: STRTYPE
-    
+
     /**
      * Set the ItemSalesTaxRef ListID for the JournalEntry
      *
@@ -304,7 +304,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: ItemSalesTaxRef FullName, datatype: STRTYPE
-    
+
     /**
      * Set the ItemSalesTaxRef FullName for the JournalEntry
      *
@@ -327,7 +327,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     }
 
     // Path: BillableStatus, datatype:
-    
+
     /**
      * Set the BillableStatus for the JournalEntry
      *
@@ -348,7 +348,7 @@ class QuickBooks_QBXML_Object_JournalEntry_JournalCreditLine extends QuickBooks_
     {
         return $this->get('BillableStatus');
     }
-    
+
     /**
      * Tell the type of object this is
      *

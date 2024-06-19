@@ -29,17 +29,17 @@ QuickBooks_Loader::load('/QuickBooks/WebConnector/Request.php');
 class QuickBooks_WebConnector_Request_SendRequestXML extends QuickBooks_WebConnector_Request
 {
     public $ticket;
-    
+
     public $strHCPResponse;
-    
+
     public $strCompanyFileName;
-    
+
     public $qbXMLCountry;
-    
+
     public $qbXMLMajorVers;
-    
+
     public $qbXMLMinorVers;
-    
+
     public function __construct($ticket = null, $hcpresponse = null, $companyfile = null, $country = null, $majorversion = null, $minorversion = null)
     {
         $this->ticket = $ticket;

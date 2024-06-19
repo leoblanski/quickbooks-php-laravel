@@ -27,7 +27,7 @@ class QuickBooks_IPP_Service_VendorCredit extends QuickBooks_IPP_Service
         return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT, $xml);
     }
     */
-    
+
     public function add($Context, $realmID, $Object)
     {
         return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_VENDORCREDIT, $Object);

@@ -31,7 +31,7 @@ class QuickBooks_ErrorHandler
 			ERROR: [' . $errno . '] ' . $errstr . '
         	Fatal error on line ' . $errline . ' in file ' . $errfile . ', PHP v' . PHP_VERSION . ' (' . PHP_OS . ')
 		');
-        
+
         exit(1);
     }
 }

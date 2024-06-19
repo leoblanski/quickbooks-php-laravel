@@ -30,7 +30,7 @@ class QuickBooks_IPP_Service_CompanyMetaData extends QuickBooks_IPP_Service
     public function findById($Context, $realmID)
     {
         $xml = null;
-        
+
         // WATCH OUT!   We pass in the realmID as ID value
         return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_COMPANYMETADATA, $realmID, $xml);
     }

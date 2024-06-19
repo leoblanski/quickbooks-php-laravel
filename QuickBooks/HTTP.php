@@ -48,10 +48,10 @@ define('QUICKBOOKS_HTTP_METHOD_HEAD', 'HEAD');
 
 class QuickBooks_HTTP
 {
-    const HTTP_400 = 400;
-    const HTTP_401 = 401;
-    const HTTP_404 = 404;
-    const HTTP_500 = 500;
+    public const HTTP_400 = 400;
+    public const HTTP_401 = 401;
+    public const HTTP_404 = 404;
+    public const HTTP_500 = 500;
 
     protected $_url;
 
@@ -154,12 +154,12 @@ class QuickBooks_HTTP
 
     public function verifyPeer($yes_or_no)
     {
-        $this->_verify_peer = (boolean) $yes_or_no;
+        $this->_verify_peer = (bool) $yes_or_no;
     }
 
     public function verifyHost($yes_or_no)
     {
-        $this->_verify_host = (boolean) $yes_or_no;
+        $this->_verify_host = (bool) $yes_or_no;
     }
 
     public function setHeaders($arr)
@@ -187,7 +187,7 @@ class QuickBooks_HTTP
      */
     public function returnHeaders($return)
     {
-        $this->_return_headers = (boolean) $return;
+        $this->_return_headers = (bool) $return;
     }
 
     public function setHeader($key, $value)
@@ -278,7 +278,7 @@ class QuickBooks_HTTP
     public function useDebugMode($yes_or_no)
     {
         $prev = $this->_debug;
-        $this->_debug = (boolean) $yes_or_no;
+        $this->_debug = (bool) $yes_or_no;
 
         return $prev;
     }
@@ -291,13 +291,13 @@ class QuickBooks_HTTP
      */
     public function useMasking($yes_or_no)
     {
-        $this->_masking = (boolean) $yes_or_no;
+        $this->_masking = (bool) $yes_or_no;
     }
 
     public function useTestEnvironment($yes_or_no)
     {
         $prev = $this->_test;
-        $this->_test = (boolean) $yes_or_no;
+        $this->_test = (bool) $yes_or_no;
 
         return $prev;
     }
@@ -305,7 +305,7 @@ class QuickBooks_HTTP
     public function useLiveEnvironment($yes_or_no)
     {
         $prev = $this->_test;
-        $this->_test = ! (boolean) $yes_or_no;
+        $this->_test = ! (bool) $yes_or_no;
 
         return $prev;
     }
@@ -428,12 +428,12 @@ class QuickBooks_HTTP
      */
     public function setSynchronous($yes_or_no)
     {
-        $this->_sync = (boolean) $yes_or_no;
+        $this->_sync = (bool) $yes_or_no;
     }
 
     public function setAsynchronous($yes_or_no)
     {
-        $this->_sync = !((boolean) $yes_or_no);
+        $this->_sync = !((bool) $yes_or_no);
     }
 
     /**
@@ -583,7 +583,7 @@ class QuickBooks_HTTP
         $this->_log('HTTP response: ' . substr($response, 0, 500) . '...', QUICKBOOKS_LOG_VERBOSE);
 
         $this->_last_info = curl_getinfo($ch);
-        
+
         if (curl_errno($ch)) {
             $errnum = curl_errno($ch);
             $errmsg = curl_error($ch);

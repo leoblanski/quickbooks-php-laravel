@@ -24,11 +24,11 @@ class QuickBooks_IPP_Service_ShipMethod extends QuickBooks_IPP_Service
     {
         return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_SHIPMETHOD, $query, null, $page, $size);
     }
-    
+
     public function map($Context, $realmID)
     {
         $list = $this->findAll($Context, $realmID);
-        
+
         return parent::_map($list, 'Id', 'Name');
     }
 }

@@ -29,7 +29,7 @@ QuickBooks_Loader::load('/QuickBooks/WebConnector/Request.php');
 class QuickBooks_WebConnector_Request_CloseConnection extends QuickBooks_WebConnector_Request
 {
     public $ticket;
-    
+
     public function __construct($ticket = null)
     {
         $this->ticket = $ticket;

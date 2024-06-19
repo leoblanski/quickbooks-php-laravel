@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -46,10 +46,10 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo' => 'ENUMTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -64,10 +64,10 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -83,7 +83,7 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -98,10 +98,10 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo' => 999.99,
   'IncludeRetElement' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -116,10 +116,10 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -131,7 +131,7 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -149,7 +149,7 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   11 => 'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo',
   12 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

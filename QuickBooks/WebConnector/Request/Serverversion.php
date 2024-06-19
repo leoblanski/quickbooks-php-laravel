@@ -30,6 +30,6 @@ class QuickBooks_WebConnector_Request_ServerVersion extends QuickBooks_WebConnec
 {
     public function __construct()
     {
-        
+
     }
 }

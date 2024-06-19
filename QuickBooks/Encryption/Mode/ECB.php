@@ -18,5 +18,4 @@
 
 class QuickBooks_Encryption_Mode_ECB
 {
-
 }

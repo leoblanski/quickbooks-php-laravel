@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'ItemSalesTaxAdd';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -45,10 +45,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'SalesTaxReturnLineNumber' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -62,10 +62,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'SalesTaxReturnLineNumber' => 79,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -80,7 +80,7 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -94,10 +94,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'SalesTaxReturnLineNumber' => 6,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -111,10 +111,10 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'SalesTaxReturnLineNumber' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -126,7 +126,7 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -140,7 +140,7 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   7 => 'SalesTaxReturnLineNumber',
   8 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

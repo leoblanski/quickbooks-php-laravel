@@ -29,11 +29,11 @@ class QuickBooks_MerchantService_CreditCard
     protected $_address;
     protected $_postalcode;
     protected $_cvv;
-    
+
     protected $_lodging;
-    
+
     protected $_restaurant;
-    
+
     /**
      * Create a new credit card object
      *
@@ -50,103 +50,103 @@ class QuickBooks_MerchantService_CreditCard
         $this->_address = $address;
         $this->_postalcode = str_replace(['.', '-', ' '], '', $postalcode);
         $this->_cvv = $cvv;
-        
+
         $decode = [
             '&amp;' => '&',
             '&quot;' => '"',
             '&gt;' => '>',
             '&lt;' => '<',
             ];
-        
+
         // Maximum field length of 30 for address and name
         if (strlen(htmlspecialchars($this->_name)) > 30) {
             $this->_name = str_replace(array_keys($decode), array_values($decode), substr(htmlspecialchars($this->_name), 0, 30));
         }
-        
+
         if (strlen(htmlspecialchars($this->_address)) > 30) {
             $this->_address = str_replace(array_keys($decode), array_values($decode), substr(htmlspecialchars($this->_address), 0, 30));
         }
     }
-    
+
     public function addLodgingData()
     {
-        
+
     }
-    
+
     public function addRestaurantData()
     {
-        
+
     }
-    
+
     public function setName($name)
     {
         $this->_name = $name;
     }
-    
+
     public function getName()
     {
         return $this->_name;
     }
-    
+
     public function setNumber($number)
     {
         $this->_number = $number;
     }
-    
+
     public function getNumber($mask = false)
     {
         if ($mask) {
             return str_repeat('x', min(strlen($this->_number), 12)) . substr($this->_number, 12);
         }
-        
+
         return $this->_number;
     }
-    
+
     public function setExpirationYear($year)
     {
         $this->_expyear = $year;
     }
-    
+
     public function getExpirationYear()
     {
         return $this->_expyear;
     }
-    
+
     public function setExpirationMonth($month)
     {
         $this->_expmonth = $month;
     }
-    
+
     public function getExpirationMonth()
     {
         return $this->_expmonth;
     }
-    
+
     public function setAddress($addr)
     {
         $this->_address = $addr;
     }
-    
+
     public function getAddress()
     {
         return $this->_address;
     }
-    
+
     public function setPostalCode($postalcode)
     {
         $this->_postalcode = $postalcode;
     }
-    
+
     public function getPostalCode()
     {
         return $this->_postalcode;
     }
-    
+
     public function setCVVCode($cvv)
     {
         $this->_cvv = $cvv;
     }
-    
+
     public function getCVVCode()
     {
         return $this->_cvv;

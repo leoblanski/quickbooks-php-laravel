@@ -110,34 +110,34 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
     /**
      * Read from the QuickBooks database, and write to the SQL database
      */
-    const MODE_READONLY = 'r';
-    
+    public const MODE_READONLY = 'r';
+
     /**
      * Read from the SQL database, and write to the QuickBooks database
      */
-    const MODE_WRITEONLY = 'w';
-    
+    public const MODE_WRITEONLY = 'w';
+
     /**
      * Read and write from both sources, keeping both sources in sync
      */
-    const MODE_READWRITE = '+';
-    
-    const CONFLICT_LOG = 2;
-    const CONFLICT_NEWER = 4;
-    const CONFLICT_QUICKBOOKS = 8;
-    const CONFLICT_SQL = 16;
-    const CONFLICT_CALLBACK = 32;
-    
+    public const MODE_READWRITE = '+';
+
+    public const CONFLICT_LOG = 2;
+    public const CONFLICT_NEWER = 4;
+    public const CONFLICT_QUICKBOOKS = 8;
+    public const CONFLICT_SQL = 16;
+    public const CONFLICT_CALLBACK = 32;
+
     /**
      * Delete Modes. Decides whether an item actually gets deleted, or just remains marked deleted.
      *
      */
-    const DELETE_REMOVE = 2;
+    public const DELETE_REMOVE = 2;
     //define('QUICKBOOKS_SERVER_SQL_ON_DELETE_REMOVE', QUICKBOOKS_SERVER_SQL_DELETE_REMOVE);
-    
-    const DELETE_FLAG = 4;
+
+    public const DELETE_FLAG = 4;
     //define('QUICKBOOKS_SERVER_SQL::ON_DELETE_FLAG', QUICKBOOKS_SERVER_SQL_DELETE_FLAG);
-            
+
     /**
      *
      *
@@ -186,24 +186,24 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
         $callback_options = []
     ) {
         // $dsn_or_conn, $map, $onerror = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_BUILTIN, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array()
-        
+
         if (!is_array($users)) {
             $users = [ $users ];
         }
-        
+
         // Map of callback handlers
         $sql_map = [];
-        
+
         foreach (get_class_methods('QuickBooks_Callbacks_SQL_Callbacks') as $method) {
             if (strtolower(substr($method, -7)) == 'request') {
                 $action = substr($method, 0, -7);
-                
+
                 $sql_map[$action] = [
                     'QuickBooks_Callbacks_SQL_Callbacks::' . $action . 'Request',
                     'QuickBooks_Callbacks_SQL_Callbacks::' . $action . 'Response' ];
             }
         }
-        
+
         /*
         $sql_map[QUICKBOOKS_DERIVE_ITEM] = array(
             'QuickBooks_Callbacks_SQL_Callbacks::ItemDeriveRequest',
@@ -217,26 +217,26 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
             'QuickBooks_Callbacks_SQL_Callbacks::InvoiceDeriveRequest',
             'QuickBooks_Callbacks_SQL_Callbacks::InvoiceDeriveResponse' );
         */
-        
+
         //print_r($sql_map);
         //exit;
-        
+
         // Default error handlers
         $sql_onerror = [
             '*' => 'QuickBooks_Callbacks_SQL_Errors::catchall',
             ];
-        
+
         $sql_onerror = $this->_merge($sql_onerror, $onerror, false);
-        
+
         // Default hooks
         $sql_hooks = [
             // This hook is neccessary for queueing up the appropriate actions to perform the sync 	(use login success so we know user to sync for)
             QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => [ 'QuickBooks_Callbacks_SQL_Callbacks::onAuthenticate' ],
             ];
-        
+
         // Merge with user-defined hooks
         $sql_hooks = $this->_merge($hooks, $sql_hooks, true);
-        
+
         // @TODO Prefix these with _ so that people don't accidentally overwrite them
         $sql_callback_options = [
             'hooks' => $sql_hooks,
@@ -246,12 +246,12 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
             'recur' => QuickBooks_Utilities::intervalToSeconds($how_often),
             'map' => $sql_map,
             ];
-        
+
         //print_r($sql_options);
         //exit;
-        
+
         $defaults = $this->_sqlDefaults($sql_options);
-                
+
         //$sql_callback_options['_only_query'] = $defaults['only_query'];
         //$sql_callback_options['_dont_query'] = $defaults['dont_query'];
         $sql_callback_options['_only_import'] = $defaults['only_import'];
@@ -262,18 +262,18 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
         $sql_callback_options['_dont_modify'] = $defaults['dont_modify'];
         $sql_callback_options['_only_misc'] = $defaults['only_misc'];
         $sql_callback_options['_dont_misc'] = $defaults['dont_misc'];
-        
+
         // Merge default values with passed in values
         //	(in this case, we are *required* to have these values present, so
         //	we make sure that the SQL options override any user-defined options
         $sql_callback_options = $this->_merge($callback_options, $sql_callback_options, false);
-        
+
         // Initialize the Driver singleton
         $Driver = QuickBooks_Driver_Singleton::getInstance($dsn_or_conn, $driver_options, $sql_hooks, $log_level);
-        
+
         // $dsn_or_conn, $map, $onerror = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_BUILTIN, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array()
         parent::__construct($dsn_or_conn, $sql_map, $sql_onerror, $sql_hooks, $log_level, $soap, $wsdl, $soap_options, $handler_options, $driver_options, $sql_callback_options);
-        
+
         /*
         // TESTING only
         $requestID = null;
@@ -285,7 +285,7 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
         QuickBooks_Callbacks_SQL_Callbacks::onAuthenticate($requestID, $user, $hook, $err, $hook_data, $callback_config);
         */
     }
-    
+
     /**
      * Apply default options to an array of configuration options
      *
@@ -306,19 +306,19 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
             'only_misc',
             'dont_misc',
             ];
-        
+
         foreach ($tmp as $filter) {
             if (empty($config[$filter]) or
                 (!empty($config[$filter]) and !is_array($config[$filter]))) {
                 $config[$filter] = [];
             }
         }
-        
+
         // Any other configuration defaults go here
         $defaults = [
-                          
+
             ];
-        
+
         return array_merge($defaults, $config);
     }
 }

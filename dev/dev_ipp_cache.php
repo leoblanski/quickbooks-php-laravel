@@ -19,7 +19,7 @@ $IPP->application($Context, 'be9mh7qd5');
 $map = QuickBooks_IPP_Cache::MAP_QBXML;
 
 $options = [
-    
+
     ];
 
 $Cache = new QuickBooks_IPP_Cache($Context, $dsn, $map, $options);

@@ -27,9 +27,9 @@ QuickBooks_Loader::load('/QuickBooks/WebConnector/Request.php');
 class QuickBooks_WebConnector_Request_Authenticate extends QuickBooks_WebConnector_Request
 {
     public $strUserName;
-    
+
     public $strPassword;
-    
+
     public function __construct($username = null, $password = null)
     {
         $this->strUserName = $username;

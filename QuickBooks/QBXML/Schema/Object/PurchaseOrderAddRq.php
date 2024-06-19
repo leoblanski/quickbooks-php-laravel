@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'PurchaseOrderAdd';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -114,10 +114,10 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupAdd DataExt DataExtValue' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -200,10 +200,10 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupAdd DataExt DataExtValue' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -287,7 +287,7 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -370,10 +370,10 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupAdd DataExt DataExtValue' => 999.99,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -456,10 +456,10 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupAdd DataExt DataExtValue' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -471,7 +471,7 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -556,7 +556,7 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   78 => 'PurchaseOrderLineGroupAdd DataExt DataExtValue',
   79 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

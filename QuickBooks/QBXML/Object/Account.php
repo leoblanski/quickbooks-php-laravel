@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of the Class
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of the Class
      *
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      *
      */
@@ -58,37 +58,37 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->set('ParentRef ListID', $ListID);
     }
-    
+
     public function getParentListID()
     {
         return $this->get('ParentRef ListID');
     }
-    
+
     public function setParentName($name)
     {
         return $this->set('ParentRef FullName', $name);
     }
-    
+
     public function getParentName()
     {
         return $this->get('ParentRef FullName');
     }
-    
+
     public function getParentFullName()
     {
         return $this->get('ParentRef FullName');
     }
-    
+
     public function setParentApplicationID($value)
     {
         return $this->set('ParentRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
     }
-    
+
     public function getParentApplicationID()
     {
         return $this->get('ParentRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     /**
      * Set the name of the class
      *
@@ -99,7 +99,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name of the class
      *
@@ -109,7 +109,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-    
+
     /**
      *
      */
@@ -122,7 +122,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->set('FullName', $name);
     }
-    
+
     /**
      * Set this Class active or not
      *
@@ -131,9 +131,9 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
      */
     public function setIsActive($value)
     {
-        return $this->set('IsActive', (boolean) $value);
+        return $this->set('IsActive', (bool) $value);
     }
-    
+
     /**
      * Tell whether or not this class object is active
      *
@@ -143,47 +143,47 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->getBooleanType('IsActive');
     }
-    
+
     public function setAccountType($type)
     {
         return $this->setBooleanType('AccountType', $type);
     }
-    
+
     public function getAccountType()
     {
         return $this->get('AccountType');
     }
-    
+
     public function setAccountNumber($number)
     {
         return $this->set('AccountNumber', $number);
     }
-    
+
     public function getAccountNumber()
     {
         return $this->get('AccountNumber');
     }
-    
+
     public function setBankNumber($number)
     {
         return $this->set('BankNumber', $number);
     }
-    
+
     public function getBankNumber()
     {
         return $this->get('BankNumber');
     }
-    
+
     public function setDescription($descrip)
     {
         return $this->set('Desc', $descrip);
     }
-    
+
     public function getDescription()
     {
         return $this->get('Desc');
     }
-    
+
     public function setOpenBalance($balance)
     {
         return $this->set('OpenBalance', (float) $balance);
@@ -193,7 +193,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->get('OpenBalance');
     }
-    
+
     public function setOpenBalanceDate($date)
     {
         return $this->setDateType('OpenBalanceDate', $date);
@@ -203,7 +203,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->getDateType('OpenBalanceDate');
     }
-    
+
     public function setTaxLineID($value)
     {
         return $this->set('TxLineID', $value);
@@ -213,7 +213,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->get('TxLineID');
     }
-    
+
     public function getBalance()
     {
         return $this->get('Balance');
@@ -223,7 +223,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->set('Balance', $value);
     }
-    
+
     public function getTotalBalance()
     {
         return $this->get('TotalBalance');
@@ -233,7 +233,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->set('TotalBalance', $value);
     }
-    
+
     public function getSpecialAccountType()
     {
         return $this->get('SpecialAccountType');
@@ -243,7 +243,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return $this->set('SpecialAccountType', $type);
     }
-    
+
     public function getCashFlowClassification()
     {
         return $this->get('CashFlowClassification');
@@ -263,7 +263,7 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this Class object
      *
@@ -274,10 +274,10 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -290,10 +290,10 @@ class QuickBooks_QBXML_Object_Account extends QuickBooks_QBXML_Object
     public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

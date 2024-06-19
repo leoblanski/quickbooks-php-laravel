@@ -31,7 +31,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: ItemRef ListID, datatype:
-    
+
     /**
      * Set the ItemRef ListID for the Check
      *
@@ -65,7 +65,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: ItemRef FullName, datatype:
-    
+
     /**
      * Set the ItemRef FullName for the Check
      *
@@ -88,7 +88,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: Desc, datatype:
-    
+
     /**
      * Set the Desc for the Check
      *
@@ -126,7 +126,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
         $this->getDesc();
     }
     // Path: Quantity, datatype:
-    
+
     /**
      * Set the Quantity for the Check
      *
@@ -149,7 +149,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: UnitOfMeasure, datatype:
-    
+
     /**
      * Set the UnitOfMeasure for the Check
      *
@@ -172,7 +172,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: Cost, datatype:
-    
+
     /**
      * Set the Cost for the Check
      *
@@ -195,7 +195,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: Amount, datatype:
-    
+
     /**
      * Set the Amount for the Check
      *
@@ -218,7 +218,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: CustomerRef ListID, datatype:
-    
+
     /**
      * Set the CustomerRef ListID for the Check
      *
@@ -252,7 +252,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: CustomerRef FullName, datatype:
-    
+
     /**
      * Set the CustomerRef FullName for the Check
      *
@@ -275,7 +275,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: ClassRef ListID, datatype:
-    
+
     /**
      * Set the ClassRef ListID for the Check
      *
@@ -309,7 +309,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: ClassRef FullName, datatype:
-    
+
     /**
      * Set the ClassRef FullName for the Check
      *
@@ -332,7 +332,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: BillableStatus, datatype:
-    
+
     /**
      * Set the BillableStatus for the Check
      *
@@ -355,7 +355,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: OverrideItemAccountRef ListID, datatype:
-    
+
     /**
      * Set the OverrideItemAccountRef ListID for the Check
      *
@@ -389,7 +389,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     }
 
     // Path: OverrideItemAccountRef FullName, datatype:
-    
+
     /**
      * Set the OverrideItemAccountRef FullName for the Check
      *
@@ -410,13 +410,13 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     {
         return $this->get('OverrideItemAccountRef FullName');
     }
-    
+
     public function asXML($root = null, $parent = null, $object = null)
     {
         if (is_null($object)) {
             $object = $this->_object;
         }
-        
+
         switch ($parent) {
             case QUICKBOOKS_ADD_CHECK:
                 $root = 'ItemLineAdd';
@@ -427,10 +427,10 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
                 $parent = null;
                 break;
         }
-        
+
         return parent::asXML($root, $parent, $object);
     }
-    
+
     /**
      *
      *
@@ -440,17 +440,17 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      *
      */
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      *
      *
@@ -464,7 +464,7 @@ class QuickBooks_QBXML_Object_Bill_ItemLine extends QuickBooks_QBXML_Object
         $this->_cleanup();
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     public function object()
     {
         return 'ItemLine';

@@ -32,7 +32,7 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
         if ($hex) {
             $key = pack('H*', $key);
         }
-        
+
         $keys[] = '';
         $boxs[] = '';
         $cipher = '';
@@ -44,7 +44,7 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
             $keys[$i] = ord($key[$i % $key_length]);
             $boxs[$i] = $i;
         }
-        
+
         $j = 0;
         for ($i = 0; $i < 256; $i++) {
             $j = ($j + $boxs[$i] + $keys[$i]) % 256;
@@ -52,7 +52,7 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
             $boxs[$i] = $boxs[$j];
             $boxs[$j] = $tmp;
         }
-        
+
         $a = 0;
         $j = 0;
         for ($i = 0; $i < $data_length; $i++) {
@@ -64,10 +64,10 @@ class QuickBooks_Encryption_Rc4 extends QuickBooks_Encryption
             $k = $boxs[(($boxs[$a] + $boxs[$j]) % 256)];
             $cipher .= chr(ord($data[$i]) ^ $k);
         }
-        
+
         return $cipher;
     }
-    
+
     public function decrypt($key, $data, $hex = false)
     {
         return $this->encrypt($key, $data, $hex);

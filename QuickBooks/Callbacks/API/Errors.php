@@ -28,7 +28,7 @@ class QuickBooks_Callbacks_API_Errors
     {
         return QuickBooks_Callbacks_API_Errors::e500_notfound($requestID, $user, $action, $ident, $extra, $err, $xml, $errnum, $errmsg, $config);
     }
-    
+
     /**
      * Handle a QuickBooks error indicating that nothing matched a search
      *
@@ -55,65 +55,65 @@ class QuickBooks_Callbacks_API_Errors
     {
         //$requestID, $user, $action, $ident, $extra, $errerr, $xml, $errnum, $errmsg, $this->_callback_config
         // Not found, *still call the callback!*
-        
+
         /*
         $extra['callbacks'], $method, $action, $ID, $err, $qbxml, $qbobject, $qbres
         */
-        
+
         // Get the driver instance
         $Driver = QuickBooks_Driver_Singleton::getInstance();
-        
+
         if (!isset($extra['callbacks'])) {
             $extra['callbacks'] = [];
         }
-        
+
         if (!is_array($extra['callbacks'])) {
             $extra['callbacks'] = [ $extra['callbacks'] ];
         }
-        
+
         $method = null;
         if (isset($extra['method'])) {
             $method = $extra['method'];
         }
-        
+
         $err = '';
-        
+
         $qbobject = new QuickBooks_Iterator([]);
         $qbres = null;
-        
+
         foreach ($extra['callbacks'] as $func) {
             if (false !== strpos($func, '::') and
                 true) { // method_exists()) 	// is this safe to do?
                 // Callback *static method*
-                
+
                 $tmp = explode('::', $func);
-                
+
                 $return = call_user_func([ $tmp[0], $tmp[1] ], $method, $action, $ident, $err, $xml, $qbobject, $qbres);
             } elseif (function_exists($func)) {
                 // Callback *function*
-                
+
                 $return = call_user_func($func, $method, $action, $ident, $err, $xml, $qbobject, $qbres);
             } else {
                 $err = 'Could not call function or method: ' . $func;
                 $Driver->log('API: ' . $err, null, QUICKBOOKS_LOG_NORMAL);
                 return false;
             }
-            
+
             if (!$return) {
                 break;
             }
         }
-        
+
         if ($err) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     public static function catchall($requestID, $user, $action, $ident, $extra, &$err, $xml, $errnum, $errmsg, $config)
     {
-        
+
         return false;
     }
 }

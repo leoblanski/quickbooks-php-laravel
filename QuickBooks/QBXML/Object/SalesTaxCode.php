@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_SalesTaxCode extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of the Class
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_SalesTaxCode extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of the Class
      *
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_SalesTaxCode extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-        
+
     /**
      * Set the name of the class
      *
@@ -61,7 +61,7 @@ class QuickBooks_QBXML_Object_SalesTaxCode extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name of the class
      *
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Object_SalesTaxCode extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-        
+
     /**
      * Set this Class active or not
      *
@@ -82,7 +82,7 @@ class QuickBooks_QBXML_Object_SalesTaxCode extends QuickBooks_QBXML_Object
     {
         return $this->setBooleanType('IsActive', $value);
     }
-    
+
     /**
      * Tell whether or not this class object is active
      *
@@ -92,27 +92,27 @@ class QuickBooks_QBXML_Object_SalesTaxCode extends QuickBooks_QBXML_Object
     {
         return $this->getBooleanType('IsActive');
     }
-    
+
     public function setIsTaxable($boolean)
     {
         return $this->setBooleanType('IsTaxable', $boolean);
     }
-    
+
     public function getIsTaxable()
     {
         return $this->getBooleanType('IsTaxable', true);
     }
-    
+
     public function setDescription($Desc)
     {
         return $this->set('Desc', $Desc);
     }
-    
+
     public function getDescription()
     {
         return $this->get('Desc');
     }
-        
+
     /**
      * Tell what type of object this is
      *

@@ -32,7 +32,7 @@ class QuickBooks_WebConnector_Result_ConnectionError extends QuickBooks_WebConne
      * @var string
      */
     public $connectionErrorResult;
-    
+
     /**
      * Create a new result object
      *

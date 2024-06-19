@@ -32,7 +32,7 @@ class QuickBooks_WebConnector_Result_ReceiveResponseXML extends QuickBooks_WebCo
      * @var integer
      */
     public $receiveResponseXMLResult;
-    
+
     /**
      * Create a new ->receiveResponseXML result object
      *

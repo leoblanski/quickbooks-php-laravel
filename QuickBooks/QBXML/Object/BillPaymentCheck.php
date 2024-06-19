@@ -34,7 +34,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the TxnID of the Class
      *
@@ -45,7 +45,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->set('TxnID', $TxnID);
     }
-    
+
     /**
      * Alias of {@link QuickBooks_Object_ReceivePayment::setTxnID()}
      */
@@ -53,7 +53,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->setTxnID($TxnID);
     }
-    
+
     /**
      * Get the ListID of the Class
      *
@@ -63,7 +63,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->get('TxnID');
     }
-    
+
     /**
      * Alias of {@link QuickBooks_Object_ReceivePayment::getTxnID()}
      */
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->getTxnID();
     }
-    
+
     /**
      * Set the customer ListID
      *
@@ -82,7 +82,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->set('PayeeEntityRef ListID', $ListID);
     }
-    
+
     /**
      * Set the customer ApplicationID (auto-replaced by the API with a ListID)
      *
@@ -93,12 +93,12 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->set('PayeeEntityRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_VENDOR, QUICKBOOKS_LISTID, $value));
     }
-    
+
     public function getPayeeEntityApplicationID()
     {
         return $this->get('PayeeEntityRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     /**
      * Set the customer name
      *
@@ -109,7 +109,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->set('PayeeEntityRef FullName', $name);
     }
-    
+
     /**
      * Get the customer ListID
      *
@@ -119,7 +119,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->get('PayeeEntityRef ListID');
     }
-    
+
     /**
      * Get the customer name
      *
@@ -129,7 +129,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->get('PayeeEntityRef FullName');
     }
-    
+
     /**
      * Set the transaction date
      *
@@ -140,7 +140,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->setDateType('TxnDate', $date);
     }
-    
+
     /**
      * Alias of {@link QuickBooks_Object_Invoice::setTxnDate()}
      */
@@ -148,7 +148,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->setTxnDate($date);
     }
-    
+
     /**
      * Get the transaction date
      *
@@ -158,17 +158,17 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->getDateType('TxnDate');
     }
-    
+
     public function setIsToBePrinted($bool)
     {
         return $this->setBooleanType('IsToBePrinted', $bool);
     }
-    
+
     public function getIsToBePrinted()
     {
         return $this->getBooleanType('IsToBePrinted');
     }
-    
+
     /**
      * Set the reference number
      *
@@ -179,7 +179,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->set('RefNumber', $str);
     }
-    
+
     /**
      * Get the reference number
      *
@@ -189,7 +189,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->get('RefNumber');
     }
-    
+
     /**
      * Alias of {@link QuickBooks_Object_ReceivePayment::addAppliedToTxn()}
      */
@@ -197,7 +197,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->addAppliedToTxn($obj);
     }
-    
+
     /**
      *
      *
@@ -216,10 +216,10 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
         $lines[] = $obj;
 
         return $this->set('AppliedToTxn', $lines);*/
-        
+
         return $this->addListItem('AppliedToTxn', $obj);
     }
-    
+
     /**
      * Alias of {@link QuickBooks_Object_Invoice::getTxnDate()}
      */
@@ -227,7 +227,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->getDateType('TxnDate', $format);
     }
-    
+
     /**
      * Set the total amount of the received payment
      *
@@ -238,7 +238,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->setAmountType('TotalAmount', $amount);
     }
-    
+
     /**
      * Get the total amount of the received payment
      *
@@ -248,17 +248,17 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->getAmountType('TotalAmount');
     }
-    
+
     public function setAPAccountListID($ListID)
     {
         return $this->set('APAccountRef ListID', $ListID);
     }
-    
+
     public function setAPAccountFullName($name)
     {
         return $this->set('APAccountRef FullName', $name);
     }
-    
+
     public function setAPAccountApplicationID($value)
     {
         return $this->set('APAccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
@@ -268,27 +268,27 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->get('APAccountRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     public function getAPAccountListID()
     {
         return $this->get('APAccountRef ListID');
     }
-    
+
     public function getAPAccountFullName()
     {
         return $this->get('APAccountRef FullName');
     }
-        
+
     public function setBankAccountListID($ListID)
     {
         return $this->set('BankAccountRef ListID', $ListID);
     }
-    
+
     public function setBankAccountFullName($name)
     {
         return $this->set('BankAccountRef FullName', $name);
     }
-    
+
     public function setBankAccountApplicationID($value)
     {
         return $this->set('BankAccountRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID(QUICKBOOKS_OBJECT_ACCOUNT, QUICKBOOKS_LISTID, $value));
@@ -298,27 +298,27 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return $this->get('BankAccountRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     public function getBankAccountListID()
     {
         return $this->get('BankAccountRef ListID');
     }
-    
+
     public function getBankAccountFullName()
     {
         return $this->get('BankAccountRef FullName');
     }
-    
+
     public function setMemo($memo)
     {
         return $this->set('Memo', $memo);
     }
-    
+
     public function getMemo()
     {
         return $this->get('Memo');
     }
-        
+
     /**
      * Perform any needed clean-up of the object data members
      *
@@ -328,7 +328,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this Class object
      *
@@ -342,62 +342,62 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
 
         return parent::asArray($request, $nest);
     }*/
-    
+
     public function asList($request)
     {
         switch ($request) {
             case 'BillPaymentCheckAddRq':
-                
+
                 if (isset($this->_object['AppliedToTxn'])) {
                     $this->_object['AppliedToTxnAdd'] = $this->_object['AppliedToTxn'];
                 }
-                
+
                 break;
             case 'BillPaymentCheckModRq':
-                
+
                 if (isset($this->_object['AppliedToTxn'])) {
                     $this->_object['AppliedToTxnMod'] = $this->_object['AppliedToTxn'];
                 }
-                
+
                 break;
         }
-        
+
         return parent::asList($request);
     }
-    
+
     public function asXML($root = null, $parent = null, $object = null)
     {
         if (is_null($object)) {
             $object = $this->_object;
         }
-                
+
         switch ($root) {
             case QUICKBOOKS_ADD_BILLPAYMENTCHECK:
-                
+
                 /*
                 if (isset($this->_object['AppliedToTxn']))
                 {
                     $this->_object['AppliedToTxnAdd'] = $this->_object['AppliedToTxn'];
                 }
                 */
-                
+
                 if ($this->exists('AppliedToTxnAdd')) {
                     foreach ($object['AppliedToTxnAdd'] as $key => $obj) {
                         $obj->setOverride('AppliedToTxnAdd');
                     }
                 }
-                
+
                 break;
             case QUICKBOOKS_MOD_BILLPAYMENTCHECK:
-                
+
                 // finish me!
-                
+
                 break;
         }
-        
+
         return parent::asXML($root, $parent, $object);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -415,7 +415,7 @@ class QuickBooks_QBXML_Object_BillPaymentCheck extends QuickBooks_QBXML_Object
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
     */
-    
+
     /**
      * Tell what type of object this is
      *

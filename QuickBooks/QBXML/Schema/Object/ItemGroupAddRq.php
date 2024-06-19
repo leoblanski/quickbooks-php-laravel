@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'ItemGroupAdd';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -47,10 +47,10 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'ItemGroupLine UnitOfMeasure' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -66,10 +66,10 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'ItemGroupLine UnitOfMeasure' => 31,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -86,7 +86,7 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -102,10 +102,10 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'ItemGroupLine UnitOfMeasure' => 7,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -121,10 +121,10 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'ItemGroupLine UnitOfMeasure' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -136,7 +136,7 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -154,7 +154,7 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   11 => 'ItemGroupLine UnitOfMeasure',
   12 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

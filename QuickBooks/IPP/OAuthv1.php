@@ -32,19 +32,19 @@ class QuickBooks_IPP_OAuthv1
     /**
      *
      */
-    const NONCE = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    public const NONCE = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-    const METHOD_POST = 'POST';
-    const METHOD_GET = 'GET';
-    const METHOD_PUT = 'PUT';
-    const METHOD_DELETE = 'DELETE';
+    public const METHOD_POST = 'POST';
+    public const METHOD_GET = 'GET';
+    public const METHOD_PUT = 'PUT';
+    public const METHOD_DELETE = 'DELETE';
 
-    const DEFAULT_VERSION = '1.0';
-    const DEFAULT_SIGNATURE = 'HMAC-SHA1';
+    public const DEFAULT_VERSION = '1.0';
+    public const DEFAULT_SIGNATURE = 'HMAC-SHA1';
 
-    const SIGNATURE_PLAINTEXT = 'PLAINTEXT';
-    const SIGNATURE_HMAC = 'HMAC-SHA1';
-    const SIGNATURE_RSA = 'RSA-SHA1';
+    public const SIGNATURE_PLAINTEXT = 'PLAINTEXT';
+    public const SIGNATURE_HMAC = 'HMAC-SHA1';
+    public const SIGNATURE_RSA = 'RSA-SHA1';
 
     /**
      * Create our OAuth instance

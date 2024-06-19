@@ -41,33 +41,33 @@ class QuickBooks_Callbacks_Integrator_Callbacks
         // Get an API instance
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         $module = get_class($Integrator);
-        
+
         // This is the *very first time the integration was run!*
         //	Orders *will not* be fetched from before this time!
         $type = null;
         $opts = null;
         //$first_datetime = $API->configRead(get_class($this), 'initial', $type, $opts);
         $first_datetime = $API->configRead($module, 'initial', $type, $opts);
-        
+
         $first = false;
         if (!$first_datetime) {
             $first_datetime = date('Y-m-d H:i:s');
             $API->configWrite($module, 'initial', $first_datetime);
-            
+
             $first = true;
         }
-        
+
         // The is the last time the integration was run!
         $type = null;
         $opts = null;
         $last_datetime = $API->configRead($module, 'datetime', $type, $opts);
-        
+
         if (!$last_datetime) {
             $last_datetime = date('Y-m-d H:i:s');
         }
-        
+
         /*
         if (!empty($this->_integrator_config['debug_datetime']))
         {
@@ -75,7 +75,7 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             $first_datetime = date('Y-m-d H:i:s', strtotime($this->_integrator_config['debug_datetime']));
         }
         */
-        
+
         $force = false;
         /*
         $force = false;
@@ -84,10 +84,10 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             $force = true;
         }
         */
-        
+
         $this_datetime = date('Y-m-d H:i:s');
         $API->log('Integration handle() has started: [first: ' . $first_datetime . '], [last: ' . $last_datetime . '], [this: ' . $this_datetime . ']', QUICKBOOKS_LOG_VERBOSE);
-        
+
         /*
         if (strtotime($this_datetime) - strtotime($last_datetime) > QUICKBOOKS_SERVER_INTEGRATOR_RECUR or
             $first or
@@ -95,10 +95,10 @@ class QuickBooks_Callbacks_Integrator_Callbacks
         {
             $API->log('Last integration timestamp: ' . $last_datetime . ', current timestamp: ' . $this_datetime, QUICKBOOKS_LOG_VERBOSE);
             */
-            
+
         // Do some integration routines
         QuickBooks_Callbacks_Integrator_Callbacks::_integrate($last_datetime, $first_datetime, $first);
-            
+
         $API->configWrite($module, 'datetime', $this_datetime);
         /*}
         else
@@ -107,7 +107,7 @@ class QuickBooks_Callbacks_Integrator_Callbacks
         }
         */
     }
-    
+
     /**
      *
      *
@@ -119,75 +119,75 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         // Integrator instance
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         // Generics which *must* be present
         if ($Shipping = $Integrator->getGenericShipping()) {
             QuickBooks_Callbacks_Integrator_Callbacks::_integrateShipping($Shipping);
         }
-        
+
         /*
         if ($Handling = $Integrator->getGenericHandling())
         {
             $this->_integrateHandling($Handling);
         }
         */
-        
+
         if ($Discount = $Integrator->getGenericDiscount()) {
             QuickBooks_Callbacks_Integrator_Callbacks::_integrateDiscounts($Discount);
         }
-        
+
         /*
         if ($Coupon = $Integrator->getGenericCoupon())
         {
             $this->_integrateCoupons($Coupon);
         }
         */
-        
+
         //$customers = $Integrator>listNewCustomersSince($last_datetime, $first_datetime, $first_time_running);
         //QuickBooks_Callbacks_Integrator_Callbacks::_integrateNewCustomers($customers);
-        
+
         //
         $orders = $Integrator->listNewOrdersSince($last_datetime, $first_datetime, $first_time_running);
         QuickBooks_Callbacks_Integrator_Callbacks::_integrateNewOrders($orders);
-        
+
         //
         $estimates = $Integrator->listNewEstimatesSince($last_datetime, $first_datetime, $first_time_running);
         QuickBooks_Callbacks_Integrator_Callbacks::_integrateNewEstimates($estimates);
-        
+
         //
         QuickBooks_Callbacks_Integrator_Callbacks::_pullNewAccounts($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         QuickBooks_Callbacks_Integrator_Callbacks::_pullNewClasses($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         QuickBooks_Callbacks_Integrator_Callbacks::_pullNewPaymentMethods($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         QuickBooks_Callbacks_Integrator_Callbacks::_pullNewCustomerTypes($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         QuickBooks_Callbacks_Integrator_Callbacks::_pullNewShipMethods($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         QuickBooks_Callbacks_Integrator_Callbacks::_pullNewSalesTaxItems($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         QuickBooks_Callbacks_Integrator_Callbacks::_pullNewSalesTaxGroupItems($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         QuickBooks_Callbacks_Integrator_Callbacks::_pullNewSalesTaxCodes($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         QuickBooks_Callbacks_Integrator_Callbacks::_pullNewUnitOfMeasureSets($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         //QuickBooks_Callbacks_Integrator_Callbacks::_pullNewOrders($last_datetime, $first_datetime, $first_time_running);
-        
+
         //
         //QuickBooks_Callbacks_Integrator_Callbacks::_pullNewEstimates($last_datetime, $first_datetime, $first_time_running);
     }
-    
+
     /**
      *
      *
@@ -196,14 +196,14 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         // Get the API instance
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (true) { //$first_time_running)
             // A realllly long time ago
             $datetime = '1983-01-02 00:00:01';
         }
-            
+
         $API->log('Pulling in accounts modified since ' . $datetime, QUICKBOOKS_LOG_VERBOSE);
-        
+
         return $API->listAccountsModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listAccountsModifiedAfter');
     }
 
@@ -216,17 +216,17 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         // Get the API instance
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (true) { // $first_time_running)
             // A realllly long time ago
             $datetime = '1983-01-02 00:00:01';
         }
-            
+
         $API->log('Pulling in classes modified since ' . $datetime, QUICKBOOKS_LOG_VERBOSE);
-        
+
         return $API->listClassesModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listClassesModifiedAfter');
     }
-    
+
     /**
      *
      *
@@ -236,29 +236,29 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         // Get the API instance
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (true) { // $first_time_running)
             // A realllly long time ago
             $datetime = '1983-01-02 00:00:01';
         }
-            
+
         $API->log('Pulling in payment methods modified since ' . $datetime, QUICKBOOKS_LOG_VERBOSE);
-        
+
         return $API->listPaymentMethodsModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listPaymentMethodsModifiedAfter');
     }
-    
+
     protected static function _pullNewSalesTaxItems($datetime, $first_datetime, $first_time_running)
     {
         // Get the API instance
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (true) { // $first_time_running)
             // A realllly long time ago
             $datetime = '1983-01-02 00:00:01';
         }
-            
+
         $API->log('Pulling in sales tax items modified since ' . $datetime, QUICKBOOKS_LOG_VERBOSE);
-        
+
         return $API->listSalesTaxItemsModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listSalesTaxItemsModifiedAfter');
     }
 
@@ -266,17 +266,17 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         // Get the API instance
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (true) { // $first_time_running)
             // A realllly long time ago
             $datetime = '1983-01-02 00:00:01';
         }
-            
+
         $API->log('Pulling in sales tax *group* items modified since ' . $datetime, QUICKBOOKS_LOG_VERBOSE);
-        
+
         return $API->listSalesTaxGroupItemsModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listSalesTaxGroupItemsModifiedAfter');
     }
-    
+
     /**
      *
      *
@@ -291,12 +291,12 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             // A realllly long time ago
             $datetime = '1983-01-02 00:00:01';
         }
-            
+
         $API->log('Pulling in ship methods modified since ' . $datetime, QUICKBOOKS_LOG_VERBOSE);
-        
+
         return $API->listShipMethodsModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listShipMethodsModifiedAfter');
     }
-    
+
     /**
      *
      *
@@ -306,14 +306,14 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         // Get the API instance
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (true) { // $first_time_running)
             // A realllly long time ago
             $datetime = '1983-01-02 00:00:01';
         }
-            
+
         $API->log('Pulling in customer types modified since ' . $datetime, QUICKBOOKS_LOG_VERBOSE);
-        
+
         return $API->listCustomerTypesModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listCustomerTypesModifiedAfter');
     }
 
@@ -321,14 +321,14 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         // Get the API instance
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (true) { // $first_time_running)
             // A realllly long time ago
             $datetime = '1983-01-02 00:00:01';
         }
-            
+
         $API->log('Pulling in unit of measure sets modified since ' . $datetime, QUICKBOOKS_LOG_VERBOSE);
-        
+
         return $API->listUnitOfMeasureSetsModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listUnitOfMeasureSetsModifiedAfter');
     }
 
@@ -336,17 +336,17 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         // Get the API instance
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (true) { // $first_time_running)
             // A realllly long time ago
             $datetime = '1983-01-02 00:00:01';
         }
-            
+
         $API->log('Pulling in sales tax codes modified since ' . $datetime, QUICKBOOKS_LOG_VERBOSE);
-        
+
         return $API->listSalesTaxCodesModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listSalesTaxCodesModifiedAfter');
     }
-    
+
     /**
      *
      *
@@ -367,10 +367,10 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             return $API->listEstimatesModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listEstimatesModifiedAfter');
         }
         */
-        
+
         return true;
     }
-    
+
     /**
      *
      *
@@ -392,10 +392,10 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             return $API->listInvoicesModifiedAfter($datetime, 'QuickBooks_Callbacks_Integrator_Callbacks::listInvoicesModifiedAfter');
         }
         */
-        
+
         return true;
     }
-    
+
     protected static function _integrateNewCustomers($customers)
     {
         foreach ($customers as $CustomerID) {
@@ -414,7 +414,7 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             }*/
         }
     }
-    
+
     /**
      *
      *
@@ -426,16 +426,16 @@ class QuickBooks_Callbacks_Integrator_Callbacks
         // Let's start with new estimates
         foreach ($estimates as $EstimateID) {
             $API->log('Analyzing estimate #' . $EstimateID, QUICKBOOKS_LOG_VERBOSE);
-            
+
             $Estimate = $Integrator->getEstimate($EstimateID);
             QuickBooks_Callbacks_Integrator_Callbacks::_integrateEstimate($Estimate, $EstimateID);
-            
+
             // Customer
             $CustomerID = $Estimate->getCustomerApplicationID();
             if ($ListID = $Estimate->getCustomerListID()) {
                 // xxx Do nothing, already in QuickBooks
                 // Add it again, just in case!
-                
+
                 //
                 QuickBooks_Callbacks_Integrator_Callbacks::integrateAddCustomer($CustomerID);
             } elseif (true) {
@@ -452,15 +452,15 @@ class QuickBooks_Callbacks_Integrator_Callbacks
                 //$Customer = $Integrator->getCustomer($CustomerID, __FILE__, __LINE__);
                 //$this->_integrateCustomer($Customer, $CustomerID, $extras);
             }*/
-            
+
             $list = $Integrator->getEstimateItemsForEstimate($EstimateID);
             foreach ($list as $EstimateItem) {
                 $ProductID = $EstimateItem->getItemApplicationID();
-                
+
                 if (!$EstimateID) {
                     continue;
                 }
-                
+
                 //
                 if ($ListID = $EstimateItem->getItemListID()) {
                     // Add it again anyway, just in case
@@ -483,18 +483,18 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             }
         }
     }
-    
+
     protected static function _integrateNewOrders($orders)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         // Let's start with new orders
         foreach ($orders as $OrderID) {
             $API->log('Analyzing order #' . $OrderID, QUICKBOOKS_LOG_VERBOSE);
-            
+
             $Order = $Integrator->getOrder($OrderID);
-            
+
             if ($Order) {
                 // Customer
                 $CustomerID = $Order->getCustomerApplicationID();
@@ -505,7 +505,7 @@ class QuickBooks_Callbacks_Integrator_Callbacks
                     // Try to fetch the customer by name
                     $API->getCustomerByName($Integrator->getCustomerNameForQuery($CustomerID), 'QuickBooks_Callbacks_Integrator_Callbacks::getCustomerByName', $CustomerID);
                 }
-                
+
                 // ShipMethod
                 /*
                 $ShipMethodID = $Order->getShipMethodApplicationID();
@@ -532,16 +532,16 @@ class QuickBooks_Callbacks_Integrator_Callbacks
                     }
                 }
                 */
-                                
+
                 $list = $Integrator->getOrderItems($OrderID);
                 foreach ($list as $OrderItem) {
                     //
                     $ProductID = $OrderItem->getItemApplicationID();
-                    
+
                     if (!$ProductID) {
                         continue;
                     }
-                    
+
                     //
                     if ($ListID = $OrderItem->getItemListID()) {
                         // Add it again anyway, just in case
@@ -549,15 +549,15 @@ class QuickBooks_Callbacks_Integrator_Callbacks
                         QuickBooks_Callbacks_Integrator_Callbacks::_integrateProduct($Product, $ProductID);
                     } else {
                         // Queue a request *for each type* of item
-                        
+
                         // Try to fetch the product from QuickBooks
                         $API->getItemByName($Integrator->getProductNameForQuery($ProductID), 'QuickBooks_Callbacks_Integrator_Callbacks::getProductByName', $ProductID);
                     }
                 }
-                
+
                 //
                 QuickBooks_Callbacks_Integrator_Callbacks::_integrateOrder($Order, $OrderID);
-                
+
                 //
                 $Payment = $Integrator->getPayment($OrderID);
                 if ($Payment and $Payment->getTotalAmount() > 0) {
@@ -566,51 +566,51 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             }
         }
     }
-    
+
     /**
      * @deprecated
      */
     protected static function _integrateHandling($Handling)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         $API->getItemByName($Handling->getFullName(), 'QuickBooks_Callbacks_Integrator_Callbacks::getProductByName', QUICKBOOKS_INTEGRATOR_HANDLING_ID);
         return QuickBooks_Callbacks_Integrator::_integrateProduct($Handling, QUICKBOOKS_INTEGRATOR_HANDLING_ID);
     }
-    
+
     /**
      *
      */
     protected static function _integrateShipping($Shipping)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         $API->getItemByName($Shipping->getFullName(), 'QuickBooks_Callbacks_Integrator_Callbacks::getProductByName', QUICKBOOKS_INTEGRATOR_SHIPPING_ID);
         return QuickBooks_Callbacks_Integrator_Callbacks::_integrateProduct($Shipping, QUICKBOOKS_INTEGRATOR_SHIPPING_ID);
     }
-    
+
     /**
      *
      */
     protected static function _integrateCoupons($Coupon)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         $API->getItemByName($Coupon->getFullName(), 'QuickBooks_Callbacks_Integrator_Callbacks::getProductByName', QUICKBOOKS_INTEGRATOR_COUPON_ID);
         return QuickBooks_Callbacks_Integrator_Callbacks::_integrateProduct($Coupon, QUICKBOOKS_INTEGRATOR_COUPON_ID);
     }
-    
+
     /**
      *
      */
     protected static function _integrateDiscounts($Discount)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         $API->getItemByName($Discount->getFullName(), 'QuickBooks_Callbacks_Integrator_Callbacks::getProductByName', QUICKBOOKS_INTEGRATOR_DISCOUNT_ID);
         return QuickBooks_Callbacks_Integrator_Callbacks::_integrateProduct($Discount, QUICKBOOKS_INTEGRATOR_DISCOUNT_ID);
     }
-    
+
     /**
      *
      *
@@ -620,10 +620,10 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         //
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         $API->log('Integrating order #' . $OrderID . ' as a ' . $Order->object(), QUICKBOOKS_LOG_DEVELOP);
         $user = $API->user();
-        
+
         // Call a hook to indicate the order is being pushed to QuickBooks
         $hook_data = [
             'OrderID' => $OrderID,
@@ -637,17 +637,17 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             $err,
             $hook_data);
         */
-        
+
         // Send the object to QuickBooks
         switch ($Order->object()) {
             case QUICKBOOKS_OBJECT_SALESRECEIPT:
-                
+
                 return $API->addSalesReceipt($Order, 'QuickBooks_Callbacks_Integrator_Callbacks::addSalesReceipt', $OrderID);
             case QUICKBOOKS_OBJECT_SALESORDER:
-                
+
                 return $API->addSalesOrder($Order, 'QuickBooks_Callbacks_Integrator_Callbacks::addSalesOrder', $OrderID);
             case QUICKBOOKS_OBJECT_INVOICE:
-                
+
                 return $API->addInvoice($Order, 'QuickBooks_Callbacks_Integrator_Callbacks::addInvoice', $OrderID);
             default:
                 return false;
@@ -658,14 +658,14 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         //
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         //
         $API->log('Integrating estimate #' . $EstimateID . ' as a ' . $Estimate->object(), QUICKBOOKS_LOG_DEVELOP);
-        
+
         //
         return $API->addEstimate($Estimate, 'QuickBooks_Callbacks_Integrator_Callbacks::addEstimate', $EstimateID);
     }
-    
+
     /**
      *
      *
@@ -676,11 +676,11 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     protected static function _integratePayment($Payment, $OrderID)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         $API->log('Integrating payment for order #' . $OrderID, QUICKBOOKS_LOG_DEVELOP);
         return $API->addReceivePayment($Payment, 'QuickBooks_Callbacks_Integrator_Callbacks::addReceivePayment', $OrderID);
     }
-    
+
     /**
      *
      *
@@ -692,7 +692,7 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         //
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         // Call a hook to indicate the order is being pushed to QuickBooks
         /*
         $hook_data = array(
@@ -707,89 +707,89 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             $err,
             $hook_data);
         */
-        
+
         switch ($Product->object()) {
             case QUICKBOOKS_OBJECT_INVENTORYITEM:
-                
+
                 return $API->addInventoryItem($Product, 'QuickBooks_Callbacks_Integrator_Callbacks::addInventoryItem', $ProductID);
             case QUICKBOOKS_OBJECT_NONINVENTORYITEM:
-                
+
                 return $API->addNonInventoryItem($Product, 'QuickBooks_Callbacks_Integrator_Callbacks::addNonInventoryItem', $ProductID);
             case QUICKBOOKS_OBJECT_SERVICEITEM:
-                
+
                 return $API->addServiceItem($Product, 'QuickBooks_Callbacks_Integrator_Callbacks::addServiceItem', $ProductID);
             case QUICKBOOKS_OBJECT_DISCOUNTITEM:
-                
+
                 return $API->addDiscountItem($Product, 'QuickBooks_Callbacks_Integrator_Callbacks::addDiscountItem', $ProductID);
             case QUICKBOOKS_OBJECT_OTHERCHARGEITEM:
-                    
+
                 return $API->addOtherChargeItem($Product, 'QuickBooks_Callbacks_Integrator_Callbacks::addOtherChargeItem', $ProductID);
             default:
                 return false;
         }
     }
-    
+
     protected static function _integrateSalesReceipt()
     {
-        
+
     }
-    
+
     protected static function _integrateSalesOrder()
     {
-        
+
     }
-    
+
     protected static function _integrateInventoryItem()
     {
-        
+
     }
-    
+
     protected static function _integrateNonInventoryItem()
     {
-        
+
     }
-    
+
     protected static function _integrateServiceItem()
     {
-        
+
     }
-    
+
     protected static function _integrateDiscountItem()
     {
-        
+
     }
-    
+
     protected static function _integrateSalesTaxItem()
     {
-        
+
     }
-    
+
     public static function integrateQueryCustomer($CustomerID)
     {
         return QuickBooks_Callbacks_Integrator_Callbacks::integrateCustomer($CustomerID, false, true);
     }
-    
+
     public static function integrateAddCustomer($CustomerID)
     {
         //print('adding!');
         return QuickBooks_Callbacks_Integrator_Callbacks::integrateCustomer($CustomerID, false);
     }
-    
+
     public static function integrateModCustomer($CustomerID)
     {
         //print('modifying!');
         return QuickBooks_Callbacks_Integrator_Callbacks::integrateCustomer($CustomerID, true);
     }
-    
+
     public static function integrateCustomer($CustomerID, $modify = false, $query = false)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         $API->log('Analyzing customer #' . $CustomerID, QUICKBOOKS_LOG_DEVELOP);
-        
+
         $extras = $Integrator->getCustomerExtras($CustomerID, __FILE__, __LINE__);
-        
+
         if ($Customer = $Integrator->getCustomer($CustomerID, __FILE__, __LINE__)) {
             $action = 'add';
             if ($modify) {
@@ -797,11 +797,11 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             } elseif ($query) {
                 $action = 'query';
             }
-            
+
             $API->log('Integrating customer #' . $CustomerID . ' (' . $action . ')', QUICKBOOKS_LOG_DEVELOP);
-            
+
             $continue = false;
-            
+
             // Turn off modifications of customers
             /*
             if ($modify and
@@ -810,7 +810,7 @@ class QuickBooks_Callbacks_Integrator_Callbacks
                 $continue = true;
             }
             else */
-            
+
             if ($query and
                 $API->getCustomerByName($Integrator->getCustomerNameForQuery($CustomerID), 'QuickBooks_Callbacks_Integrator_Callbacks::getCustomerByName', $CustomerID)) {
                 return true;
@@ -831,28 +831,28 @@ class QuickBooks_Callbacks_Integrator_Callbacks
                     $err,
                     $hook_data);
                 */
-                
+
                 $continue = true;
             }
-            
+
             if ($continue) {
                 if (is_array($extras)) {
                     foreach ($extras as $key => $Extra) {
                         $API->addDataExt($Extra, 'QuickBooks_Callbacks_Integrator_Callbacks::addExtra', $CustomerID . '-' . $key, null, QUICKBOOKS_ADD_CUSTOMER);
-                        
+
                         if ($modify) {
                             $API->modifyDataExt($Extra, 'QuickBooks_Callbacks_Integrator_Callbacks::modExtra', $CustomerID . '-' . $key, null, QUICKBOOKS_MOD_CUSTOMER);
                         }
                     }
                 }
-                
+
                 return true;
             }
         }
-        
+
         return false;
     }
-        
+
     /**
      *
      *
@@ -869,55 +869,55 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         if ($Iterator->count() == 1) {
             // If we found the customer in QuickBooks, create a mapping with the ListID value
-            
+
             $Customer = $Iterator->next();
             if ($API->createMapping(QUICKBOOKS_OBJECT_CUSTOMER, $ID, $Customer->getListID(), $Customer->getEditSequence())) {
                 // Let's make sure that this customer is up-to-date
-                
+
                 return QuickBooks_Callbacks_Integrator_Callbacks::integrateModCustomer($ID);
             }
         } elseif ($Iterator->count() == 0) {
             // Otherwise, we need to queue up an add request to add this cart item to QuickBooks
-            
+
             return QuickBooks_Callbacks_Integrator_Callbacks::integrateAddCustomer($ID);
         }
-        
+
         return false;
     }
-    
+
     public static function getInvoiceByRefNumber($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
-        
+
     }
-    
+
     public static function getProductByName($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         if ($Iterator->count() == 1) {
             // If we found the item in QuickBooks, create a mapping with the ListID value
             $Item = $Iterator->next();
-            
+
             // Save the item in our list of integrator items
             $Integrator->saveItem($Item);
-            
+
             // Create an object mapping
             return $API->createMapping($Item->object(), $ID, $Item->getListID(), $Item->getEditSequence());
         } elseif ($Iterator->count() == 0) {
             // Otherwise, we need to queue up an add request to add this cart item to QuickBooks
-            
+
             if ($ID == QUICKBOOKS_INTEGRATOR_SHIPPING_ID) {
                 return true;
             } elseif ($ID == QUICKBOOKS_INTEGRATOR_DISCOUNT_ID) {
                 return true;
             }
-            
+
             $Product = $Integrator->getProduct($ID, __FILE__, __LINE__);
-            
+
             switch ($Product->object()) {
                 case QUICKBOOKS_OBJECT_SERVICEITEM:
                     return $API->addServiceItem($Product, 'QuickBooks_Callbacks_Integrator_Callbacks::addServiceItem', $ID);
@@ -930,60 +930,60 @@ class QuickBooks_Callbacks_Integrator_Callbacks
                     break;
             }
         }
-        
+
         return false;
     }
-    
+
     public static function getServiceItemByName($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
-        
+
     }
-    
+
     public static function getInventoryItemByName($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
-        
+
     }
-    
+
     public static function getNonInventoryItemByName($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
-        
+
     }
-    
+
     public static function getDiscountItemByName($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
-        
+
     }
-    
+
     public static function getClassByName($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
-        
+
     }
-    
+
     public static function getAccountByName($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
-        
+
     }
-    
+
     public static function getShipMethodByName($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         if ($Iterator->count() == 1) {
             // If we found the object in QuickBooks, create a mapping with the ListID value
-            
+
             $ShipMethod = $Iterator->next();
             return $API->createMapping(QUICKBOOKS_OBJECT_SHIPMETHOD, $ID, $ShipMethod->getListID(), $ShipMethod->getEditSequence());
         } elseif ($Iterator->count() == 0) {
             // Otherwise, we need to queue up an add request to add this cart item to QuickBooks
-            
+
             $ShipMethod = $Integrator->getShipMethod($ID);
             return $API->addShipMethod($ShipMethod, 'QuickBooks_Callbacks_Integrator_Callbacks::addShipMethod', $ID);
         }
-        
+
         return false;
     }
-    
+
     /**
      *
      *
@@ -1000,44 +1000,44 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         if ($Iterator->count() == 1) {
             // If we found the object in QuickBooks, create a mapping with the ListID value
-            
+
             $PaymentMethod = $Iterator->next();
             return $API->createMapping(QUICKBOOKS_OBJECT_PAYMENTMETHOD, $ID, $PaymentMethod->getListID(), $PaymentMethod->getEditSequence());
         } elseif ($Iterator->count() == 0) {
             // Otherwise, we need to queue up an add request to add this cart item to QuickBooks
-            
+
             $PaymentMethod = $Integrator->getPaymentMethod($ID);
             return $API->addPaymentMethod($PaymentMethod, 'QuickBooks_Callbacks_Integrator_Callbacks::addPaymentMethod', $ID);
         }
-        
+
         return false;
     }
-    
+
     public static function listInvoicesModifiedAfter($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($Invoice = $Iterator->next()) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     public static function listSalesTaxItemsModifiedAfter($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($SalesTaxItem = $Iterator->next()) {
             // Store this in the database
             $Integrator->saveSalesTaxItem($SalesTaxItem);
         }
-        
+
         return true;
     }
 
@@ -1045,25 +1045,25 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($SalesTaxGroupItem = $Iterator->next()) {
             // Store this in the database
             $Integrator->saveSalesTaxGroupItem($SalesTaxGroupItem);
         }
-        
+
         return true;
     }
-    
+
     public static function listAccountsModifiedAfter($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($Account = $Iterator->next()) {
             // Store this in the database
             $Integrator->saveAccount($Account);
         }
-        
+
         return true;
     }
 
@@ -1071,51 +1071,51 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($Class = $Iterator->next()) {
             // Store this in the database
             $Integrator->saveClass($Class);
         }
-        
+
         return true;
     }
-    
+
     public static function listPaymentMethodsModifiedAfter($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($PaymentMethod = $Iterator->next()) {
             // Store this in the database
             $Integrator->savePaymentMethod($PaymentMethod);
         }
-        
+
         return true;
     }
-    
+
     public static function listCustomerTypesModifiedAfter($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($CustomerType = $Iterator->next()) {
             // Store this in the database
             $Integrator->saveCustomerType($CustomerType);
         }
-        
+
         return true;
     }
-    
+
     public static function listShipMethodsModifiedAfter($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($ShipMethod = $Iterator->next()) {
             // Store this in the database
             $Integrator->saveShipMethod($ShipMethod);
         }
-        
+
         return true;
     }
 
@@ -1123,12 +1123,12 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($SalesTaxCode = $Iterator->next()) {
             // Store this in the database
             $Integrator->saveSalesTaxCode($SalesTaxCode);
         }
-        
+
         return true;
     }
 
@@ -1136,27 +1136,27 @@ class QuickBooks_Callbacks_Integrator_Callbacks
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($UnitOfMeasureSet = $Iterator->next()) {
             // Store this in the database
             $Integrator->saveUnitOfMeasureSet($UnitOfMeasureSet);
         }
-        
+
         return true;
     }
-    
+
     public static function listEstimatesModifiedAfter($method, $action, $ID, $err, $qbxml, $Iterator, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
         $Integrator = QuickBooks_Integrator_Singleton::getInstance();
-        
+
         while ($Estimate = $Iterator->next()) {
             // Let's check if this estimate already exists in the system
             $EstimateID = null;
             if ($API->hasApplicationID(QUICKBOOKS_OBJECT_ESTIMATE, $Estimate->getTxnID())) {
                 $EstimateID = $API->fetchApplicationID(QUICKBOOKS_OBJECT_ESTIMATE, $Estimate->getTxnID());
             }
-            
+
             // Now, there's a customer assigned to this estimate, let's make sure the customer exists
             if ($API->hasApplicationID(QUICKBOOKS_OBJECT_CUSTOMER, $Estimate->getCustomerListID())) {
                 // Great, it exists!
@@ -1165,36 +1165,36 @@ class QuickBooks_Callbacks_Integrator_Callbacks
                 $Customer = new QuickBooks_Object_Customer();
                 $Customer->setListID($Estimate->getCustomerListID());
                 $Customer->setName($Estimate->getCustomerName());
-                
+
                 $Integrator->setCustomer(null, $Customer);
             }
-            
+
             // There are line items assigned to this estimate too, and each line item has a product...
             //foreach ($Estimate->listLineItems
-            
+
             $Integrator->setEstimate($EstimateID, $Estimate);
         }
-        
+
         return true;
     }
-    
+
     public static function addPaymentMethod()
     {
-        
+
     }
-    
+
     public static function addShipMethod()
     {
-        
+
     }
-    
+
     public static function addServiceItem($method, $action, $ID, &$err, $qbxml, $ServiceItem, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (is_object($ServiceItem)) {
             // If we found the customer in QuickBooks, create a mapping with the ListID value
-            
+
             $API->createMapping(
                 QUICKBOOKS_OBJECT_SERVICEITEM,
                 $ID,
@@ -1203,14 +1203,14 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             );
         }
     }
-    
+
     public static function addInventoryItem($method, $action, $ID, &$err, $qbxml, $InventoryItem, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (is_object($InventoryItem)) {
             // If we found the customer in QuickBooks, create a mapping with the ListID value
-            
+
             $API->createMapping(
                 QUICKBOOKS_OBJECT_INVENTORYITEM,
                 $ID,
@@ -1219,14 +1219,14 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             );
         }
     }
-    
+
     public static function addNonInventoryItem($method, $action, $ID, &$err, $qbxml, $NonInventoryItem, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (is_object($NonInventoryItem)) {
             // If we found the customer in QuickBooks, create a mapping with the ListID value
-            
+
             $API->createMapping(
                 QUICKBOOKS_OBJECT_NONINVENTORYITEM,
                 $ID,
@@ -1235,14 +1235,14 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             );
         }
     }
-    
+
     public static function addInvoice($method, $action, $ID, &$err, $qbxml, $Invoice, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (is_object($Invoice)) {
             // If we found the customer in QuickBooks, create a mapping with the ListID value
-            
+
             $API->createMapping(
                 QUICKBOOKS_OBJECT_INVOICE,
                 $ID,
@@ -1251,44 +1251,44 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             );
         }
     }
-    
+
     public static function addEstimate()
     {
-        
+
     }
-    
+
     public static function addSalesReceipt()
     {
-        
+
     }
-    
+
     public static function addAccount()
     {
-        
+
     }
-    
+
     public static function addClass()
     {
-        
+
     }
-    
+
     public static function addExtra()
     {
-        
+
     }
-    
+
     public static function modExtra()
     {
-        
+
     }
-    
+
     public static function addCustomer($method, $action, $ID, &$err, $qbxml, $Customer, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (is_object($Customer)) {
             // If we found the customer in QuickBooks, create a mapping with the ListID value
-            
+
             $API->createMapping(
                 QUICKBOOKS_OBJECT_CUSTOMER,
                 $ID,
@@ -1297,19 +1297,19 @@ class QuickBooks_Callbacks_Integrator_Callbacks
             );
         }
     }
-    
+
     public static function modCustomer()
     {
-        
+
     }
-    
+
     public static function addReceivePayment($method, $action, $ID, &$err, $qbxml, $ReceivePayment, $qbres)
     {
         $API = QuickBooks_API_Singleton::getInstance();
-        
+
         if (is_object($ReceivePayment)) {
             // If we found the customer in QuickBooks, create a mapping with the ListID value
-            
+
             $API->createMapping(
                 QUICKBOOKS_OBJECT_RECEIVEPAYMENT,
                 $ID,

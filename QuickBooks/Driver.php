@@ -265,9 +265,9 @@ QuickBooks_Loader::load('/QuickBooks/Encryption.php');
  */
 abstract class QuickBooks_Driver
 {
-    const HOOK_QUEUEREPORT = 'QuickBooks_Driver::queueReport';
+    public const HOOK_QUEUEREPORT = 'QuickBooks_Driver::queueReport';
 
-    const HOOK_QUEUEGET = 'QuickBooks_Driver::queueGet';
+    public const HOOK_QUEUEGET = 'QuickBooks_Driver::queueGet';
 
     /**
      * An array of hooks (map of hook-types => array( 'userdef1', 'userdef2', ... )

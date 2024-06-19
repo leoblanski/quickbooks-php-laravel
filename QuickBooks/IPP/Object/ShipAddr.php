@@ -8,12 +8,12 @@ class QuickBooks_IPP_Object_ShipAddr extends QuickBooks_IPP_Object
     {
         return $this->setCountrySubDivisionCode($state);
     }
-    
+
     public function getState()
     {
         return $this->getCountrySubDivisionCode();
     }
-    
+
     protected function _order()
     {
         return [

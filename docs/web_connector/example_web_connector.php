@@ -244,10 +244,10 @@ $dsn = 'mysql://root:root@localhost/quickbooks_server';
 if (!QuickBooks_Utilities::initialized($dsn)) {
     // Initialize creates the neccessary database schema for queueing up requests and logging
     QuickBooks_Utilities::initialize($dsn);
-    
+
     // This creates a username and password which is used by the Web Connector to authenticate
     QuickBooks_Utilities::createUser($dsn, $user, $pass);
-    
+
     // Queueing up a test request
     //
     // You can instantiate and use the QuickBooks_Queue class to queue up
@@ -289,12 +289,12 @@ if (!QuickBooks_Utilities::initialized($dsn)) {
     //	DO YOUR OWN QUEUEING IN THIS FILE! See
     //	docs/example_web_connector_queueing.php for more details and examples
     //	of queueing things up.
-    
+
     $primary_key_of_your_customer = 5;
 
     $Queue = new QuickBooks_WebConnector_Queue($dsn);
     $Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_your_customer);
-    
+
     // Also note the that ->enqueue() method supports some other parameters:
     // 	string $action				The type of action to queue up
     //	mixed $ident = null			Pass in the unique primary key of your record here, so you can pull the data from your application to build a qbXML request in your request handler
@@ -375,7 +375,7 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
     //
     // So, when you implement this for your business, you'd probably do
     //	something like this...:
-    
+
     /*
     // Fetch your customer record from your database
     $record = mysql_fetch_array(mysql_query("SELECT * FROM your_customer_table WHERE your_customer_ID_field = " . (int) $ID));
@@ -399,9 +399,9 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 
     return $qbxml;
     */
-    
+
     // But we're just testing, so we'll just use a static test request:
-     
+
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="2.0"?>
 		<QBXML>
@@ -429,7 +429,7 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 				</CustomerAddRq>
 			</QBXMLMsgsRq>
 		</QBXML>';
-    
+
     return $xml;
 }
 
@@ -456,7 +456,7 @@ function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $ext
     //	later. (You'll need to refer to the customer by either ListID or Name
     //	in other requests, say, to update the customer or to add an invoice for
     //	the customer.
-    
+
     /*
     mysql_query("UPDATE your_customer_table SET quickbooks_listid = '" . mysql_escape_string($idents['ListID']) . "' WHERE your_customer_ID_field = " . (int) $ID);
     */
@@ -482,7 +482,7 @@ function _quickbooks_salesreceipt_add_request($requestID, $user, $action, $ID, $
             <ListID>80003579-1231522938</ListID>
         </CustomerRef>
     */
-    
+
     $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="2.0"?>
 		<QBXML>
@@ -527,7 +527,7 @@ function _quickbooks_salesreceipt_add_request($requestID, $user, $action, $ID, $
 				</SalesReceiptAddRq>
 			</QBXMLMsgsRq>
 		</QBXML>';
-    
+
     return $xml;
 }
 

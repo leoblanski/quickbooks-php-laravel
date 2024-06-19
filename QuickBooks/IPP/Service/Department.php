@@ -39,7 +39,7 @@ class QuickBooks_IPP_Service_Department extends QuickBooks_IPP_Service
         $xml = null;
         return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_DEPARTMENT, $IDType, $xml);
     }
-    
+
     /**
      * Add a new department to QuickBooks
      *

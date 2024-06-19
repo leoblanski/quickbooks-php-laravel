@@ -32,13 +32,13 @@ if (isset($_POST['submitted'])) {
 			'" . mysql_escape_string($_POST['fname']) . "', 
 			'" . mysql_escape_string($_POST['lname']) . "'
 		)");
-        
+
     // Get the primary key of the new record
     $id = mysql_insert_id();
-    
+
     // Queue up the customer add
     $Queue = new QuickBooks_WebConnector_Queue($dsn);
     $Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $id);
-    
+
     die('Great, queued up a customer!');
 }

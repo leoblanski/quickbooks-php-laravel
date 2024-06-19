@@ -24,27 +24,27 @@ class QuickBooks_QBXML_Object_Deposit_DepositLine extends QuickBooks_QBXML_Objec
     {
         parent::__construct($arr);
     }
-    
+
     public function setPaymentTxnID($TxnID)
     {
         return $this->set('PaymentTxnID', $TxnID);
     }
-    
+
     public function getPaymentTxnID()
     {
         return $this->get('PaymentTxnID');
     }
-    
+
     public function setPaymentTxnLineID($TxnLineID)
     {
         return $this->set('PaymentTxnLineID', $TxnLineID);
     }
-    
+
     public function getPaymentTxnLineID()
     {
         return $this->get('PaymentTxnLineID');
     }
-    
+
     public function setOverrideMemo($value)
     {
         return $this->set('OverrideMemo', $value);
@@ -95,7 +95,7 @@ class QuickBooks_QBXML_Object_Deposit_DepositLine extends QuickBooks_QBXML_Objec
     {
         return $this->get('Amount');
     }
-    
+
     public function setMemo($value)
     {
         return $this->set('Memo', $value);
@@ -112,7 +112,7 @@ class QuickBooks_QBXML_Object_Deposit_DepositLine extends QuickBooks_QBXML_Objec
     }
 
     // Path: ClassRef ListID, datatype:
-    
+
     /**
      * Set the ClassRef ListID for the Check
      *
@@ -146,7 +146,7 @@ class QuickBooks_QBXML_Object_Deposit_DepositLine extends QuickBooks_QBXML_Objec
     }
 
     // Path: ClassRef FullName, datatype:
-    
+
     /**
      * Set the ClassRef FullName for the Check
      *
@@ -167,13 +167,13 @@ class QuickBooks_QBXML_Object_Deposit_DepositLine extends QuickBooks_QBXML_Objec
     {
         return $this->get('ClassRef FullName');
     }
-    
+
     public function asXML($root = null, $parent = null, $object = null)
     {
         if (is_null($object)) {
             $object = $this->_object;
         }
-        
+
         switch ($parent) {
             case QUICKBOOKS_ADD_DEPOSIT:
                 $root = 'DepositLineAdd';
@@ -184,10 +184,10 @@ class QuickBooks_QBXML_Object_Deposit_DepositLine extends QuickBooks_QBXML_Objec
                 $parent = null;
                 break;
         }
-        
+
         return parent::asXML($root, $parent, $object);
     }
-    
+
     /**
      *
      *
@@ -197,17 +197,17 @@ class QuickBooks_QBXML_Object_Deposit_DepositLine extends QuickBooks_QBXML_Objec
     {
         return true;
     }
-    
+
     /**
      *
      */
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      *
      *
@@ -221,7 +221,7 @@ class QuickBooks_QBXML_Object_Deposit_DepositLine extends QuickBooks_QBXML_Objec
         $this->_cleanup();
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     public function object()
     {
         return 'DepositLine';

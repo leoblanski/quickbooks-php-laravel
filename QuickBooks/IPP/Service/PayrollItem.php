@@ -24,31 +24,31 @@ class QuickBooks_IPP_Service_PayrollItem extends QuickBooks_IPP_Service
     {
         return parent::_findAll($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYROLLITEM, $query, null, $page, $size, '', $options);
     }
-    
+
     public function findById($Context, $realmID, $ID)
     {
         $xml = null;
         return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYROLLITEM, $ID, $xml);
     }
-    
+
     public function findByName($Context, $realmID, $name)
     {
         $list = $this->findAll($Context, $realmID, $name);
-        
+
         foreach ($list as $Item) {
             if (strtolower($Item->getName()) == strtolower($name)) {
                 return $Item;
             }
         }
-        
+
         return false;
     }
-    
+
     public function add($Context, $realmID, $Object)
     {
         return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYROLLITEM, $Object);
     }
-    
+
     public function delete($Context, $realmID, $IDType)
     {
         return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_PAYROLLITEM, $IDType);

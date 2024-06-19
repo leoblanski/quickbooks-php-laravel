@@ -47,7 +47,7 @@ foreach ($fields as $field) {
 
         print("\t" . $field . ': {' . $cast . '} (length: ' . strlen($cast) . ')' . "\n");
     }
-    
+
     print("\n");
 }
 print("\n");
@@ -64,7 +64,7 @@ $invoice = [
     'IsToBeEmailed' => true,
     'IsFinanceCharge' => false,
     'IsPending' => true,
-    
+
     'InvoiceLine Class FullName' => 'Test & Class',
     'InvoiceLine Item FullName' => 'Item & Test',
     ];

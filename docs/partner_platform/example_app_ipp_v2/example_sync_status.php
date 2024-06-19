@@ -33,17 +33,17 @@ $realm = $creds['qb_realm'];
 if ($Context = $IPP->context()) {
     // Set the DBID
     $IPP->dbid($Context, 'something');
-    
+
     // Set the IPP flavor
     $IPP->flavor($creds['qb_flavor']);
-    
+
     // Get the base URL if it's QBO
     if ($creds['qb_flavor'] == QuickBooks_IPP_IDS::FLAVOR_ONLINE) {
         $IPP->baseURL($IPP->getBaseURL($Context, $realm));
     }
-    
+
     $SyncStatus = new QuickBooks_IPP_Service_SyncStatus();
-    
+
     $id = '{QBO-119}';
 
     $status = $SyncStatus->status($Context, $realm, QuickBooks_IPP_IDS::RESOURCE_CUSTOMER, $id);

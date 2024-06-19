@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'EstimateAdd';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -118,10 +118,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtValue' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -208,10 +208,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtValue' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -299,7 +299,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -386,10 +386,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtValue' => 999.99,
   'IncludeRetElement' => 4,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -476,10 +476,10 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtValue' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -491,7 +491,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -581,7 +581,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
             'EstimateLineGroupAdd DataExt DataExtValue',
             'IncludeRetElement',
         ];
-        
+
         return $paths;
     }
 }

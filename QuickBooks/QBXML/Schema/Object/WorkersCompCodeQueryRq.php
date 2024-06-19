@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_WorkersCompCodeQueryRq extends QuickBooks_Q
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -49,10 +49,10 @@ class QuickBooks_QBXML_Schema_Object_WorkersCompCodeQueryRq extends QuickBooks_Q
   'ToEffectiveDate' => 'DATETYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -70,10 +70,10 @@ class QuickBooks_QBXML_Schema_Object_WorkersCompCodeQueryRq extends QuickBooks_Q
   'ToEffectiveDate' => 0,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -92,7 +92,7 @@ class QuickBooks_QBXML_Schema_Object_WorkersCompCodeQueryRq extends QuickBooks_Q
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -110,10 +110,10 @@ class QuickBooks_QBXML_Schema_Object_WorkersCompCodeQueryRq extends QuickBooks_Q
   'ToEffectiveDate' => 999.99,
   'IncludeRetElement' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -131,10 +131,10 @@ class QuickBooks_QBXML_Schema_Object_WorkersCompCodeQueryRq extends QuickBooks_Q
   'ToEffectiveDate' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -146,7 +146,7 @@ class QuickBooks_QBXML_Schema_Object_WorkersCompCodeQueryRq extends QuickBooks_Q
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -164,7 +164,7 @@ class QuickBooks_QBXML_Schema_Object_WorkersCompCodeQueryRq extends QuickBooks_Q
   11 => 'ToEffectiveDate',
   12 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

@@ -29,7 +29,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         parent::__construct($arr);
     }
-    
+
     /**
      * Set the ListID of the Class
      *
@@ -40,7 +40,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->set('ListID', $ListID);
     }
-    
+
     /**
      * Get the ListID of the Class
      *
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->get('ListID');
     }
-    
+
     /**
      *
      */
@@ -58,12 +58,12 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->set('ParentRef ListID', $ListID);
     }
-    
+
     public function getParentListID()
     {
         return $this->get('ParentRef ListID');
     }
-    
+
     /**
      * @deprecated
      */
@@ -71,7 +71,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->set('ParentRef FullName', $name);
     }
-    
+
     /**
      * @deprecated
      */
@@ -79,27 +79,27 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->get('ParentRef FullName');
     }
-    
+
     public function setParentFullName($name)
     {
         return $this->set('ParentRef FullName', $name);
     }
-    
+
     public function getParentFullName()
     {
         return $this->get('ParentRef FullName');
     }
-    
+
     public function setParentApplicationID($value)
     {
         return $this->set('ParentRef ' . QUICKBOOKS_API_APPLICATIONID, $this->encodeApplicationID($this->object(), QUICKBOOKS_LISTID, $value));
     }
-    
+
     public function getParentApplicationID()
     {
         return $this->get('ParentRef ' . QUICKBOOKS_API_APPLICATIONID);
     }
-    
+
     /**
      * Set the name of the class
      *
@@ -110,7 +110,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->set('Name', $name);
     }
-    
+
     /**
      * Get the name of the class
      *
@@ -120,7 +120,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->get('Name');
     }
-    
+
     /**
      *
      */
@@ -133,7 +133,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->set('FullName', $name);
     }
-    
+
     /**
      * Set this Class active or not
      *
@@ -144,7 +144,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->setBooleanType('IsActive', $value);
     }
-    
+
     /**
      * Tell whether or not this class object is active
      *
@@ -154,7 +154,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return $this->getBooleanType('IsActive');
     }
-    
+
     /**
      * Perform any needed clean-up of the object data members
      *
@@ -164,7 +164,7 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     {
         return true;
     }
-    
+
     /**
      * Get an array representation of this Class object
      *
@@ -175,10 +175,10 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -191,10 +191,10 @@ class QuickBooks_QBXML_Object_CustomerType extends QuickBooks_QBXML_Object
     public function asQBXML($request, $todo_for_empty_elements = QUICKBOOKS_OBJECT_XML_DROP, $indent = "\t", $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $todo_for_empty_elements, $indent, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

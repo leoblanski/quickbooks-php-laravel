@@ -25,7 +25,7 @@ class QuickBooks_IPP_Object_Line extends QuickBooks_IPP_Object
         return $this->get('Desc');
     }
     */
-    
+
     protected function _order()
     {
         return [

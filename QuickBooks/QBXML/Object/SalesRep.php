@@ -39,7 +39,7 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
     {
         return $this->set('Initial', $value);
     }
-    
+
     /**
      * Get the initials of this sales rep
      *
@@ -49,7 +49,7 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
     {
         return $this->get('Initial');
     }
-    
+
     /**
      * Set this sales rep active or not
      *
@@ -58,9 +58,9 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
      */
     public function setIsActive($value)
     {
-        return $this->set('IsActive', (boolean) $value);
+        return $this->set('IsActive', (bool) $value);
     }
-    
+
     /**
      * Get whether or not this sales rep is active
      *
@@ -79,7 +79,7 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
     {
         return $this->set('SalesRepEntityRef ListID', $lid);
     }
-    
+
     /**
      * @param string $name
      * @return boolean
@@ -97,10 +97,10 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
     public function asArray($request, $nest = true)
     {
         $this->_cleanup();
-        
+
         return parent::asArray($request, $nest);
     }
-    
+
     /**
      * Convert this object to a valid qbXML request
      *
@@ -113,10 +113,10 @@ class QuickBooks_QBXML_Object_SalesRep extends QuickBooks_QBXML_Object
     public function asQBXML($request, $version = null, $locale = null, $root = null)
     {
         $this->_cleanup();
-        
+
         return parent::asQBXML($request, $version = null, $locale = null, $root);
     }
-    
+
     /**
      * Tell what type of object this is
      *

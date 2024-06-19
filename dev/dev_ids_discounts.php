@@ -19,13 +19,13 @@ $realmID = 182938192;
 $IPP = new QuickBooks_IPP();
 if ($Context = $IPP->authenticate($username, $password, $token)) {
     $IPP->application($Context, 'bf4in6uym');
-    
+
     $Service = new QuickBooks_IPP_Service_Discount();
-    
+
     $list = $Service->findAll($Context, $realmID);
-    
+
     //print_r($list);
-    
+
     foreach ($list as $Discount) {
         //print_r($Discount);
         print($Discount->getId() . ', ' . $Discount->getName() . ', ' . $Discount->getAmount()->getAmount() . "\n\n");

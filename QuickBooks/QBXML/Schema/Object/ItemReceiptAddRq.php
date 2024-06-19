@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
     protected function &_qbxmlWrapper()
     {
         static $wrapper = 'ItemReceiptAdd';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -81,10 +81,10 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'ItemGroupLineAdd UnitOfMeasure' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -134,10 +134,10 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'ItemGroupLineAdd UnitOfMeasure' => 31,
   'IncludeRetElement' => 50,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -188,7 +188,7 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'IncludeRetElement' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -238,10 +238,10 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'ItemGroupLineAdd UnitOfMeasure' => 7,
   'IncludeRetElement' => 999.99,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -291,10 +291,10 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'ItemGroupLineAdd UnitOfMeasure' => false,
   'IncludeRetElement' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -306,7 +306,7 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
         return $paths;
     }
     */
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -363,7 +363,7 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   49 => 'ItemGroupLineAdd UnitOfMeasure',
   50 => 'IncludeRetElement',
 ];
-            
+
         return $paths;
     }
 }

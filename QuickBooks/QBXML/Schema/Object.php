@@ -33,14 +33,14 @@ define('QUICKBOOKS_QBXML_SCHEMA_TYPE_AMTTYPE', 'AMTTYPE');
 abstract class QuickBooks_QBXML_Schema_Object
 {
     abstract protected function &_qbxmlWrapper();
-    
+
     public function qbxmlWrapper()
     {
         return $this->_qbxmlWrapper();
     }
-    
+
     abstract protected function &_dataTypePaths();
-    
+
     /**
      *
      *
@@ -50,10 +50,10 @@ abstract class QuickBooks_QBXML_Schema_Object
     public function paths($match = null)
     {
         $paths = $this->_dataTypePaths();
-        
+
         return array_keys($paths);
     }
-    
+
     /**
      *
      *
@@ -68,9 +68,9 @@ abstract class QuickBooks_QBXML_Schema_Object
             'Name' => 'STRTYPE',
             );
         */
-        
+
         $paths = $this->_dataTypePaths();
-        
+
         if (isset($paths[$path])) {
             return $paths[$path];
         } elseif ($case_doesnt_matter) {
@@ -80,12 +80,12 @@ abstract class QuickBooks_QBXML_Schema_Object
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     abstract protected function &_maxLengthPaths();
-    
+
     /**
      *
      *
@@ -102,9 +102,9 @@ abstract class QuickBooks_QBXML_Schema_Object
             'FirstName' => 41,
             );
         */
-        
+
         $paths = $this->_maxLengthPaths();
-            
+
         if (isset($paths[$path])) {
             return $paths[$path];
         } elseif ($case_doesnt_matter) {
@@ -114,12 +114,12 @@ abstract class QuickBooks_QBXML_Schema_Object
                 }
             }
         }
-        
+
         return 0;
     }
-    
+
     abstract protected function &_isOptionalPaths();
-    
+
     public function isOptional($path)
     {
         /*
@@ -129,18 +129,18 @@ abstract class QuickBooks_QBXML_Schema_Object
             'LastName' => true,
             );
         */
-        
+
         $paths = $this->_isOptionalPaths();
-        
+
         if (isset($paths[$path])) {
             return $paths[$path];
         }
-        
+
         return true;
     }
-    
+
     abstract protected function &_sinceVersionPaths();
-    
+
     public function sinceVersion($path)
     {
         /*
@@ -149,18 +149,18 @@ abstract class QuickBooks_QBXML_Schema_Object
             'LastName' => '0.0',
             );
         */
-        
+
         $paths = $this->_sinceVersionPaths();
-            
+
         if (isset($paths[$path])) {
             return $paths[$path];
         }
-        
+
         return '999.99';
     }
-    
+
     abstract protected function &_isRepeatablePaths();
-    
+
     /**
      * Tell whether or not a specific element is repeatable
      *
@@ -175,16 +175,16 @@ abstract class QuickBooks_QBXML_Schema_Object
             'LastName' => false,
             );
         */
-        
+
         $paths = $this->_isRepeatablePaths();
-        
+
         if (isset($paths[$path])) {
             return $paths[$path];
         }
-        
+
         return false;
     }
-    
+
     /**
      * Tell whether or not an element exists
      *
@@ -194,7 +194,7 @@ abstract class QuickBooks_QBXML_Schema_Object
     public function exists($path, $case_doesnt_matter = true, $is_end_element = false)
     {
         $ordered_paths = $this->_reorderPathsPaths();
-        
+
         if (in_array($path, $ordered_paths)) {
             return true;
         } elseif ($case_doesnt_matter) {
@@ -204,31 +204,31 @@ abstract class QuickBooks_QBXML_Schema_Object
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      *
      */
     public function unfold($path)
     {
         static $paths = null;
-        
+
         if (is_null($paths)) {
             $paths = $this->_reorderPathsPaths();
             $paths = array_change_key_case(array_combine(array_values($paths), array_values($paths)), CASE_LOWER);
         }
-        
+
         //print('unfolding: {' . $path . '}' . "\n");
-        
+
         if (isset($paths[strtolower($path)])) {
             return $paths[strtolower($path)];
         }
-        
+
         return null;
     }
-    
+
     /**
      *
      * @note WARNING! These are lists of UNSUPPORTED locales, NOT lists of supported ones!
@@ -239,7 +239,7 @@ abstract class QuickBooks_QBXML_Schema_Object
         $arr = [];
         return $arr;
     }
-    
+
     /**
      *
      * @note WARNING! These are lists of UNSUPPORTED locales, NOT lists of supported ones!
@@ -249,7 +249,7 @@ abstract class QuickBooks_QBXML_Schema_Object
     {
         return $this->_inLocalePaths();
     }
-    
+
     /*
     public function inLocale($path, $locale)
     {
@@ -268,14 +268,14 @@ abstract class QuickBooks_QBXML_Schema_Object
         return false;
     }
     */
-    
+
     /**
      * Return a list of paths in a specific schema order
      *
      * @return array
      */
     abstract protected function &_reorderPathsPaths();
-    
+
     /**
      * Re-order an array to match the schema order
      *
@@ -292,11 +292,11 @@ abstract class QuickBooks_QBXML_Schema_Object
             2 => 'LastName',
             );
         */
-        
+
         $ordered_paths = $this->_reorderPathsPaths();
-        
+
         $tmp = [];
-        
+
         foreach ($ordered_paths as $key => $path) {
             if (in_array($path, $unordered_paths)) {
                 $tmp[$key] = $path;
@@ -337,13 +337,13 @@ abstract class QuickBooks_QBXML_Schema_Object
                     $tmp[$key] = $apppath;
                 }
             }*/
-            
+
             /*else if ($path == QUICKBOOKS_API_APPLICATIONID)
             {
                 print('HERE!');
             }*/
         }
-        
+
         return array_merge($tmp);
     }
 }

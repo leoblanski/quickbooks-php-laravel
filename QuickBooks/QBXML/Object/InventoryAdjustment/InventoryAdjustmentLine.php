@@ -116,7 +116,7 @@ class QuickBooks_QBXML_Object_InventoryAdjustment_InventoryAdjustmentLine extend
         if (is_null($object)) {
             $object = $this->_object;
         }
-        
+
         switch ($parent) {
             case QUICKBOOKS_ADD_INVENTORYADJUSTMENT:
                 $root = 'InventoryAdjustmentLineAdd';

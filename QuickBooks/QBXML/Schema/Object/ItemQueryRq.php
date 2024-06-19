@@ -28,10 +28,10 @@ class QuickBooks_QBXML_Schema_Object_ItemQueryRq extends QuickBooks_QBXML_Schema
     protected function &_qbxmlWrapper()
     {
         static $wrapper = '';
-        
+
         return $wrapper;
     }
-    
+
     protected function &_dataTypePaths()
     {
         static $paths =  [
@@ -48,10 +48,10 @@ class QuickBooks_QBXML_Schema_Object_ItemQueryRq extends QuickBooks_QBXML_Schema
   'IncludeRetElement' => 'STRTYPE',
   'OwnerID' => 'GUIDTYPE',
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_maxLengthPaths()
     {
         static $paths =  [
@@ -68,10 +68,10 @@ class QuickBooks_QBXML_Schema_Object_ItemQueryRq extends QuickBooks_QBXML_Schema
   'IncludeRetElement' => 50,
   'OwnerID' => 0,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isOptionalPaths()
     {
         static $paths =  [
@@ -89,7 +89,7 @@ class QuickBooks_QBXML_Schema_Object_ItemQueryRq extends QuickBooks_QBXML_Schema
   'OwnerID' => true,
 ];
     }
-    
+
     protected function &_sinceVersionPaths()
     {
         static $paths =  [
@@ -106,10 +106,10 @@ class QuickBooks_QBXML_Schema_Object_ItemQueryRq extends QuickBooks_QBXML_Schema
   'IncludeRetElement' => 4,
   'OwnerID' => 2,
 ];
-        
+
         return $paths;
     }
-    
+
     protected function &_isRepeatablePaths()
     {
         static $paths =  [
@@ -126,10 +126,10 @@ class QuickBooks_QBXML_Schema_Object_ItemQueryRq extends QuickBooks_QBXML_Schema
   'IncludeRetElement' => true,
   'OwnerID' => true,
 ];
-            
+
         return $paths;
     }
-    
+
     /*
     abstract protected function &_inLocalePaths()
     {
@@ -141,16 +141,16 @@ class QuickBooks_QBXML_Schema_Object_ItemQueryRq extends QuickBooks_QBXML_Schema
         return $paths;
     }
     */
-    
+
     protected function &_inLocalePaths()
     {
         static $paths = [
             'ActiveStatus' => [ 'QBOE' ],
             ];
-        
+
         return $paths;
     }
-    
+
     protected function &_reorderPathsPaths()
     {
         static $paths =  [
@@ -167,7 +167,7 @@ class QuickBooks_QBXML_Schema_Object_ItemQueryRq extends QuickBooks_QBXML_Schema
   10 => 'IncludeRetElement',
   11 => 'OwnerID',
 ];
-            
+
         return $paths;
     }
 }

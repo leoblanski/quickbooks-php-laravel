@@ -35,7 +35,7 @@ class QuickBooks_Adapter_Server_Builtin implements QuickBooks_Adapter_Server
      * QuickBooks_SOAP_Server built-in SOAP server instance
      */
     protected $_server;
-    
+
     /**
      * Create a new adapter for the built-in SOAP server
      *
@@ -46,7 +46,7 @@ class QuickBooks_Adapter_Server_Builtin implements QuickBooks_Adapter_Server
     {
         $this->_server = new QuickBooks_SOAP_Server($wsdl, $soap_options);
     }
-    
+
     /**
      * Handle an incoming SOAP request
      *
@@ -57,7 +57,7 @@ class QuickBooks_Adapter_Server_Builtin implements QuickBooks_Adapter_Server
     {
         return $this->_server->handle($raw_http_input);
     }
-    
+
     /**
      *
      *
@@ -67,7 +67,7 @@ class QuickBooks_Adapter_Server_Builtin implements QuickBooks_Adapter_Server
     {
         return $this->_server->setClass($class, $dsn_or_conn, $map, $onerror, $hooks, $log_level, $raw_http_input, $handler_options, $driver_options, $callback_options);
     }
-    
+
     /**
      *
      *

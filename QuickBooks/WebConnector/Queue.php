@@ -60,7 +60,7 @@ class QuickBooks_WebConnector_Queue
      * @var string
      */
     protected $_user;
-    
+
     /**
      * Create a new QuickBooks queue instance
      *
@@ -71,16 +71,16 @@ class QuickBooks_WebConnector_Queue
     {
         //$this->_driver = QuickBooks_Utilities::driverFactory($dsn_or_conn, $config);
         $this->_driver = QuickBooks_Driver_Factory::create($dsn_or_conn, $config);
-        
+
         // No default username was provided, fetch the default from the driver
         if (!$user) {
             $user = $this->_driver->authDefault();
         }
-        
+
         // Set the default username
         $this->_user = $user;
     }
-    
+
     /**
      * Get or set the username the queue is operating on/for
      *
@@ -92,10 +92,10 @@ class QuickBooks_WebConnector_Queue
         if ($user) {
             $this->_user = $user;
         }
-        
+
         return $this->_user;
     }
-    
+
     /**
      * Request to enter "Interactive Mode" with the Web Connector
      *
@@ -111,24 +111,24 @@ class QuickBooks_WebConnector_Queue
             $tmp = array_merge(range('a', 'z'), range(0, 9));
             shuffle($tmp);
             $random = substr(implode('', $tmp), 0, 8);
-            
+
             /*
             if (!$user)
             {
                 $user = $this->_driver->authDefault();
             }
             */
-            
+
             if (!$user) {
                 $user = $this->_user;
             }
-            
+
             return $this->_driver->queueEnqueue(QUICKBOOKS_INTERACTIVE_MODE, $random, true, $priority, $user);
         }
-        
+
         return false;
     }
-    
+
     /**
      * Register a recurring event
      *
@@ -154,13 +154,13 @@ class QuickBooks_WebConnector_Queue
     public function recurring($run_every, $action, $ident = null, $priority = 0, $extra = null, $user = null, $qbxml = null, $replace = true)
     {
         $run_every = QuickBooks_Utilities::intervalToSeconds($run_every);
-        
+
         if (!strlen($ident)) {
             $tmp = array_merge(['a', 'z'], range(0, 9));
             shuffle($tmp);
             $ident = substr(implode('', $tmp), 0, 8);
         }
-        
+
         if ($this->_driver) {
             /*
             if (!$user)
@@ -168,18 +168,18 @@ class QuickBooks_WebConnector_Queue
                 $user = $this->_driver->authDefault();
             }
             */
-            
+
             // Use the default user (provided in __construct) if none is given
             if (!$user) {
                 $user = $this->_user;
             }
-            
+
             return $this->_driver->recurEnqueue($user, $run_every, $action, substr($ident, 0, 40), $replace, $priority, $extra, $qbxml);
         }
-        
+
         return false;
     }
-    
+
     /**
      * Add a new item/action to the QuickBooks queue
      *
@@ -202,12 +202,12 @@ class QuickBooks_WebConnector_Queue
     {
         if (!strlen($ident)) {
             // If they didn't provide an $ident, generate a random, unique one
-            
+
             $tmp = array_merge(range('a', 'z'), range(0, 9));
             shuffle($tmp);
             $ident = substr(implode('', $tmp), 0, 8);
         }
-        
+
         if ($this->_driver) {
             /*
             if (!$user)
@@ -215,18 +215,18 @@ class QuickBooks_WebConnector_Queue
                 $user = $this->_driver->authDefault();
             }
             */
-            
+
             // Use the default user (provided in __construct) if none is given
             if (!$user) {
                 $user = $this->_user;
             }
-            
+
             return $this->_driver->queueEnqueue($user, $action, substr($ident, 0, 40), $replace, $priority, $extra, $qbxml);
         }
-        
+
         return false;
     }
-    
+
     /**
      * Tell whether or not an action/ident already exists in the queue
      *
@@ -242,13 +242,13 @@ class QuickBooks_WebConnector_Queue
             if (!$user) {
                 $user = $this->_user;
             }
-            
+
             return $this->_driver->queueExists($user, $action, $ident);
         }
-        
+
         return null;
     }
-    
+
     /**
      * Tell the number of items currently in the queue
      *
@@ -262,14 +262,14 @@ class QuickBooks_WebConnector_Queue
             if (!$user) {
                 $user = $this->_user;
             }
-            
+
             $queued = true;
             return $this->_driver->queueLeft($user, $queued);
         }
-        
+
         return null;
     }
-    
+
     /**
      * Forcibly remove an item from the queue
      *
@@ -285,15 +285,15 @@ class QuickBooks_WebConnector_Queue
             if (!$user) {
                 $user = $this->_user;
             }
-            
+
             $ticket = null;
             $new_status = QUICKBOOKS_STATUS_CANCELLED;
             return $this->_driver->queueRemove($user, $action, $ident);
         }
-        
+
         return null;
     }
-    
+
     /*public function identifier($type, $ident, $user = null)
     {
         $types = QuickBooks_Utilities::listObjects();
@@ -324,7 +324,7 @@ class QuickBooks_WebConnector_Queue
 
     }
     */
-    
+
     /**
      * Get debugging information from the queue
      *

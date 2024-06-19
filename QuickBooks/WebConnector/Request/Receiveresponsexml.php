@@ -29,13 +29,13 @@ QuickBooks_Loader::load('/QuickBooks/WebConnector/Request.php');
 class QuickBooks_WebConnector_Request_ReceiveResponseXML extends QuickBooks_WebConnector_Request
 {
     public $ticket;
-    
+
     public $hresult;
-    
+
     public $message;
-    
+
     public $response;
-    
+
     public function __construct($ticket = null, $response = null, $hresult = null, $message = null)
     {
         $this->ticket = $ticket;

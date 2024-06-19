@@ -54,64 +54,64 @@ QuickBooks_Loader::import('/QuickBooks/IPP/Service');
  */
 class QuickBooks_IPP
 {
-    const API_ADDRECORD = 'API_AddRecord';
+    public const API_ADDRECORD = 'API_AddRecord';
 
-    const API_GETBILLINGSTATUS = 'API_GetBillingStatus';
+    public const API_GETBILLINGSTATUS = 'API_GetBillingStatus';
 
     /**
      * This is not a real API call!
      */
-    const API_GETBASEURL = '_getBaseURL_';
+    public const API_GETBASEURL = '_getBaseURL_';
 
-    const API_GETDBINFO = 'API_GetDBInfo';
+    public const API_GETDBINFO = 'API_GetDBInfo';
 
-    const API_GETDBVAR = 'API_GetDBVar';
+    public const API_GETDBVAR = 'API_GetDBVar';
 
-    const API_GETUSERINFO = 'API_GetUserInfo';
+    public const API_GETUSERINFO = 'API_GetUserInfo';
 
-    const API_GETUSERROLE = 'API_GetUserRole';
+    public const API_GETUSERROLE = 'API_GetUserRole';
 
-    const API_GETSCHEMA = 'API_GetSchema';
+    public const API_GETSCHEMA = 'API_GetSchema';
 
-    const API_SETDBVAR = 'API_SetDBVar';
+    public const API_SETDBVAR = 'API_SetDBVar';
 
-    const API_GETISREALMQBO = 'API_GetIsRealmQBO';
+    public const API_GETISREALMQBO = 'API_GetIsRealmQBO';
 
-    const API_GETIDSREALM = 'API_GetIDSRealm';
+    public const API_GETIDSREALM = 'API_GetIDSRealm';
 
-    const API_ATTACHIDSREALM = 'API_AttachIDSRealm';
+    public const API_ATTACHIDSREALM = 'API_AttachIDSRealm';
 
-    const API_DETACHIDSREALM = 'API_DetachIDSRealm';
+    public const API_DETACHIDSREALM = 'API_DetachIDSRealm';
 
-    const API_RENAMEAPP = 'API_RenameApp';
+    public const API_RENAMEAPP = 'API_RenameApp';
 
-    const API_ASSERTFEDERATEDIDENTITY = 'API_AssertFederatedIdentity';
+    public const API_ASSERTFEDERATEDIDENTITY = 'API_AssertFederatedIdentity';
 
-    const API_GETENTITLEMENTVALUES = 'API_GetEntitlementValues';
+    public const API_GETENTITLEMENTVALUES = 'API_GetEntitlementValues';
 
-    const API_GETENTITLEMENTVALUESANDUSERROLE = 'API_GetEntitlementValuesAndUserRole';
+    public const API_GETENTITLEMENTVALUESANDUSERROLE = 'API_GetEntitlementValuesAndUserRole';
 
-    const AUTHMODE_FEDERATED = 'federated';
-    const AUTHMODE_OAUTHV1 = 'oauthv1';
-    const AUTHMODE_OAUTHV2 = 'oauthv2';
+    public const AUTHMODE_FEDERATED = 'federated';
+    public const AUTHMODE_OAUTHV1 = 'oauthv1';
+    public const AUTHMODE_OAUTHV2 = 'oauthv2';
 
     /**
      *
      * @var unknown_type
      */
-    const COOKIE = 'ippfedcookie';
+    public const COOKIE = 'ippfedcookie';
 
     /**
      *
      * @var string
      */
-    const REQUEST_IPP = 'ipp';
+    public const REQUEST_IPP = 'ipp';
 
     /**
      *
      * @var string
      */
-    const REQUEST_IDS = 'ids';
+    public const REQUEST_IDS = 'ids';
 
     /**
      * An IDS request to add an object
@@ -142,49 +142,49 @@ class QuickBooks_IPP
      * No error occurred
      * @var integer
      */
-    const OK = QUICKBOOKS_ERROR_OK;
+    public const OK = QUICKBOOKS_ERROR_OK;
 
     /**
      * No error occurred
      * @var integer
      */
-    const ERROR_OK = QUICKBOOKS_ERROR_OK;
+    public const ERROR_OK = QUICKBOOKS_ERROR_OK;
 
     /**
      * Indicates a generic internal error
      * @param integer
      */
-    const ERROR_INTERNAL = -1091;
+    public const ERROR_INTERNAL = -1091;
 
     /**
      * Indicates an error when parsing an XML stream
      * @param integer
      */
-    const ERROR_XML = -1092;
+    public const ERROR_XML = -1092;
 
     /**
      * Indicates an error establishing a socket connection to QBMS
      * @param integer
      */
-    const ERROR_SOCKET = -1093;
+    public const ERROR_SOCKET = -1093;
 
     /**
      * Indicates an error with a parameter passed to QBMS
      * @param integer
      */
-    const ERROR_PARAM = -1094;
+    public const ERROR_PARAM = -1094;
 
     /**
      * Indicates an internal SSL-related error
      * @param integer
      */
-    const ERROR_SSL = -1095;
+    public const ERROR_SSL = -1095;
 
     /**
      *
      *
      */
-    const ERROR_HTTP = -1096;
+    public const ERROR_HTTP = -1096;
 
     protected $_test;
 
@@ -546,7 +546,7 @@ class QuickBooks_IPP
      */
     public function useIDSParser($true_or_false)
     {
-        $this->_ids_parser = (boolean) $true_or_false;
+        $this->_ids_parser = (bool) $true_or_false;
         return $this->_ids_parser;
     }
 
@@ -905,7 +905,7 @@ class QuickBooks_IPP
      */
     public function useMasking($yes_or_no)
     {
-        $this->_masking = (boolean) $yes_or_no;
+        $this->_masking = (bool) $yes_or_no;
     }
 
     /**
@@ -919,7 +919,7 @@ class QuickBooks_IPP
      */
     public function useDebugMode($yes_or_no)
     {
-        $this->_debug = (boolean) $yes_or_no;
+        $this->_debug = (bool) $yes_or_no;
     }
 
     /**
@@ -1021,7 +1021,7 @@ class QuickBooks_IPP
                         $data = http_build_query($signdata);
                     }
                 } else {
-                    
+
                 }
             }
         }

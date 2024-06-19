@@ -38,7 +38,7 @@ class QuickBooks_IPP_Service_ItemConsolidated extends QuickBooks_IPP_Service
         $xml = null;
         return parent::_findById($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEMCONSOLIDATED, $ID, $xml);
     }
-    
+
     /*
     public function findByNameContains($Context, $realmID, $contains)
     {
@@ -55,7 +55,7 @@ class QuickBooks_IPP_Service_ItemConsolidated extends QuickBooks_IPP_Service
         return parent::_findAll($Context, $realmID, $resource, $xml);
     }
     */
-    
+
     /**
      * Get an item by name
      *
@@ -80,12 +80,12 @@ class QuickBooks_IPP_Service_ItemConsolidated extends QuickBooks_IPP_Service
         return false;
     }
     */
-    
+
     public function add($Context, $realmID, $Object)
     {
         return parent::_add($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEMCONSOLIDATED, $Object);
     }
-    
+
     public function delete($Context, $realmID, $IDType)
     {
         return parent::_delete($Context, $realmID, QuickBooks_IPP_IDS::RESOURCE_ITEMCONSOLIDATED, $IDType);

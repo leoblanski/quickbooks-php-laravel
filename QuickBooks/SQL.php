@@ -18,45 +18,45 @@ class QuickBooks_SQL
     /**
      * Hook which occurs every time a new record is INSERTed into the SQL mirror
      */
-    const HOOK_SQL_INSERT = 'QuickBooks_SQL sql-insert';
-    
+    public const HOOK_SQL_INSERT = 'QuickBooks_SQL sql-insert';
+
     /**
      * Hook which occurs every time a record is UPDATEd in the SQL mirror
      */
-    const HOOK_SQL_UPDATE = 'QuickBooks_SQL sql-update';
-    
+    public const HOOK_SQL_UPDATE = 'QuickBooks_SQL sql-update';
+
     /**
      *
      */
-    const HOOK_SQL_DELETE = 'QuickBooks_SQL sql-delete';
-    
+    public const HOOK_SQL_DELETE = 'QuickBooks_SQL sql-delete';
+
     /**
      *
      */
-    const HOOK_SQL_INVENTORY = 'QuickBooks_SQL sql-inventory';
-    
-    const HOOK_SQL_INVENTORYASSEMBLY = 'QuickBooks_SQL sql-inventoryassembly';
-    
+    public const HOOK_SQL_INVENTORY = 'QuickBooks_SQL sql-inventory';
+
+    public const HOOK_SQL_INVENTORYASSEMBLY = 'QuickBooks_SQL sql-inventoryassembly';
+
     /**
      *
      */
-    const HOOK_QUICKBOOKS_INSERT = 'QuickBooks_SQL quickbooks-insert';
-    
+    public const HOOK_QUICKBOOKS_INSERT = 'QuickBooks_SQL quickbooks-insert';
+
     /**
      *
      */
-    const HOOK_QUICKBOOKS_UPDATE = 'QuickBooks_SQL quickbooks-update';
-    
+    public const HOOK_QUICKBOOKS_UPDATE = 'QuickBooks_SQL quickbooks-update';
+
     /**
      *
      */
-    const HOOK_QUICKBOOKS_DELETE = 'QuickBooks_SQL quickbooks-delete';
-    
+    public const HOOK_QUICKBOOKS_DELETE = 'QuickBooks_SQL quickbooks-delete';
+
     /**
      *
      */
     protected $_config;
-    
+
     /**
      *
      *
@@ -68,16 +68,16 @@ class QuickBooks_SQL
     {
         $this->_config = $this->_defaults($sql_options);
     }
-    
+
     protected function _defaults($options)
     {
         $defaults = [
-            
+
             ];
-            
+
         return array_merge($defaults, $options);
     }
-    
+
     /**
      * Tell whether or not a string starts with another string
      *
@@ -88,10 +88,10 @@ class QuickBooks_SQL
     protected function _startsWith($str, $startswith)
     {
         $length = strlen($startswith);
-        
+
         return (substr($str, 0, $length)) == $startswith;
     }
-    
+
     /**
      * Execute an SQL query and return the result resource
      *
@@ -104,22 +104,22 @@ class QuickBooks_SQL
         if ($this->_driver) {
             if ($look) {
                 $tmp = trim(strtoupper($sql));
-                
+
                 if ($this->_startsWith($sql, 'UPDATE ')) {
-                    
+
                 } elseif ($this->_startsWith($sql, 'INSERT INTO ')) {
-                    
+
                 } elseif ($this->_startsWith($sql, 'DELETE FROM ')) {
-                    
+
                 }
             }
-            
+
             return $this->_driver->query($sql);
         }
-        
+
         return false;
     }
-    
+
     /**
      * Fetch a record from a result resource
      *
@@ -130,9 +130,9 @@ class QuickBooks_SQL
      */
     public function fetch($res, $as_object = true, $index = null)
     {
-        
+
     }
-    
+
     /**
      *
      *
@@ -141,31 +141,31 @@ class QuickBooks_SQL
      */
     public function escape($str)
     {
-        
+
     }
-    
+
     public function last()
     {
-        
+
     }
-    
+
     public function getCustomer($listID)
     {
-        
+
     }
-    
+
     public function addCustomer($customer)
     {
-        
+
     }
-    
+
     public function modifyCustomer($listID, $customer)
     {
-        
+
     }
-    
+
     public function deleteCustomer($listID)
     {
-        
+
     }
 }

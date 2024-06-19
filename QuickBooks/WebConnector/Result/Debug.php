@@ -32,7 +32,7 @@ class QuickBooks_WebConnector_Result_Debug extends QuickBooks_WebConnector_Resul
      * @var array
      */
     public $debug;
-    
+
     /**
      * Create a new result object
      *

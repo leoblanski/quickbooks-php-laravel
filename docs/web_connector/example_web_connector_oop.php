@@ -101,15 +101,15 @@ class My_Class_Name
      * DSN-style connection string
      */
     protected $_dsn;
-    
+
     /**
      * Class constructor
      */
     public function __construct($my_example_var1, $my_example_var2)
     {
-        
+
     }
-    
+
     /**
      * Set our DSN-style connection string
      *
@@ -123,7 +123,7 @@ class My_Class_Name
     {
         $this->_dsn = $dsn;
     }
-    
+
     /**
      * Generate a qbXML response to add a particular customer to QuickBooks
      *
@@ -155,9 +155,9 @@ class My_Class_Name
         // You'd probably do some database access here to pull the record with
         //	ID = $ID from your database and build a request to add that particular
         //	customer to QuickBooks.
-        
+
         // But we're just testing, so we'll just use a static test request:
-         
+
         $xml = '<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="2.0"?>
 			<QBXML>
@@ -185,10 +185,10 @@ class My_Class_Name
 					</CustomerAddRq>
 				</QBXMLMsgsRq>
 			</QBXML>';
-        
+
         return $xml;
     }
-    
+
     /**
      * Receive a response from QuickBooks
      *
@@ -212,12 +212,12 @@ class My_Class_Name
         //	later. (You'll need to refer to the customer by either ListID or Name
         //	in other requests, say, to update the customer or to add an invoice for
         //	the customer.
-        
+
         /*
         mysql_query("UPDATE your_customer_table SET quickbooks_listid = '" . mysql_escape_string($idents['ListID']) . "' WHERE your_customer_ID_field = " . (int) $ID);
         */
     }
-    
+
     /**
      * Catch and handle a 500 error from QuickBooks
      *
@@ -238,11 +238,11 @@ class My_Class_Name
             'QuickBooks error occured!',
             'The following error occured: ' . $errnum . ': ' . $errmsg
         );
-        
+
         // return true;			// If you return TRUE, it will continue to process requests
         return false;			// If you return FALSE, it will stop processing requests
     }
-    
+
     /**
      * Example of a login success hook implemented as an object method
      *
@@ -260,7 +260,7 @@ class My_Class_Name
             QuickBooks_Utilities::log($this->_dsn, 'This user logged in and the user login hook was called: ' . $user . ', params: ' . print_r($hook_data, true));
             return true;
         }
-        
+
         return false;
     }
 }
@@ -312,10 +312,10 @@ $dsn = 'mysql://root:root@localhost/quickbooks';
 if (!QuickBooks_Utilities::initialized($dsn)) {
     // Initialize creates the neccessary database schema for queueing up requests and logging
     QuickBooks_Utilities::initialize($dsn);
-    
+
     // This creates a username and password which is used by the Web Connector to authenticate
     QuickBooks_Utilities::createUser($dsn, $user, $pass);
-    
+
     // Queueing up a test request
     //
     // You can instantiate and use the QuickBooks_Queue class to queue up
@@ -329,12 +329,12 @@ if (!QuickBooks_Utilities::initialized($dsn)) {
     //
     // We're going to queue up a request to add a customer, just as a demo...
     // 	NOTE: You would *never* want to do this in this file *unless* it's for testing. See example_integration.php for more details!
-    
+
     $primary_key_of_your_customer = 5;
 
     $Queue = new QuickBooks_WebConnector_Queue($dsn);
     $Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_your_customer);
-    
+
     // Also note the that ->enqueue() method supports some other parameters:
     // 	string $action				The type of action to queue up
     //	mixed $ident = null			Pass in the unique primary key of your record here, so you can pull the data from your application to build a qbXML request in your request handler
