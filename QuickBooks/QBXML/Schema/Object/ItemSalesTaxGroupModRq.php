@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ItemSalesTaxGroupModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ItemSalesTaxGroupModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ItemSalesTaxGroupMod ListID' => 'IDTYPE',
   'ItemSalesTaxGroupMod EditSequence' => 'STRTYPE',
   'ItemSalesTaxGroupMod Name' => 'STRTYPE',
@@ -43,14 +43,14 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxGroupModRq extends QuickBooks_Q
   'ItemSalesTaxGroupMod ItemSalesTaxRef ListID' => 'IDTYPE',
   'ItemSalesTaxGroupMod ItemSalesTaxRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ItemSalesTaxGroupMod ListID' => 0,
   'ItemSalesTaxGroupMod EditSequence' => 16,
   'ItemSalesTaxGroupMod Name' => 31,
@@ -59,14 +59,14 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxGroupModRq extends QuickBooks_Q
   'ItemSalesTaxGroupMod ItemSalesTaxRef ListID' => 0,
   'ItemSalesTaxGroupMod ItemSalesTaxRef FullName' => 31,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ItemSalesTaxGroupMod ListID' => false,
   'ItemSalesTaxGroupMod EditSequence' => false,
   'ItemSalesTaxGroupMod Name' => true,
@@ -75,12 +75,12 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxGroupModRq extends QuickBooks_Q
   'ItemSalesTaxGroupMod ItemSalesTaxRef ListID' => false,
   'ItemSalesTaxGroupMod ItemSalesTaxRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ItemSalesTaxGroupMod ListID' => 999.99,
   'ItemSalesTaxGroupMod EditSequence' => 999.99,
   'ItemSalesTaxGroupMod Name' => 999.99,
@@ -89,14 +89,14 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxGroupModRq extends QuickBooks_Q
   'ItemSalesTaxGroupMod ItemSalesTaxRef ListID' => 999.99,
   'ItemSalesTaxGroupMod ItemSalesTaxRef FullName' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ItemSalesTaxGroupMod ListID' => false,
   'ItemSalesTaxGroupMod EditSequence' => false,
   'ItemSalesTaxGroupMod Name' => false,
@@ -105,26 +105,26 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxGroupModRq extends QuickBooks_Q
   'ItemSalesTaxGroupMod ItemSalesTaxRef ListID' => false,
   'ItemSalesTaxGroupMod ItemSalesTaxRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ItemSalesTaxGroupMod ListID',
   1 => 'ItemSalesTaxGroupMod EditSequence',
   2 => 'ItemSalesTaxGroupMod Name',
@@ -133,10 +133,8 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxGroupModRq extends QuickBooks_Q
   5 => 'ItemSalesTaxGroupMod ItemSalesTaxRef ListID',
   6 => 'ItemSalesTaxGroupMod ItemSalesTaxRef FullName',
   7 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

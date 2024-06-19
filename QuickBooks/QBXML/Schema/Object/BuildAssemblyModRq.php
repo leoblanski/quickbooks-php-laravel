@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: BuildAssemblyModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_BuildAssemblyModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'BuildAssemblyMod TxnID' => 'IDTYPE',
   'BuildAssemblyMod EditSequence' => 'STRTYPE',
   'BuildAssemblyMod TxnDate' => 'DATETYPE',
@@ -44,14 +44,14 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyModRq extends QuickBooks_QBXML
   'BuildAssemblyMod MarkPendingIfRequired' => 'BOOLTYPE',
   'BuildAssemblyMod RemovePending' => 'BOOLTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'BuildAssemblyMod TxnID' => 0,
   'BuildAssemblyMod EditSequence' => 16,
   'BuildAssemblyMod TxnDate' => 0,
@@ -61,14 +61,14 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyModRq extends QuickBooks_QBXML
   'BuildAssemblyMod MarkPendingIfRequired' => 0,
   'BuildAssemblyMod RemovePending' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'BuildAssemblyMod TxnID' => false,
   'BuildAssemblyMod EditSequence' => false,
   'BuildAssemblyMod TxnDate' => true,
@@ -78,12 +78,12 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyModRq extends QuickBooks_QBXML
   'BuildAssemblyMod MarkPendingIfRequired' => true,
   'BuildAssemblyMod RemovePending' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'BuildAssemblyMod TxnID' => 0,
   'BuildAssemblyMod EditSequence' => 999.99,
   'BuildAssemblyMod TxnDate' => 999.99,
@@ -93,14 +93,14 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyModRq extends QuickBooks_QBXML
   'BuildAssemblyMod MarkPendingIfRequired' => 7,
   'BuildAssemblyMod RemovePending' => 999.99,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'BuildAssemblyMod TxnID' => false,
   'BuildAssemblyMod EditSequence' => false,
   'BuildAssemblyMod TxnDate' => false,
@@ -110,26 +110,26 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyModRq extends QuickBooks_QBXML
   'BuildAssemblyMod MarkPendingIfRequired' => false,
   'BuildAssemblyMod RemovePending' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'BuildAssemblyMod TxnID',
   1 => 'BuildAssemblyMod EditSequence',
   2 => 'BuildAssemblyMod TxnDate',
@@ -139,10 +139,8 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyModRq extends QuickBooks_QBXML
   6 => 'BuildAssemblyMod MarkPendingIfRequired',
   7 => 'BuildAssemblyMod RemovePending',
   8 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

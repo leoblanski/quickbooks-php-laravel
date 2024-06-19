@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ItemDiscountModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ItemDiscountModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'ItemDiscountMod';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'ItemDiscountMod';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ListID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'Name' => 'STRTYPE',
@@ -50,14 +50,14 @@ class QuickBooks_QBXML_Schema_Object_ItemDiscountModRq extends QuickBooks_QBXML_
   'AccountRef FullName' => 'STRTYPE',
   'ApplyAccountRefToExistingTxns' => 'BOOLTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ListID' => 0,
   'EditSequence' => 16,
   'Name' => 31,
@@ -73,14 +73,14 @@ class QuickBooks_QBXML_Schema_Object_ItemDiscountModRq extends QuickBooks_QBXML_
   'AccountRef FullName' => 0,
   'ApplyAccountRefToExistingTxns' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ListID' => false,
   'EditSequence' => false,
   'Name' => true,
@@ -96,12 +96,12 @@ class QuickBooks_QBXML_Schema_Object_ItemDiscountModRq extends QuickBooks_QBXML_
   'AccountRef FullName' => true,
   'ApplyAccountRefToExistingTxns' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ListID' => 999.99,
   'EditSequence' => 999.99,
   'Name' => 999.99,
@@ -117,14 +117,14 @@ class QuickBooks_QBXML_Schema_Object_ItemDiscountModRq extends QuickBooks_QBXML_
   'AccountRef FullName' => 999.99,
   'ApplyAccountRefToExistingTxns' => 7,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ListID' => false,
   'EditSequence' => false,
   'Name' => false,
@@ -140,26 +140,26 @@ class QuickBooks_QBXML_Schema_Object_ItemDiscountModRq extends QuickBooks_QBXML_
   'AccountRef FullName' => false,
   'ApplyAccountRefToExistingTxns' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ListID',
   1 => 'EditSequence',
   2 => 'Name',
@@ -175,10 +175,8 @@ class QuickBooks_QBXML_Schema_Object_ItemDiscountModRq extends QuickBooks_QBXML_
   12 => 'AccountRef FullName',
   13 => 'ApplyAccountRefToExistingTxns',
   14 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

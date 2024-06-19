@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: DepositModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_DepositModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'DepositMod';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'DepositMod';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'TxnDate' => 'DATETYPE',
@@ -60,14 +60,14 @@ class QuickBooks_QBXML_Schema_Object_DepositModRq extends QuickBooks_QBXML_Schem
   'DepositLineMod ClassRef FullName' => 'STRTYPE',
   'DepositLineMod Amount' => 'AMTTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'EditSequence' => 16,
   'TxnDate' => 0,
@@ -93,14 +93,14 @@ class QuickBooks_QBXML_Schema_Object_DepositModRq extends QuickBooks_QBXML_Schem
   'DepositLineMod ClassRef FullName' => 159,
   'DepositLineMod Amount' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'TxnDate' => true,
@@ -126,12 +126,12 @@ class QuickBooks_QBXML_Schema_Object_DepositModRq extends QuickBooks_QBXML_Schem
   'DepositLineMod ClassRef FullName' => true,
   'DepositLineMod Amount' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnID' => 999.99,
   'EditSequence' => 999.99,
   'TxnDate' => 999.99,
@@ -157,14 +157,14 @@ class QuickBooks_QBXML_Schema_Object_DepositModRq extends QuickBooks_QBXML_Schem
   'DepositLineMod ClassRef FullName' => 999.99,
   'DepositLineMod Amount' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'TxnDate' => false,
@@ -190,56 +190,55 @@ class QuickBooks_QBXML_Schema_Object_DepositModRq extends QuickBooks_QBXML_Schem
   'DepositLineMod ClassRef FullName' => false,
   'DepositLineMod Amount' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
-			'TxnID',
-			'EditSequence',
-			'TxnDate',
-			'DepositToAccountRef ListID',
-			'DepositToAccountRef FullName',
-			'Memo',
-			'CashBackInfoMod',
-			'CashBackInfoMod AccountRef',
-			'CashBackInfoMod AccountRef ListID',
-			'CashBackInfoMod AccountRef FullName',
-			'CashBackInfoMod Memo',
-			'CashBackInfoMod Amount',
-			'DepositLineMod TxnLineID',
-			'DepositLineMod PaymentTxnID',
-			'DepositLineMod PaymentTxnLineID',
-			'DepositLineMod EntityRef ListID',
-			'DepositLineMod EntityRef FullName',
-			'DepositLineMod AccountRef ListID',
-			'DepositLineMod AccountRef FullName',
-			'DepositLineMod Memo',
-			'DepositLineMod CheckNumber',
-			'DepositLineMod PaymentMethodRef ListID',
-			'DepositLineMod PaymentMethodRef FullName',
-			'DepositLineMod ClassRef ListID',
-			'DepositLineMod ClassRef FullName',
-			'DepositLineMod Amount',
-			'IncludeRetElement',
-			);
-			
-		return $paths;
-	}
-}
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
 
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
+            'TxnID',
+            'EditSequence',
+            'TxnDate',
+            'DepositToAccountRef ListID',
+            'DepositToAccountRef FullName',
+            'Memo',
+            'CashBackInfoMod',
+            'CashBackInfoMod AccountRef',
+            'CashBackInfoMod AccountRef ListID',
+            'CashBackInfoMod AccountRef FullName',
+            'CashBackInfoMod Memo',
+            'CashBackInfoMod Amount',
+            'DepositLineMod TxnLineID',
+            'DepositLineMod PaymentTxnID',
+            'DepositLineMod PaymentTxnLineID',
+            'DepositLineMod EntityRef ListID',
+            'DepositLineMod EntityRef FullName',
+            'DepositLineMod AccountRef ListID',
+            'DepositLineMod AccountRef FullName',
+            'DepositLineMod Memo',
+            'DepositLineMod CheckNumber',
+            'DepositLineMod PaymentMethodRef ListID',
+            'DepositLineMod PaymentMethodRef FullName',
+            'DepositLineMod ClassRef ListID',
+            'DepositLineMod ClassRef FullName',
+            'DepositLineMod Amount',
+            'IncludeRetElement',
+            ];
+            
+        return $paths;
+    }
+}

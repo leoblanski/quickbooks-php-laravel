@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: CheckModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'CheckMod';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'CheckMod';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'AccountRef ListID' => 'IDTYPE',
@@ -123,14 +123,14 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => 'IDTYPE',
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'EditSequence' => 16,
   'AccountRef ListID' => 0,
@@ -219,14 +219,14 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => 0,
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 159,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'AccountRef ListID' => true,
@@ -315,12 +315,12 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => true,
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnID' => 999.99,
   'EditSequence' => 999.99,
   'AccountRef ListID' => 999.99,
@@ -409,14 +409,14 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => 999.99,
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'AccountRef ListID' => false,
@@ -505,26 +505,26 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => false,
   'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'TxnID',
   1 => 'EditSequence',
   2 => 'AccountRef ListID',
@@ -613,10 +613,8 @@ class QuickBooks_QBXML_Schema_Object_CheckModRq extends QuickBooks_QBXML_Schema_
   85 => 'ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID',
   86 => 'ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName',
   87 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

@@ -12,15 +12,14 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $PurchaseOrderService = new QuickBooks_IPP_Service_PurchaseOrder();
 
-$pos = $PurchaseOrderService->query($Context, $realm, "SELECT * FROM PurchaseOrder");
+$pos = $PurchaseOrderService->query($Context, $realm, 'SELECT * FROM PurchaseOrder');
 
 //print_r($terms);
 
-foreach ($pos as $PurchaseOrder)
-{
-	//print_r($Term);
+foreach ($pos as $PurchaseOrder) {
+    //print_r($Term);
 
-	print('PurchaseOrder Id=' . $PurchaseOrder->getId() . ' is named: ' . $PurchaseOrder->getDocNumber() . '<br>');
+    print('PurchaseOrder Id=' . $PurchaseOrder->getId() . ' is named: ' . $PurchaseOrder->getDocNumber() . '<br>');
 }
 
 /*

@@ -23,15 +23,12 @@ $Payments = new QuickBooks_Payments($oauth_consumer_key, $oauth_consumer_secret,
 
 $BankAccount = new QuickBooks_Payments_BankAccount($name, $number, $routing, $type, $phone);
 
-if ($Transaction = $Payments->debit($Context, $BankAccount, $amount, $currency))
-{
-	//print_r($Transaction);
+if ($Transaction = $Payments->debit($Context, $BankAccount, $amount, $currency)) {
+    //print_r($Transaction);
 
-	print_r($Transaction);
-}
-else
-{
-	print('Error while debiting a bank account: ' . $Payments->lastError());
+    print_r($Transaction);
+} else {
+    print('Error while debiting a bank account: ' . $Payments->lastError());
 }
 
 print('<br><br><br><br>');

@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: PriceLevelModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_PriceLevelModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'PriceLevelMod ListID' => 'IDTYPE',
   'PriceLevelMod EditSequence' => 'STRTYPE',
   'PriceLevelMod Name' => 'STRTYPE',
@@ -47,14 +47,14 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelModRq extends QuickBooks_QBXML_Sc
   'PriceLevelMod PriceLevelPerItem AdjustPercentage' => 'PERCENTTYPE',
   'PriceLevelMod PriceLevelPerItem AdjustRelativeTo' => 'ENUMTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'PriceLevelMod ListID' => 0,
   'PriceLevelMod EditSequence' => 16,
   'PriceLevelMod Name' => 31,
@@ -67,14 +67,14 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelModRq extends QuickBooks_QBXML_Sc
   'PriceLevelMod PriceLevelPerItem AdjustPercentage' => 0,
   'PriceLevelMod PriceLevelPerItem AdjustRelativeTo' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'PriceLevelMod ListID' => false,
   'PriceLevelMod EditSequence' => false,
   'PriceLevelMod Name' => true,
@@ -87,12 +87,12 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelModRq extends QuickBooks_QBXML_Sc
   'PriceLevelMod PriceLevelPerItem AdjustPercentage' => false,
   'PriceLevelMod PriceLevelPerItem AdjustRelativeTo' => false,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'PriceLevelMod ListID' => 999.99,
   'PriceLevelMod EditSequence' => 999.99,
   'PriceLevelMod Name' => 999.99,
@@ -105,14 +105,14 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelModRq extends QuickBooks_QBXML_Sc
   'PriceLevelMod PriceLevelPerItem AdjustPercentage' => 999.99,
   'PriceLevelMod PriceLevelPerItem AdjustRelativeTo' => 999.99,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'PriceLevelMod ListID' => false,
   'PriceLevelMod EditSequence' => false,
   'PriceLevelMod Name' => false,
@@ -125,26 +125,26 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelModRq extends QuickBooks_QBXML_Sc
   'PriceLevelMod PriceLevelPerItem AdjustPercentage' => false,
   'PriceLevelMod PriceLevelPerItem AdjustRelativeTo' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'PriceLevelMod ListID',
   1 => 'PriceLevelMod EditSequence',
   2 => 'PriceLevelMod Name',
@@ -160,10 +160,8 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelModRq extends QuickBooks_QBXML_Sc
   12 => 'PriceLevelMod PriceLevelPerItem AdjustPercentage',
   13 => 'PriceLevelMod PriceLevelPerItem AdjustRelativeTo',
   14 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

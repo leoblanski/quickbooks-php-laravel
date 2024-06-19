@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: DataExtAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'DataExtAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'DataExtAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'OwnerID' => 'GUIDTYPE',
   'DataExtName' => 'STRTYPE',
   'ListDataExtType' => 'ENUMTYPE',
@@ -45,14 +45,14 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'TxnLineID' => 'IDTYPE',
   'OtherDataExtType' => 'ENUMTYPE',
   'DataExtValue' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'OwnerID' => 0,
   'DataExtName' => 31,
   'ListDataExtType' => 0,
@@ -63,14 +63,14 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'TxnLineID' => 0,
   'OtherDataExtType' => 0,
   'DataExtValue' => 1024,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'OwnerID' => false,
   'DataExtName' => false,
   'ListDataExtType' => false,
@@ -81,12 +81,12 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'TxnLineID' => true,
   'OtherDataExtType' => false,
   'DataExtValue' => false,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'OwnerID' => 999.99,
   'DataExtName' => 999.99,
   'ListDataExtType' => 999.99,
@@ -97,14 +97,14 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'TxnLineID' => 3,
   'OtherDataExtType' => 999.99,
   'DataExtValue' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'OwnerID' => false,
   'DataExtName' => false,
   'ListDataExtType' => false,
@@ -115,26 +115,26 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   'TxnLineID' => false,
   'OtherDataExtType' => false,
   'DataExtValue' => false,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'OwnerID',
   1 => 'DataExtName',
   2 => 'ListDataExtType',
@@ -145,10 +145,8 @@ class QuickBooks_QBXML_Schema_Object_DataExtAddRq extends QuickBooks_QBXML_Schem
   7 => 'TxnLineID',
   8 => 'OtherDataExtType',
   9 => 'DataExtValue',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

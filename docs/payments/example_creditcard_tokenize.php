@@ -22,13 +22,10 @@ $Payments = new QuickBooks_Payments($oauth_consumer_key, $oauth_consumer_secret,
 
 $CreditCard = new QuickBooks_Payments_CreditCard($name, $number, $expyear, $expmonth, $street, $city, $region);
 
-if ($Token = $Payments->tokenize($Context, $CreditCard))
-{
-	print_r($Token);
-}
-else
-{
-	print('Error while tokenizing payment: ' . $Payments->lastResponse());
+if ($Token = $Payments->tokenize($Context, $CreditCard)) {
+    print_r($Token);
+} else {
+    print('Error while tokenizing payment: ' . $Payments->lastResponse());
 }
 
 print('<br><br><br><br>');

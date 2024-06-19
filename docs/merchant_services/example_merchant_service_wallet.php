@@ -2,9 +2,9 @@
 
 /**
  * Example of using QuickBooks Merchant Services 'Payment Wallet' support
- * 
+ *
  * Make sure you look at docs/example_merchant_service.php first!
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
@@ -12,7 +12,7 @@
 // Plain text output
 header('Content-Type: text/plain');
 
-// I always program in E_STRICT error mode... 
+// I always program in E_STRICT error mode...
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', true);
 
@@ -31,14 +31,15 @@ $application_login = 'test.foxycart.com';
 $connection_ticket = 'TGT-145-niiEL2kCFoOTYHvkwBarmg';
 //$connection_ticket = 'TGT-152-LWGj1YQUufTAlSW8DK1c6A';
 
-// Create an instance of the MerchantService object 
+// Create an instance of the MerchantService object
 $MS = new QuickBooks_MerchantService(
-	$dsn, 
-	$path_to_private_key_and_certificate, 
-	$application_login,
-	$connection_ticket);
+    $dsn,
+    $path_to_private_key_and_certificate,
+    $application_login,
+    $connection_ticket
+);
 
-// If you're using a Intuit QBMS development account, you must set this to true! 
+// If you're using a Intuit QBMS development account, you must set this to true!
 $MS->useTestEnvironment(true);
 
 // If you want to see the full XML input/output, you can turn on debug mode
@@ -60,13 +61,10 @@ $Card = new QuickBooks_MerchantService_CreditCard($name, $number, $expyear, $exp
 $customerID = '1234ABCD';
 
 // Add this credit card to the wallet
-if ($walletID = $MS->addWallet($customerID, $Card))
-{
-	print('New wallet ID created: ' . $walletID . "\n");
-}
-else
-{
-	print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
+if ($walletID = $MS->addWallet($customerID, $Card)) {
+    print('New wallet ID created: ' . $walletID . "\n");
+} else {
+    print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
 }
 
 //exit;
@@ -74,43 +72,31 @@ else
 // Now, let's update it
 $Card->setName('Keith R. Palmer Jr.');
 
-if ($MS->updateWallet($customerID, $walletID, $Card))
-{
-	print('Wallet updated!' . "\n");
-}
-else
-{
-	print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
+if ($MS->updateWallet($customerID, $walletID, $Card)) {
+    print('Wallet updated!' . "\n");
+} else {
+    print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
 }
 
 // Fetch it
-if ($CreditCard = $MS->getWallet($customerID, $walletID))
-{
-	print_r($CreditCard);
-}
-else
-{
-	print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
+if ($CreditCard = $MS->getWallet($customerID, $walletID)) {
+    print_r($CreditCard);
+} else {
+    print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
 }
 
 // Now, let's delete it
-if ($MS->deleteWallet($customerID, $walletID))
-{
-	print('Wallet deleted!' . "\n");
-}
-else
-{
-	print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
+if ($MS->deleteWallet($customerID, $walletID)) {
+    print('Wallet deleted!' . "\n");
+} else {
+    print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
 }
 
 // Now, re-add it so we can charge/authorize against it
-if ($walletID = $MS->addWallet($customerID, $Card))
-{
-	print('New wallet ID created: ' . $walletID . "\n");
-}
-else
-{
-	print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
+if ($walletID = $MS->addWallet($customerID, $Card)) {
+    print('New wallet ID created: ' . $walletID . "\n");
+} else {
+    print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
 }
 
 // Authorize funds against the wallet
@@ -119,14 +105,11 @@ $salestax = 0.06;				// Optional
 $comment = 'Test Comment';		// Optional
 $cvv = '349';					// Optional
 
-if ($Transaction = $MS->authorizeWallet($customerID, $walletID, $amount, $salestax, $comment, $cvv))
-{
-	print('Wallet authorized!' . "\n");
-	print_r($Transaction);
-}
-else
-{
-	print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
+if ($Transaction = $MS->authorizeWallet($customerID, $walletID, $amount, $salestax, $comment, $cvv)) {
+    print('Wallet authorized!' . "\n");
+    print_r($Transaction);
+} else {
+    print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
 }
 
 // Charge funds against the wallet
@@ -135,14 +118,11 @@ $salestax = 0.06;				// Optional
 $comment = 'Test Comment';		// Optional
 $cvv = '349';					// Optional
 
-if ($Transaction = $MS->chargeWallet($customerID, $walletID, $amount, $salestax, $comment, $cvv))
-{
-	print('Wallet charged!' . "\n");
-	print_r($Transaction);
-}
-else
-{
-	print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
+if ($Transaction = $MS->chargeWallet($customerID, $walletID, $amount, $salestax, $comment, $cvv)) {
+    print('Wallet charged!' . "\n");
+    print_r($Transaction);
+} else {
+    print('An error occurred: [' . $MS->errorNumber() . ': ' . $MS->errorMessage() . ']' . "\n");
 }
 
-// 
+//

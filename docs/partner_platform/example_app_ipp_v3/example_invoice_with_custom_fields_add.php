@@ -39,13 +39,10 @@ $CustomField->setType('StringType');
 $CustomField->setStringValue('Test value here');
 $Invoice->addCustomField($CustomField);
 
-if ($resp = $InvoiceService->add($Context, $realm, $Invoice))
-{
-	print('Our new Invoice ID is: [' . $resp . ']');
-}
-else
-{
-	print($InvoiceService->lastError());
+if ($resp = $InvoiceService->add($Context, $realm, $Invoice)) {
+    print('Our new Invoice ID is: [' . $resp . ']');
+} else {
+    print($InvoiceService->lastError());
 }
 
 /*

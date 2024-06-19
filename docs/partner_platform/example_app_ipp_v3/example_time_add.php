@@ -22,13 +22,10 @@ $TimeActivity->setStartTime(QuickBooks_Utilities::datetime('-5 hours'));
 $TimeActivity->setEndTime(QuickBooks_Utilities::datetime('-1 hour'));
 $TimeActivity->setDescription('Test entry.');
 
-if ($resp = $TimeActivityService->add($Context, $realm, $TimeActivity))
-{
-	print('Our new TimeActivity ID is: [' . $resp . ']');
-}
-else
-{
-	print($TimeActivityService->lastError($Context));
+if ($resp = $TimeActivityService->add($Context, $realm, $TimeActivity)) {
+    print('Our new TimeActivity ID is: [' . $resp . ']');
+} else {
+    print($TimeActivityService->lastError($Context));
 }
 
 print('<br><br><br><br>');
@@ -37,7 +34,7 @@ print('Request [' . $IPP->lastRequest() . ']');
 print("\n\n\n\n");
 print('Response [' . $IPP->lastResponse() . ']');
 print("\n\n\n\n\n\n\n\n\n");
-	
+
 ?>
 
 </pre>

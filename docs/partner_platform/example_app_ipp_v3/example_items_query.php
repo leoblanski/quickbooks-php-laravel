@@ -14,11 +14,10 @@ $ItemService = new QuickBooks_IPP_Service_Term();
 
 $items = $ItemService->query($Context, $realm, "SELECT * FROM Item WHERE Metadata.LastUpdatedTime > '2013-01-01T14:50:22-08:00' ORDER BY Metadata.LastUpdatedTime ");
 
-foreach ($items as $Item)
-{
-	//print_r($Item);
+foreach ($items as $Item) {
+    //print_r($Item);
 
-	print('Item Id=' . $Item->getId() . ' is named: ' . $Item->getName() . '<br>');
+    print('Item Id=' . $Item->getId() . ' is named: ' . $Item->getName() . '<br>');
 }
 
 /*

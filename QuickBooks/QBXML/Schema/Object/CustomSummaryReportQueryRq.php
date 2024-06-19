@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: CustomSummaryReportQueryRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'CustomSummaryReportType' => 'ENUMTYPE',
   'DisplayReport' => 'BOOLTYPE',
   'ReportPeriod FromReportDate' => 'DATETYPE',
@@ -72,14 +72,14 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReturnRows' => 'ENUMTYPE',
   'ReturnColumns' => 'ENUMTYPE',
   'ReportBasis' => 'ENUMTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'CustomSummaryReportType' => 0,
   'DisplayReport' => 0,
   'ReportPeriod FromReportDate' => 0,
@@ -117,14 +117,14 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReturnRows' => 0,
   'ReturnColumns' => 0,
   'ReportBasis' => 0,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'CustomSummaryReportType' => false,
   'DisplayReport' => true,
   'ReportPeriod FromReportDate' => true,
@@ -162,12 +162,12 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReturnRows' => true,
   'ReturnColumns' => true,
   'ReportBasis' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'CustomSummaryReportType' => 999.99,
   'DisplayReport' => 3,
   'ReportPeriod FromReportDate' => 999.99,
@@ -205,14 +205,14 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReturnRows' => 999.99,
   'ReturnColumns' => 999.99,
   'ReportBasis' => 2.1,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'CustomSummaryReportType' => false,
   'DisplayReport' => false,
   'ReportPeriod FromReportDate' => false,
@@ -250,26 +250,26 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   'ReturnRows' => false,
   'ReturnColumns' => false,
   'ReportBasis' => false,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'CustomSummaryReportType',
   1 => 'DisplayReport',
   2 => 'ReportPeriod FromReportDate',
@@ -307,10 +307,8 @@ class QuickBooks_QBXML_Schema_Object_CustomSummaryReportQueryRq extends QuickBoo
   34 => 'ReturnRows',
   35 => 'ReturnColumns',
   36 => 'ReportBasis',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

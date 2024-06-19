@@ -118,11 +118,6 @@ $err_desc = null;
 $err_db = null;
 $list = $Parser->parseIDS($xml, $optype, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
 
-foreach ($list as $Customer)
-{
-	print($Customer->getName() . ' has an ID of: ' . $Customer->getId() . ', ' . $Customer->getAddress(0)->getId() . "\n");
+foreach ($list as $Customer) {
+    print($Customer->getName() . ' has an ID of: ' . $Customer->getId() . ', ' . $Customer->getAddress(0)->getId() . "\n");
 }
-
-
-
-

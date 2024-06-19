@@ -8,50 +8,47 @@ require_once dirname(__FILE__) . '/config_oauthv2.php';
 
 require_once dirname(__FILE__) . '/views/header.tpl.php';
 
-$examples = array();
+$examples = [];
 
 $dh = opendir(dirname(__FILE__));
-while (false !== ($file = readdir($dh)))
-{
-	if (substr($file, 0, 7) != 'example')
-	{
-		continue;
-	}
+while (false !== ($file = readdir($dh))) {
+    if (substr($file, 0, 7) != 'example') {
+        continue;
+    }
 
-	$tmp = explode('_', $file);
-	switch (end($tmp))
-	{
-		case 'get.php':
-			$examples[$file] = 'Get ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'add.php':
-			$examples[$file] = 'Add a ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'void.php';
-			$examples[$file] = 'Void a ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'update.php':
-			$examples[$file] = 'Update a ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'query.php':
-			$examples[$file] = 'Query for ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'count.php':
-			$examples[$file] = 'Count ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'cdc.php';
-			$examples[$file] = 'Get objects that have changed since a timestamp';
-			break;
-		case 'entitlements.php':
-			$examples[$file] = 'Get entitlement values (e.g. find out what features QBO supports)';
-			break;
-		case 'delete.php';
-			$examples[$file] = 'Delete a ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'objects.php';
-			$examples[$file] = 'Object ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-	}
+    $tmp = explode('_', $file);
+    switch (end($tmp)) {
+        case 'get.php':
+            $examples[$file] = 'Get ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'add.php':
+            $examples[$file] = 'Add a ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'void.php':
+            $examples[$file] = 'Void a ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'update.php':
+            $examples[$file] = 'Update a ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'query.php':
+            $examples[$file] = 'Query for ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'count.php':
+            $examples[$file] = 'Count ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'cdc.php':
+            $examples[$file] = 'Get objects that have changed since a timestamp';
+            break;
+        case 'entitlements.php':
+            $examples[$file] = 'Get entitlement values (e.g. find out what features QBO supports)';
+            break;
+        case 'delete.php':
+            $examples[$file] = 'Delete a ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'objects.php':
+            $examples[$file] = 'Object ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+    }
 }
 
 ?>

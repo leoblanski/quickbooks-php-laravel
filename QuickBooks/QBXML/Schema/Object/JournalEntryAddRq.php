@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: JournalEntryAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_JournalEntryAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'JournalEntryAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'JournalEntryAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnDate' => 'DATETYPE',
   'RefNumber' => 'STRTYPE',
   'Memo' => 'STRTYPE',
@@ -64,14 +64,14 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryAddRq extends QuickBooks_QBXML_
   'JournalCreditLine ItemSalesTaxRef FullName' => 'STRTYPE',
   'JournalCreditLine BillableStatus' => 'ENUMTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnDate' => 0,
   'RefNumber' => 11,
   'Memo' => 4000,
@@ -101,14 +101,14 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryAddRq extends QuickBooks_QBXML_
   'JournalCreditLine ItemSalesTaxRef FullName' => 159,
   'JournalCreditLine BillableStatus' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnDate' => true,
   'RefNumber' => true,
   'Memo' => true,
@@ -138,12 +138,12 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryAddRq extends QuickBooks_QBXML_
   'JournalCreditLine ItemSalesTaxRef FullName' => true,
   'JournalCreditLine BillableStatus' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnDate' => 999.99,
   'RefNumber' => 999.99,
   'Memo' => 999.99,
@@ -173,14 +173,14 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryAddRq extends QuickBooks_QBXML_
   'JournalCreditLine ItemSalesTaxRef FullName' => 999.99,
   'JournalCreditLine BillableStatus' => 3,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnDate' => false,
   'RefNumber' => false,
   'Memo' => false,
@@ -210,31 +210,31 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryAddRq extends QuickBooks_QBXML_
   'JournalCreditLine ItemSalesTaxRef FullName' => false,
   'JournalCreditLine BillableStatus' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'TxnDate',
   1 => 'RefNumber',
   2 => 'Memo',
   3 => 'IsAdjustment',
-  4 => 'JournalDebitLine', 
+  4 => 'JournalDebitLine',
   5 => 'JournalDebitLine TxnLineID',
   6 => 'JournalDebitLine AccountRef ListID',
   7 => 'JournalDebitLine AccountRef FullName',
@@ -247,7 +247,7 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryAddRq extends QuickBooks_QBXML_
   14 => 'JournalDebitLine ItemSalesTaxRef ListID',
   15 => 'JournalDebitLine ItemSalesTaxRef FullName',
   16 => 'JournalDebitLine BillableStatus',
-  17 => 'JournalCreditLine', 
+  17 => 'JournalCreditLine',
   18 => 'JournalCreditLine TxnLineID',
   19 => 'JournalCreditLine AccountRef ListID',
   20 => 'JournalCreditLine AccountRef FullName',
@@ -261,10 +261,8 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryAddRq extends QuickBooks_QBXML_
   28 => 'JournalCreditLine ItemSalesTaxRef FullName',
   29 => 'JournalCreditLine BillableStatus',
   30 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

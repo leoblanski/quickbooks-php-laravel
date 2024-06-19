@@ -26,13 +26,10 @@ $PrimaryEmailAddr->setAddress('support@consolibyte.com');
 // What are we doing?
 print('Updating the customer name to: ' . $Customer->getDisplayName() . '<br>');
 
-if ($CustomerService->update($Context, $realm, $Customer->getId(), $Customer))
-{
-	print('&nbsp; Updated!<br>');
-}
-else
-{
-	print('&nbsp; Error: ' . $CustomerService->lastError($Context));
+if ($CustomerService->update($Context, $realm, $Customer->getId(), $Customer)) {
+    print('&nbsp; Updated!<br>');
+} else {
+    print('&nbsp; Error: ' . $CustomerService->lastError($Context));
 }
 
 /*

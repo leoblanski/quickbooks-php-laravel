@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: VendorCreditAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_VendorCreditAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'VendorCreditAdd VendorRef ListID' => 'IDTYPE',
   'VendorCreditAdd VendorRef FullName' => 'STRTYPE',
   'VendorCreditAdd APAccountRef ListID' => 'IDTYPE',
@@ -79,14 +79,14 @@ class QuickBooks_QBXML_Schema_Object_VendorCreditAddRq extends QuickBooks_QBXML_
   'VendorCreditAdd ItemGroupLineAdd Quantity' => 'QUANTYPE',
   'VendorCreditAdd ItemGroupLineAdd UnitOfMeasure' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'VendorCreditAdd VendorRef ListID' => 0,
   'VendorCreditAdd VendorRef FullName' => 41,
   'VendorCreditAdd APAccountRef ListID' => 0,
@@ -131,14 +131,14 @@ class QuickBooks_QBXML_Schema_Object_VendorCreditAddRq extends QuickBooks_QBXML_
   'VendorCreditAdd ItemGroupLineAdd Quantity' => 0,
   'VendorCreditAdd ItemGroupLineAdd UnitOfMeasure' => 31,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'VendorCreditAdd VendorRef ListID' => true,
   'VendorCreditAdd VendorRef FullName' => true,
   'VendorCreditAdd APAccountRef ListID' => true,
@@ -183,12 +183,12 @@ class QuickBooks_QBXML_Schema_Object_VendorCreditAddRq extends QuickBooks_QBXML_
   'VendorCreditAdd ItemGroupLineAdd Quantity' => true,
   'VendorCreditAdd ItemGroupLineAdd UnitOfMeasure' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'VendorCreditAdd VendorRef ListID' => 999.99,
   'VendorCreditAdd VendorRef FullName' => 999.99,
   'VendorCreditAdd APAccountRef ListID' => 999.99,
@@ -233,14 +233,14 @@ class QuickBooks_QBXML_Schema_Object_VendorCreditAddRq extends QuickBooks_QBXML_
   'VendorCreditAdd ItemGroupLineAdd Quantity' => 999.99,
   'VendorCreditAdd ItemGroupLineAdd UnitOfMeasure' => 7,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'VendorCreditAdd VendorRef ListID' => false,
   'VendorCreditAdd VendorRef FullName' => false,
   'VendorCreditAdd APAccountRef ListID' => false,
@@ -285,26 +285,26 @@ class QuickBooks_QBXML_Schema_Object_VendorCreditAddRq extends QuickBooks_QBXML_
   'VendorCreditAdd ItemGroupLineAdd Quantity' => false,
   'VendorCreditAdd ItemGroupLineAdd UnitOfMeasure' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'VendorCreditAdd',
   1 => 'VendorCreditAdd VendorRef',
   2 => 'VendorCreditAdd VendorRef ListID',
@@ -354,10 +354,8 @@ class QuickBooks_QBXML_Schema_Object_VendorCreditAddRq extends QuickBooks_QBXML_
   46 => 'VendorCreditAdd ItemGroupLineAdd Quantity',
   47 => 'VendorCreditAdd ItemGroupLineAdd UnitOfMeasure',
   48 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

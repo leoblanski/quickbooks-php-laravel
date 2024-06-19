@@ -26,16 +26,16 @@ require_once 'QuickBooks/QBXML/Schema/Object.php';
  */
 class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRs extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
 
-		return $wrapper;
-	}
+        return $wrapper;
+    }
 
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ItemInventoryAssemblyRet ListID' => 'IDTYPE',
   'ItemInventoryAssemblyRet TimeCreated' => 'DATETIMETYPE',
   'ItemInventoryAssemblyRet TimeModified' => 'DATETIMETYPE',
@@ -74,14 +74,14 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRs extends QuickB
   'ItemInventoryAssemblyRet DataExtRet DataExtName' => 'STRTYPE',
   'ItemInventoryAssemblyRet DataExtRet DataExtType' => 'ENUMTYPE',
   'ItemInventoryAssemblyRet DataExtRet DataExtValue' => 'STRTYPE',
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ItemInventoryAssemblyRet ListID' => 0,
   'ItemInventoryAssemblyRet TimeCreated' => 0,
   'ItemInventoryAssemblyRet TimeModified' => 0,
@@ -120,14 +120,14 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRs extends QuickB
   'ItemInventoryAssemblyRet DataExtRet DataExtName' => 0,
   'ItemInventoryAssemblyRet DataExtRet DataExtType' => 0,
   'ItemInventoryAssemblyRet DataExtRet DataExtValue' => 0,
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ItemInventoryAssemblyRet ListID' => false,
   'ItemInventoryAssemblyRet TimeCreated' => false,
   'ItemInventoryAssemblyRet TimeModified' => false,
@@ -166,12 +166,12 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRs extends QuickB
   'ItemInventoryAssemblyRet DataExtRet DataExtName' => false,
   'ItemInventoryAssemblyRet DataExtRet DataExtType' => false,
   'ItemInventoryAssemblyRet DataExtRet DataExtValue' => false,
-);
-	}
+];
+    }
 
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ItemInventoryAssemblyRet ListID' => 999.99,
   'ItemInventoryAssemblyRet TimeCreated' => 999.99,
   'ItemInventoryAssemblyRet TimeModified' => 999.99,
@@ -210,14 +210,14 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRs extends QuickB
   'ItemInventoryAssemblyRet DataExtRet DataExtName' => 999.99,
   'ItemInventoryAssemblyRet DataExtRet DataExtType' => 999.99,
   'ItemInventoryAssemblyRet DataExtRet DataExtValue' => 999.99,
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ItemInventoryAssemblyRet ListID' => false,
   'ItemInventoryAssemblyRet TimeCreated' => false,
   'ItemInventoryAssemblyRet TimeModified' => false,
@@ -256,26 +256,26 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRs extends QuickB
   'ItemInventoryAssemblyRet DataExtRet DataExtName' => false,
   'ItemInventoryAssemblyRet DataExtRet DataExtType' => false,
   'ItemInventoryAssemblyRet DataExtRet DataExtValue' => false,
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
 
-		return $paths;
-	}
-	*/
+        return $paths;
+    }
+    */
 
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ItemInventoryAssemblyRet ListID',
   1 => 'ItemInventoryAssemblyRet TimeCreated',
   2 => 'ItemInventoryAssemblyRet TimeModified',
@@ -317,8 +317,8 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRs extends QuickB
   38 => 'ItemInventoryAssemblyRet DataExtRet DataExtName',
   39 => 'ItemInventoryAssemblyRet DataExtRet DataExtType',
   40 => 'ItemInventoryAssemblyRet DataExtRet DataExtValue',
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 }

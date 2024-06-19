@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: JournalEntryModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_JournalEntryModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'JournalEntryMod';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'JournalEntryMod';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'TxnDate' => 'DATETYPE',
@@ -54,14 +54,14 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryModRq extends QuickBooks_QBXML_
   'JournalLineMod ItemSalesTaxRef FullName' => 'STRTYPE',
   'JournalLineMod BillableStatus' => 'ENUMTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'EditSequence' => 16,
   'TxnDate' => 0,
@@ -81,14 +81,14 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryModRq extends QuickBooks_QBXML_
   'JournalLineMod ItemSalesTaxRef FullName' => 159,
   'JournalLineMod BillableStatus' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'TxnDate' => true,
@@ -108,12 +108,12 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryModRq extends QuickBooks_QBXML_
   'JournalLineMod ItemSalesTaxRef FullName' => true,
   'JournalLineMod BillableStatus' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnID' => 999.99,
   'EditSequence' => 999.99,
   'TxnDate' => 999.99,
@@ -133,14 +133,14 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryModRq extends QuickBooks_QBXML_
   'JournalLineMod ItemSalesTaxRef FullName' => 999.99,
   'JournalLineMod BillableStatus' => 999.99,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'TxnDate' => false,
@@ -160,26 +160,26 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryModRq extends QuickBooks_QBXML_
   'JournalLineMod ItemSalesTaxRef FullName' => false,
   'JournalLineMod BillableStatus' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'TxnID',
   1 => 'EditSequence',
   2 => 'TxnDate',
@@ -199,10 +199,8 @@ class QuickBooks_QBXML_Schema_Object_JournalEntryModRq extends QuickBooks_QBXML_
   16 => 'JournalLineMod ItemSalesTaxRef FullName',
   17 => 'JournalLineMod BillableStatus',
   18 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: SalesReceiptModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_SalesReceiptModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'SalesReceiptMod';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'SalesReceiptMod';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'CustomerRef ListID' => 'IDTYPE',
@@ -143,14 +143,14 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptModRq extends QuickBooks_QBXML_
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other1' => 'STRTYPE',
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other2' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'EditSequence' => 16,
   'CustomerRef ListID' => 0,
@@ -259,14 +259,14 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptModRq extends QuickBooks_QBXML_
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other1' => 29,
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other2' => 29,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'CustomerRef ListID' => true,
@@ -375,12 +375,12 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptModRq extends QuickBooks_QBXML_
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other1' => true,
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other2' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'EditSequence' => 999.99,
   'CustomerRef ListID' => 999.99,
@@ -489,14 +489,14 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptModRq extends QuickBooks_QBXML_
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other1' => 6,
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other2' => 6,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'CustomerRef ListID' => false,
@@ -605,26 +605,26 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptModRq extends QuickBooks_QBXML_
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other1' => false,
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other2' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'TxnID',
   1 => 'EditSequence',
   2 => 'CustomerRef ListID',
@@ -733,8 +733,8 @@ class QuickBooks_QBXML_Schema_Object_SalesReceiptModRq extends QuickBooks_QBXML_
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other1',
   'SalesReceiptLineGroupMod SalesReceiptLineMod Other2',
   'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }

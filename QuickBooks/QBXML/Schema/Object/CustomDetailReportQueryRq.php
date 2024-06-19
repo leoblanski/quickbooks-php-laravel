@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: CustomDetailReportQueryRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'CustomDetailReportType' => 'ENUMTYPE',
   'DisplayReport' => 'BOOLTYPE',
   'ReportPeriod FromReportDate' => 'DATETYPE',
@@ -70,14 +70,14 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'IncludeAccounts' => 'ENUMTYPE',
   'ReportOpenBalanceAsOf' => 'ENUMTYPE',
   'ReportBasis' => 'ENUMTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'CustomDetailReportType' => 0,
   'DisplayReport' => 0,
   'ReportPeriod FromReportDate' => 0,
@@ -113,14 +113,14 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'IncludeAccounts' => 0,
   'ReportOpenBalanceAsOf' => 0,
   'ReportBasis' => 0,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'CustomDetailReportType' => false,
   'DisplayReport' => true,
   'ReportPeriod FromReportDate' => true,
@@ -156,12 +156,12 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'IncludeAccounts' => true,
   'ReportOpenBalanceAsOf' => true,
   'ReportBasis' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'CustomDetailReportType' => 999.99,
   'DisplayReport' => 3,
   'ReportPeriod FromReportDate' => 999.99,
@@ -197,14 +197,14 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'IncludeAccounts' => 999.99,
   'ReportOpenBalanceAsOf' => 999.99,
   'ReportBasis' => 2.1,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'CustomDetailReportType' => false,
   'DisplayReport' => false,
   'ReportPeriod FromReportDate' => false,
@@ -240,26 +240,26 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   'IncludeAccounts' => false,
   'ReportOpenBalanceAsOf' => false,
   'ReportBasis' => false,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'CustomDetailReportType',
   1 => 'DisplayReport',
   2 => 'ReportPeriod FromReportDate',
@@ -295,10 +295,8 @@ class QuickBooks_QBXML_Schema_Object_CustomDetailReportQueryRq extends QuickBook
   32 => 'IncludeAccounts',
   33 => 'ReportOpenBalanceAsOf',
   34 => 'ReportBasis',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

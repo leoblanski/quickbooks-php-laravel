@@ -51,13 +51,10 @@ $PrimaryEmailAddr = new QuickBooks_IPP_Object_PrimaryEmailAddr();
 $PrimaryEmailAddr->setAddress('support@consolibyte.com');
 $Customer->setPrimaryEmailAddr($PrimaryEmailAddr);
 
-if ($resp = $CustomerService->add($Context, $realm, $Customer))
-{
-	print('Our new customer ID is: [' . $resp . '] (name "' . $Customer->getDisplayName() . '")');
-}
-else
-{
-	print($CustomerService->lastError($Context));
+if ($resp = $CustomerService->add($Context, $realm, $Customer)) {
+    print('Our new customer ID is: [' . $resp . '] (name "' . $Customer->getDisplayName() . '")');
+} else {
+    print($CustomerService->lastError($Context));
 }
 
 /*

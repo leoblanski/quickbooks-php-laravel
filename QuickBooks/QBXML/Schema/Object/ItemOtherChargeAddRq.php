@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ItemOtherChargeAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ItemOtherChargeAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'ItemOtherChargeAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'ItemOtherChargeAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'Name' => 'STRTYPE',
   'IsActive' => 'BOOLTYPE',
   'ParentRef ListID' => 'IDTYPE',
@@ -60,14 +60,14 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeAddRq extends QuickBooks_QBX
   'SalesAndPurchase PrefVendorRef ListID' => 'IDTYPE',
   'SalesAndPurchase PrefVendorRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'Name' => 31,
   'IsActive' => 0,
   'ParentRef ListID' => 0,
@@ -93,14 +93,14 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeAddRq extends QuickBooks_QBX
   'SalesAndPurchase PrefVendorRef ListID' => 0,
   'SalesAndPurchase PrefVendorRef FullName' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => true,
   'ParentRef ListID' => true,
@@ -126,12 +126,12 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeAddRq extends QuickBooks_QBX
   'SalesAndPurchase PrefVendorRef ListID' => true,
   'SalesAndPurchase PrefVendorRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'Name' => 999.99,
   'IsActive' => 999.99,
   'ParentRef ListID' => 999.99,
@@ -157,14 +157,14 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeAddRq extends QuickBooks_QBX
   'SalesAndPurchase PrefVendorRef ListID' => 999.99,
   'SalesAndPurchase PrefVendorRef FullName' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => false,
   'ParentRef ListID' => false,
@@ -190,26 +190,26 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeAddRq extends QuickBooks_QBX
   'SalesAndPurchase PrefVendorRef ListID' => false,
   'SalesAndPurchase PrefVendorRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'Name',
   1 => 'IsActive',
   2 => 'ParentRef ListID',
@@ -235,10 +235,8 @@ class QuickBooks_QBXML_Schema_Object_ItemOtherChargeAddRq extends QuickBooks_QBX
   22 => 'SalesAndPurchase PrefVendorRef ListID',
   23 => 'SalesAndPurchase PrefVendorRef FullName',
   24 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

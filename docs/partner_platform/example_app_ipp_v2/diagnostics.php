@@ -9,9 +9,9 @@ $test = $IntuitAnywhere->test($the_username, $the_tenant);
 
 $creds = $IntuitAnywhere->load($the_username, $the_tenant);
 
-$diagnostics = array_merge(array(
-	'check' => $check,
-	'test' => $test,
-	), $creds);
+$diagnostics = array_merge([
+    'check' => $check,
+    'test' => $test,
+    ], $creds);
 
 print_r($diagnostics);

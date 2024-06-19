@@ -19,13 +19,10 @@ $Vendor->setMiddleName('R');
 $Vendor->setFamilyName('Palmer');
 $Vendor->setDisplayName('Keith R Palmer Jr ' . mt_rand(0, 1000));
 
-if ($resp = $VendorService->add($Context, $realm, $Vendor))
-{
-	print('Our new Vendor ID is: [' . $resp . ']');
-}
-else
-{
-	print($VendorService->lastError($Context));
+if ($resp = $VendorService->add($Context, $realm, $Vendor)) {
+    print('Our new Vendor ID is: [' . $resp . ']');
+} else {
+    print($VendorService->lastError($Context));
 }
 
 /*

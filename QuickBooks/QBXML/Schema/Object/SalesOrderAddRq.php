@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: SalesOrderAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_SalesOrderAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'SalesOrderAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'SalesOrderAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => 'IDTYPE',
   'CustomerRef FullName' => 'STRTYPE',
   'ClassRef ListID' => 'IDTYPE',
@@ -116,14 +116,14 @@ class QuickBooks_QBXML_Schema_Object_SalesOrderAddRq extends QuickBooks_QBXML_Sc
   'SalesOrderLineGroupAdd DataExt DataExtName' => 'STRTYPE',
   'SalesOrderLineGroupAdd DataExt DataExtValue' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => 0,
   'CustomerRef FullName' => 209,
   'ClassRef ListID' => 0,
@@ -205,14 +205,14 @@ class QuickBooks_QBXML_Schema_Object_SalesOrderAddRq extends QuickBooks_QBXML_Sc
   'SalesOrderLineGroupAdd DataExt DataExtName' => 31,
   'SalesOrderLineGroupAdd DataExt DataExtValue' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => true,
   'CustomerRef FullName' => true,
   'ClassRef ListID' => true,
@@ -294,12 +294,12 @@ class QuickBooks_QBXML_Schema_Object_SalesOrderAddRq extends QuickBooks_QBXML_Sc
   'SalesOrderLineGroupAdd DataExt DataExtName' => false,
   'SalesOrderLineGroupAdd DataExt DataExtValue' => false,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => 999.99,
   'CustomerRef FullName' => 999.99,
   'ClassRef ListID' => 999.99,
@@ -381,14 +381,14 @@ class QuickBooks_QBXML_Schema_Object_SalesOrderAddRq extends QuickBooks_QBXML_Sc
   'SalesOrderLineGroupAdd DataExt DataExtName' => 999.99,
   'SalesOrderLineGroupAdd DataExt DataExtValue' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => false,
   'CustomerRef FullName' => false,
   'ClassRef ListID' => false,
@@ -470,26 +470,26 @@ class QuickBooks_QBXML_Schema_Object_SalesOrderAddRq extends QuickBooks_QBXML_Sc
   'SalesOrderLineGroupAdd DataExt DataExtName' => false,
   'SalesOrderLineGroupAdd DataExt DataExtValue' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'CustomerRef ListID',
   1 => 'CustomerRef FullName',
   2 => 'ClassRef ListID',
@@ -573,8 +573,8 @@ class QuickBooks_QBXML_Schema_Object_SalesOrderAddRq extends QuickBooks_QBXML_Sc
   'SalesOrderLineGroupAdd DataExt DataExtName',
   'SalesOrderLineGroupAdd DataExt DataExtValue',
   'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }

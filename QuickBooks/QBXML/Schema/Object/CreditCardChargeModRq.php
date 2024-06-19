@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: CreditCardChargeModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_CreditCardChargeModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'CreditCardChargeMod TxnID' => 'IDTYPE',
   'CreditCardChargeMod EditSequence' => 'STRTYPE',
   'CreditCardChargeMod AccountRef ListID' => 'IDTYPE',
@@ -110,14 +110,14 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeModRq extends QuickBooks_QB
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => 'IDTYPE',
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'CreditCardChargeMod TxnID' => 0,
   'CreditCardChargeMod EditSequence' => 16,
   'CreditCardChargeMod AccountRef ListID' => 0,
@@ -193,14 +193,14 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeModRq extends QuickBooks_QB
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => 0,
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 159,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'CreditCardChargeMod TxnID' => false,
   'CreditCardChargeMod EditSequence' => false,
   'CreditCardChargeMod AccountRef ListID' => true,
@@ -276,12 +276,12 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeModRq extends QuickBooks_QB
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => true,
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'CreditCardChargeMod TxnID' => 999.99,
   'CreditCardChargeMod EditSequence' => 999.99,
   'CreditCardChargeMod AccountRef ListID' => 999.99,
@@ -357,14 +357,14 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeModRq extends QuickBooks_QB
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => 999.99,
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'CreditCardChargeMod TxnID' => false,
   'CreditCardChargeMod EditSequence' => false,
   'CreditCardChargeMod AccountRef ListID' => false,
@@ -440,26 +440,26 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeModRq extends QuickBooks_QB
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID' => false,
   'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'CreditCardChargeMod TxnID',
   1 => 'CreditCardChargeMod EditSequence',
   2 => 'CreditCardChargeMod AccountRef ListID',
@@ -535,10 +535,8 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeModRq extends QuickBooks_QB
   72 => 'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef ListID',
   73 => 'CreditCardChargeMod ItemGroupLineMod ItemLineMod OverrideItemAccountRef FullName',
   74 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

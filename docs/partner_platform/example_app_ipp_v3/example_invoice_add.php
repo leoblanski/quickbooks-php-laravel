@@ -33,14 +33,10 @@ $Invoice->addLine($Line);
 
 $Invoice->setCustomerRef('67');
 
-
-if ($resp = $InvoiceService->add($Context, $realm, $Invoice))
-{
-	print('Our new Invoice ID is: [' . $resp . ']');
-}
-else
-{
-	print($InvoiceService->lastError());
+if ($resp = $InvoiceService->add($Context, $realm, $Invoice)) {
+    print('Our new Invoice ID is: [' . $resp . ']');
+} else {
+    print($InvoiceService->lastError());
 }
 
 print('<br><br><br><br>');

@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ChargeModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ChargeMod TxnID' => 'IDTYPE',
   'ChargeMod EditSequence' => 'STRTYPE',
   'ChargeMod CustomerRef ListID' => 'IDTYPE',
@@ -59,14 +59,14 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'ChargeMod OverrideItemAccountRef ListID' => 'IDTYPE',
   'ChargeMod OverrideItemAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ChargeMod TxnID' => 0,
   'ChargeMod EditSequence' => 16,
   'ChargeMod CustomerRef ListID' => 0,
@@ -91,14 +91,14 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'ChargeMod OverrideItemAccountRef ListID' => 0,
   'ChargeMod OverrideItemAccountRef FullName' => 209,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ChargeMod TxnID' => false,
   'ChargeMod EditSequence' => false,
   'ChargeMod CustomerRef ListID' => true,
@@ -123,12 +123,12 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'ChargeMod OverrideItemAccountRef ListID' => true,
   'ChargeMod OverrideItemAccountRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ChargeMod TxnID' => 999.99,
   'ChargeMod EditSequence' => 999.99,
   'ChargeMod CustomerRef ListID' => 999.99,
@@ -153,14 +153,14 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'ChargeMod OverrideItemAccountRef ListID' => 999.99,
   'ChargeMod OverrideItemAccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ChargeMod TxnID' => false,
   'ChargeMod EditSequence' => false,
   'ChargeMod CustomerRef ListID' => false,
@@ -185,26 +185,26 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   'ChargeMod OverrideItemAccountRef ListID' => false,
   'ChargeMod OverrideItemAccountRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ChargeMod TxnID',
   1 => 'ChargeMod EditSequence',
   2 => 'ChargeMod CustomerRef ListID',
@@ -229,10 +229,8 @@ class QuickBooks_QBXML_Schema_Object_ChargeModRq extends QuickBooks_QBXML_Schema
   21 => 'ChargeMod OverrideItemAccountRef ListID',
   22 => 'ChargeMod OverrideItemAccountRef FullName',
   23 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

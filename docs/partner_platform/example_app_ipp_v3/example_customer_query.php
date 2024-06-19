@@ -13,11 +13,10 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $CustomerService = new QuickBooks_IPP_Service_Customer();
 
-$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer MAXRESULTS 25");
+$customers = $CustomerService->query($Context, $realm, 'SELECT * FROM Customer MAXRESULTS 25');
 
-foreach ($customers as $Customer)
-{
-	print('Customer Id=' . $Customer->getId() . ' is named: ' . $Customer->getFullyQualifiedName() . '<br>');
+foreach ($customers as $Customer) {
+    print('Customer Id=' . $Customer->getId() . ' is named: ' . $Customer->getFullyQualifiedName() . '<br>');
 }
 
 /*

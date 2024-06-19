@@ -12,16 +12,14 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $EmployeeService = new QuickBooks_IPP_Service_Employee();
 
-$employees = $EmployeeService->query($Context, $realm, "SELECT * FROM Employee ");
+$employees = $EmployeeService->query($Context, $realm, 'SELECT * FROM Employee ');
 
 //print_r($customers);
 
-foreach ($employees as $Employee)
-{
-	print('Employee id=' . $Employee->getId() . ' has a name of ' . $Employee->getGivenName() . ' ' . $Employee->getFamilyName() . "\n");
-	
-}
+foreach ($employees as $Employee) {
+    print('Employee id=' . $Employee->getId() . ' has a name of ' . $Employee->getGivenName() . ' ' . $Employee->getFamilyName() . "\n");
 
+}
 
 print("\n\n\n\n");
 print('Request [' . $IPP->lastRequest() . ']');

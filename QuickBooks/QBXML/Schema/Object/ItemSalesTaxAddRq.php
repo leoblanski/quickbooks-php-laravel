@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ItemSalesTaxAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'ItemSalesTaxAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'ItemSalesTaxAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'Name' => 'STRTYPE',
   'IsActive' => 'BOOLTYPE',
   'IsUsedOnPurchaseTransaction' => 'BOOLTYPE',
@@ -44,14 +44,14 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'TaxVendorRef FullName' => 'STRTYPE',
   'SalesTaxReturnLineNumber' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'Name' => 31,
   'IsActive' => 0,
   'IsUsedOnPurchaseTransaction' => 0,
@@ -61,14 +61,14 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'TaxVendorRef FullName' => 41,
   'SalesTaxReturnLineNumber' => 79,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => true,
   'IsUsedOnPurchaseTransaction' => true,
@@ -78,12 +78,12 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'TaxVendorRef FullName' => true,
   'SalesTaxReturnLineNumber' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'Name' => 999.99,
   'IsActive' => 999.99,
   'IsUsedOnPurchaseTransaction' => 6,
@@ -93,14 +93,14 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'TaxVendorRef FullName' => 999.99,
   'SalesTaxReturnLineNumber' => 6,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => false,
   'IsUsedOnPurchaseTransaction' => false,
@@ -110,26 +110,26 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   'TaxVendorRef FullName' => false,
   'SalesTaxReturnLineNumber' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'Name',
   1 => 'IsActive',
   2 => 'IsUsedOnPurchaseTransaction',
@@ -139,10 +139,8 @@ class QuickBooks_QBXML_Schema_Object_ItemSalesTaxAddRq extends QuickBooks_QBXML_
   6 => 'TaxVendorRef FullName',
   7 => 'SalesTaxReturnLineNumber',
   8 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

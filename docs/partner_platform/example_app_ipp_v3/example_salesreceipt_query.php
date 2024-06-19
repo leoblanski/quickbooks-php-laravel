@@ -12,14 +12,13 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $SalesReceiptService = new QuickBooks_IPP_Service_SalesReceipt();
 
-$salesreceipts = $SalesReceiptService->query($Context, $realm, "SELECT * FROM SalesReceipt STARTPOSITION 1 MAXRESULTS 10");
+$salesreceipts = $SalesReceiptService->query($Context, $realm, 'SELECT * FROM SalesReceipt STARTPOSITION 1 MAXRESULTS 10');
 
 //print_r($salesreceipts);
 
-foreach ($salesreceipts as $SalesReceipt)
-{
-	print('Receipt # ' . $SalesReceipt->getDocNumber() . ' has a total of $' . $SalesReceipt->getTotalAmt() . "\n");
-	
+foreach ($salesreceipts as $SalesReceipt) {
+    print('Receipt # ' . $SalesReceipt->getDocNumber() . ' has a total of $' . $SalesReceipt->getTotalAmt() . "\n");
+
 }
 
 /*

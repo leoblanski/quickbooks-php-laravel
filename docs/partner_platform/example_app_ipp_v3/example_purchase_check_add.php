@@ -51,15 +51,11 @@ $Purchase->setPaymentType('Check');
   <GlobalTaxCalculation>TaxInclusive</GlobalTaxCalculation>
 */
 
-if ($id = $PurchaseService->add($Context, $realm, $Purchase))
-{
-	print('New purchase check id is: ' . $id);
+if ($id = $PurchaseService->add($Context, $realm, $Purchase)) {
+    print('New purchase check id is: ' . $id);
+} else {
+    print('Error creating check: ' . $IPP->lastError($Context) . '');
 }
-else
-{
-	print('Error creating check: ' . $IPP->lastError($Context) . '');
-}
-
 
 /*
 print("\n\n\n\n");

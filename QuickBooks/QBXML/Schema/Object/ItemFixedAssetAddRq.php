@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ItemFixedAssetAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ItemFixedAssetAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'ItemFixedAssetAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'ItemFixedAssetAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'Name' => 'STRTYPE',
   'IsActive' => 'BOOLTYPE',
   'AcquiredAs' => 'ENUMTYPE',
@@ -59,14 +59,14 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetAddRq extends QuickBooks_QBXM
   'YearEndAccumulatedDepreciation' => 'AMTTYPE',
   'YearEndBookValue' => 'AMTTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'Name' => 31,
   'IsActive' => 0,
   'AcquiredAs' => 0,
@@ -91,14 +91,14 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetAddRq extends QuickBooks_QBXM
   'YearEndAccumulatedDepreciation' => 0,
   'YearEndBookValue' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => true,
   'AcquiredAs' => false,
@@ -123,12 +123,12 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetAddRq extends QuickBooks_QBXM
   'YearEndAccumulatedDepreciation' => true,
   'YearEndBookValue' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'Name' => 999.99,
   'IsActive' => 999.99,
   'AcquiredAs' => 999.99,
@@ -153,14 +153,14 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetAddRq extends QuickBooks_QBXM
   'YearEndAccumulatedDepreciation' => 999.99,
   'YearEndBookValue' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => false,
   'AcquiredAs' => false,
@@ -185,26 +185,26 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetAddRq extends QuickBooks_QBXM
   'YearEndAccumulatedDepreciation' => false,
   'YearEndBookValue' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'Name',
   1 => 'IsActive',
   2 => 'AcquiredAs',
@@ -229,10 +229,8 @@ class QuickBooks_QBXML_Schema_Object_ItemFixedAssetAddRq extends QuickBooks_QBXM
   21 => 'YearEndAccumulatedDepreciation',
   22 => 'YearEndBookValue',
   23 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

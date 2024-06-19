@@ -2,31 +2,30 @@
 
 /**
  * Example QuickBooks Web Connector web service with custom authentication
- * 
- * This example shows how to use a custom authentication function to 
- * 
+ *
+ * This example shows how to use a custom authentication function to
+ *
  * @author Keith Palmer <keith@consolibyte.com>
- * 
+ *
  * @package QuickBooks
  * @subpackage Documentation
  */
 
-// I always program in E_STRICT error mode... 
+// I always program in E_STRICT error mode...
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', true);
 
 // We need to make sure the correct timezone is set, or some PHP installations will complain
-if (function_exists('date_default_timezone_set'))
-{
-	// List of valid timezones is here: http://us3.php.net/manual/en/timezones.php
-	date_default_timezone_set('America/New_York');
+if (function_exists('date_default_timezone_set')) {
+    // List of valid timezones is here: http://us3.php.net/manual/en/timezones.php
+    date_default_timezone_set('America/New_York');
 }
 
 // Require the framework
 //require_once '../QuickBooks.php';
 require_once '/Users/kpalmer/Projects/QuickBooks/QuickBooks.php';
 
-// A username and password you'll use in: 
+// A username and password you'll use in:
 //	a) Your .QWC file
 //	b) The Web Connector
 //	c) The QuickBooks framework
@@ -34,16 +33,16 @@ $user = 'quickbooks';
 $pass = 'password';
 
 // Map QuickBooks actions to handler functions
-$map = array(
-	QUICKBOOKS_ADD_CUSTOMER => array( '_quickbooks_customer_add_request', '_quickbooks_customer_add_response' ),
-	// ... more action handlers here ...
-	);
+$map = [
+    QUICKBOOKS_ADD_CUSTOMER => [ '_quickbooks_customer_add_request', '_quickbooks_customer_add_response' ],
+    // ... more action handlers here ...
+    ];
 
 // This is entirely optional, use it to trigger actions when an error is returned by QuickBooks
-$errmap = array();
+$errmap = [];
 
 // An array of callback hooks
-$hooks = array();
+$hooks = [];
 
 // Logging level
 $log_level = QUICKBOOKS_LOG_DEVELOP;		// Use this level until you're sure everything works!!!
@@ -52,30 +51,29 @@ $log_level = QUICKBOOKS_LOG_DEVELOP;		// Use this level until you're sure everyt
 $soap = QUICKBOOKS_SOAPSERVER_BUILTIN;
 
 // SOAP options
-$soap_options = array();
+$soap_options = [];
 
 // * MAKE SURE YOU CHANGE THE DATABASE CONNECTION STRING BELOW TO A VALID MYSQL USERNAME/PASSWORD/HOSTNAME *
 $dsn = 'mysql://root:root@localhost/quickbooks_auth';
 
 // Handler options
-$handler_options = array(
-	'authenticate' => '_quickbooks_custom_auth', 
-	//'authenticate' => '_QuickBooksClass::theStaticMethod',
-	'deny_concurrent_logins' => false, 
-	);
+$handler_options = [
+    'authenticate' => '_quickbooks_custom_auth',
+    //'authenticate' => '_QuickBooksClass::theStaticMethod',
+    'deny_concurrent_logins' => false,
+    ];
 
-if (!QuickBooks_Utilities::initialized($dsn))
-{
-	// Initialize creates the neccessary database schema for queueing up requests and logging
-	QuickBooks_Utilities::initialize($dsn);
-	
-	// This creates a username and password which is used by the Web Connector to authenticate
-	QuickBooks_Utilities::createUser($dsn, $user, $pass);
-	
-	// Queueing up a test request
-	$primary_key_of_your_customer = 5;
-	$Queue = new QuickBooks_WebConnector_Queue($dsn);
-	$Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_your_customer);
+if (!QuickBooks_Utilities::initialized($dsn)) {
+    // Initialize creates the neccessary database schema for queueing up requests and logging
+    QuickBooks_Utilities::initialize($dsn);
+    
+    // This creates a username and password which is used by the Web Connector to authenticate
+    QuickBooks_Utilities::createUser($dsn, $user, $pass);
+    
+    // Queueing up a test request
+    $primary_key_of_your_customer = 5;
+    $Queue = new QuickBooks_WebConnector_Queue($dsn);
+    $Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_your_customer);
 }
 
 // Create a new server and tell it to handle the requests
@@ -88,17 +86,16 @@ $response = $Server->handle(true, true);
  */
 function _quickbooks_custom_auth($username, $password, &$qb_company_file)
 {
-	if ($username == 'keith' and 
-		$password == 'rocks')
-	{
-		// Use this company file and auth successfully
-		$qb_company_file = 'C:\path\to\the\file-function.QBW';
-		
-		return true;
-	}
-	
-	// Login failure
-	return false;
+    if ($username == 'keith' and
+        $password == 'rocks') {
+        // Use this company file and auth successfully
+        $qb_company_file = 'C:\path\to\the\file-function.QBW';
+        
+        return true;
+    }
+    
+    // Login failure
+    return false;
 }
 
 /**
@@ -107,24 +104,24 @@ function _quickbooks_custom_auth($username, $password, &$qb_company_file)
 /*
 class _QuickBooksClass
 {
-	static public function theStaticMethod($username, $password, &$qb_company_file)
-	{
-		//print('username [' . $username . '] [' . $password . ']');
-		
-		if ($username == 'keith' and 
-			$password == 'rocks')
-		{
-			// Use this company file and auth successfully
-			$qb_company_file = 'C:\path\to\the\file-staticmethod.QBW';
-			
-			//print('returning true...');
-			
-			return true;
-		}
-		
-		// Login failure
-		return false;
-	}
+    static public function theStaticMethod($username, $password, &$qb_company_file)
+    {
+        //print('username [' . $username . '] [' . $password . ']');
+
+        if ($username == 'keith' and
+            $password == 'rocks')
+        {
+            // Use this company file and auth successfully
+            $qb_company_file = 'C:\path\to\the\file-staticmethod.QBW';
+
+            //print('returning true...');
+
+            return true;
+        }
+
+        // Login failure
+        return false;
+    }
 }
 */
 
@@ -133,9 +130,9 @@ class _QuickBooksClass
  */
 function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	// We're just testing, so we'll just use a static test request:
-	 
-	$xml = '<?xml version="1.0" encoding="utf-8"?>
+    // We're just testing, so we'll just use a static test request:
+     
+    $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="2.0"?>
 		<QBXML>
 			<QBXMLMsgsRq onError="stopOnError">
@@ -162,14 +159,14 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
 				</CustomerAddRq>
 			</QBXMLMsgsRq>
 		</QBXML>';
-	
-	return $xml;
+    
+    return $xml;
 }
 
 /**
- * Receive a response from QuickBooks 
+ * Receive a response from QuickBooks
  */
 function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-	return;	
+    return;
 }

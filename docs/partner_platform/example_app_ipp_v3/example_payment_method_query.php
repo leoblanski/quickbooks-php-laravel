@@ -12,15 +12,14 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $PaymentMethodService = new QuickBooks_IPP_Service_PaymentMethod();
 
-$paymentmethods = $PaymentMethodService->query($Context, $realm, "SELECT * FROM PaymentMethod");
+$paymentmethods = $PaymentMethodService->query($Context, $realm, 'SELECT * FROM PaymentMethod');
 
 //print_r($terms);
 
-foreach ($paymentmethods as $PaymentMethod)
-{
-	//print_r($Term);
+foreach ($paymentmethods as $PaymentMethod) {
+    //print_r($Term);
 
-	print('PaymentMethod Id=' . $PaymentMethod->getId() . ' is named: ' . $PaymentMethod->getName() . '<br>');
+    print('PaymentMethod Id=' . $PaymentMethod->getId() . ' is named: ' . $PaymentMethod->getName() . '<br>');
 }
 
 /*

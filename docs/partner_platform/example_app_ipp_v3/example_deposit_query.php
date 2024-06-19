@@ -12,12 +12,11 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $PaymentService = new QuickBooks_IPP_Service_Payment();
 
-$list = $PaymentService->query($Context, $realm, "SELECT * FROM Deposit STARTPOSITION 1 MAXRESULTS 10");
+$list = $PaymentService->query($Context, $realm, 'SELECT * FROM Deposit STARTPOSITION 1 MAXRESULTS 10');
 
 //print_r($salesreceipts);
 
-foreach ($list as $Deposit)
-{
+foreach ($list as $Deposit) {
     print('Payment # ' . $Deposit->getPaymentRefNum() . ' has a total of $' . $Deposit->getTotalAmt() . "\n");
     print('   Internal Id: ' . $Deposit->getId() . "\n");
     print("\n");

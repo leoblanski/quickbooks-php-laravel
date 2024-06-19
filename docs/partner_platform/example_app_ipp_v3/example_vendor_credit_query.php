@@ -12,13 +12,12 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $VendorCreditService = new QuickBooks_IPP_Service_VendorCredit();
 
-$vcs = $VendorCreditService->query($Context, $realm, "SELECT * FROM VendorCredit");
+$vcs = $VendorCreditService->query($Context, $realm, 'SELECT * FROM VendorCredit');
 
 //print_r($terms);
 
-foreach ($vcs as $Vc)
-{
-	print_r($Vc);
+foreach ($vcs as $Vc) {
+    print_r($Vc);
 }
 
 /*

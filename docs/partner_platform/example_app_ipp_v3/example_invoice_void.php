@@ -15,13 +15,10 @@ $InvoiceService = new QuickBooks_IPP_Service_Invoice();
 $invoice_to_void = '{-34}';
 //$invoice_to_void = 34;    // just the integer will work too
 
-if ($resp = $InvoiceService->void($Context, $realm, $invoice_to_void))
-{
-	print('&nbsp; Updated!<br>');
-}
-else
-{
-	print('&nbsp; ' . $InvoiceService->lastError() . '<br>');
+if ($resp = $InvoiceService->void($Context, $realm, $invoice_to_void)) {
+    print('&nbsp; Updated!<br>');
+} else {
+    print('&nbsp; ' . $InvoiceService->lastError() . '<br>');
 }
 
 /*

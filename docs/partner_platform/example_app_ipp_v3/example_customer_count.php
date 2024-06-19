@@ -9,10 +9,10 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <pre>
 
 <?php
-	
+    
 $CustomerService = new QuickBooks_IPP_Service_Customer();
 
-$count = $CustomerService->query($Context, $realm, "SELECT COUNT(*) FROM Customer  ");
+$count = $CustomerService->query($Context, $realm, 'SELECT COUNT(*) FROM Customer  ');
 
 print('There are a total of ' . $count . ' customers!');
 

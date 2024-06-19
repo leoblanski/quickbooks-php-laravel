@@ -76,172 +76,158 @@ QuickBooks_Loader::import('/QuickBooks/XML/Backend');
  */
 class QuickBooks_XML_Parser
 {
-	/**
-	 *
-	 */
-	protected $_xml;
+    /**
+     *
+     */
+    protected $_xml;
 
-	/**
-	 * What back-end XML parser to use
-	 * @var Quickbooks_XML_Backend
-	 */
-	protected $_backend;
+    /**
+     * What back-end XML parser to use
+     * @var Quickbooks_XML_Backend
+     */
+    protected $_backend;
 
-	/**
-	 *
-	 */
-	const BACKEND_SIMPLEXML = 'simplexml';
+    /**
+     *
+     */
+    const BACKEND_SIMPLEXML = 'simplexml';
 
-	/**
-	 *
-	 */
-	const BACKEND_BUILTIN = 'builtin';
+    /**
+     *
+     */
+    const BACKEND_BUILTIN = 'builtin';
 
-	/**
-	 * Create a new QuickBooks_XML parser object
-	 *
-	 * @param string $xml_or_file
-	 */
-	public function __construct($xml_or_file = null, $use_backend = null)
-	{
-		$xml_or_file = $this->_read($xml_or_file);
+    /**
+     * Create a new QuickBooks_XML parser object
+     *
+     * @param string $xml_or_file
+     */
+    public function __construct($xml_or_file = null, $use_backend = null)
+    {
+        $xml_or_file = $this->_read($xml_or_file);
 
-		$this->_xml = $xml_or_file;
+        $this->_xml = $xml_or_file;
 
-		if (is_null($use_backend) and
-			function_exists('simplexml_load_string'))
-		{
-			$use_backend = QuickBooks_XML::PARSER_SIMPLEXML;
-		}
-		else if (is_null($use_backend))
-		{
-			$use_backend = QuickBooks_XML::PARSER_BUILTIN;
-		}
+        if (is_null($use_backend) and
+            function_exists('simplexml_load_string')) {
+            $use_backend = QuickBooks_XML::PARSER_SIMPLEXML;
+        } elseif (is_null($use_backend)) {
+            $use_backend = QuickBooks_XML::PARSER_BUILTIN;
+        }
 
-		$class = 'QuickBooks_XML_Backend_' . ucfirst(strtolower($use_backend));
-		$this->_backend = new $class($xml_or_file);
-	}
+        $class = 'QuickBooks_XML_Backend_' . ucfirst(strtolower($use_backend));
+        $this->_backend = new $class($xml_or_file);
+    }
 
-	/**
-	 * Read an open file descriptor, XML file, or string
-	 *
-	 * @param mixed $mixed
-	 * @return string
-	 */
-	protected function _read($mixed)
-	{
-		if (empty($mixed))
-		{
-			return '';
-		}
-		else if (is_resource($mixed) and
-			get_resource_type($mixed) == 'stream')
-		{
-			$buffer = '';
-			$tmp = '';
-			while ($tmp = fread($mixed, 8192))
-			{
-				$buffer .= $tmp;
-			}
+    /**
+     * Read an open file descriptor, XML file, or string
+     *
+     * @param mixed $mixed
+     * @return string
+     */
+    protected function _read($mixed)
+    {
+        if (empty($mixed)) {
+            return '';
+        } elseif (is_resource($mixed) and
+            get_resource_type($mixed) == 'stream') {
+            $buffer = '';
+            $tmp = '';
+            while ($tmp = fread($mixed, 8192)) {
+                $buffer .= $tmp;
+            }
 
-			return $buffer;
-		}
-		else if (substr(trim($mixed), 0, 6) == '{"warn')
-		{
-			// Intuit has a bug where some of their services return JSON erors 
-			// instead of XML, so we catch these here... 
-			
-			return '';
-		}
-		else if (substr(trim($mixed), 0, 1) != '<')
-		{
-			return file_get_contents($mixed);
-		}
+            return $buffer;
+        } elseif (substr(trim($mixed), 0, 6) == '{"warn') {
+            // Intuit has a bug where some of their services return JSON erors
+            // instead of XML, so we catch these here...
+            
+            return '';
+        } elseif (substr(trim($mixed), 0, 1) != '<') {
+            return file_get_contents($mixed);
+        }
 
-		return $mixed;
-	}
+        return $mixed;
+    }
 
-	/**
-	 * Load the XML parser with data from a string or file
-	 *
-	 * @param string $xml_or_file		An XML string or
-	 * @return integer
-	 */
-	public function load($xml_or_file)
-	{
-		$xml_or_file = $this->_read($xml_or_file);
+    /**
+     * Load the XML parser with data from a string or file
+     *
+     * @param string $xml_or_file		An XML string or
+     * @return integer
+     */
+    public function load($xml_or_file)
+    {
+        $xml_or_file = $this->_read($xml_or_file);
 
-		$this->_xml = $xml_or_file;
-		return $this->_backend->load($xml_or_file);
-	}
+        $this->_xml = $xml_or_file;
+        return $this->_backend->load($xml_or_file);
+    }
 
-	/**
-	 * Check if the XML document is valid
-	 *
-	 * *** WARNING *** This does not check against the actual QuickBooks
-	 * schemas, and in reality even the XML validation stuff it *does* do is
-	 * pretty light. You should probably double check any validation you're
-	 * doing in a better XML validator.
-	 *
-	 * @param integer $errnum
-	 * @param string $errmsg
-	 * @return boolean
-	 */
-	public function validate(&$errnum, &$errmsg)
-	{
-		return $this->_backend->validate($errnum, $errmsg);
-	}
+    /**
+     * Check if the XML document is valid
+     *
+     * *** WARNING *** This does not check against the actual QuickBooks
+     * schemas, and in reality even the XML validation stuff it *does* do is
+     * pretty light. You should probably double check any validation you're
+     * doing in a better XML validator.
+     *
+     * @param integer $errnum
+     * @param string $errmsg
+     * @return boolean
+     */
+    public function validate(&$errnum, &$errmsg)
+    {
+        return $this->_backend->validate($errnum, $errmsg);
+    }
 
-	/**
-	 *
-	 */
-	public function beautify(&$errnum, &$errmsg, $compress_empty_elements = true)
-	{
-		$errnum = 0;
-		$errmsg = '';
+    /**
+     *
+     */
+    public function beautify(&$errnum, &$errmsg, $compress_empty_elements = true)
+    {
+        $errnum = 0;
+        $errmsg = '';
 
-		$Node = $this->parse($errnum, $errmsg);
+        $Node = $this->parse($errnum, $errmsg);
 
-		if (!$errnum and is_object($Node))
-		{
-			return $Node->asXML($compress_empty_elements);
-		}
+        if (!$errnum and is_object($Node)) {
+            return $Node->asXML($compress_empty_elements);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Parse an XML document into an XML node structure
-	 *
-	 * This function returns either a QuickBooks_XML_Document on success, or false
-	 * on failure. You can use the ->validate() method first so you can tell
-	 * whether or not the parser will succeed.
-	 *
-	 * @param integer $errnum
-	 * @param string $errmsg
-	 * @return QuickBooks_XML_Document
-	 */
-	public function parse(&$errnum, &$errmsg)
-	{
-		if (!strlen($this->_xml))
-		{
-			$errnum = QuickBooks_XML::ERROR_CONTENT;
-			$errmsg = 'No XML content to parse.';
-			return false;
-		}
+    /**
+     * Parse an XML document into an XML node structure
+     *
+     * This function returns either a QuickBooks_XML_Document on success, or false
+     * on failure. You can use the ->validate() method first so you can tell
+     * whether or not the parser will succeed.
+     *
+     * @param integer $errnum
+     * @param string $errmsg
+     * @return QuickBooks_XML_Document
+     */
+    public function parse(&$errnum, &$errmsg)
+    {
+        if (!strlen($this->_xml)) {
+            $errnum = QuickBooks_XML::ERROR_CONTENT;
+            $errmsg = 'No XML content to parse.';
+            return false;
+        }
 
-		// first, let's remove all of the comments
-		if ($this->validate($errnum, $errmsg))
-		{
-			return $this->_backend->parse($errnum, $errmsg);
-		}
+        // first, let's remove all of the comments
+        if ($this->validate($errnum, $errmsg)) {
+            return $this->_backend->parse($errnum, $errmsg);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function backend()
-	{
-		$str = get_class($this->_backend);
-		return str_replace('quickbooks_xml_backend_', '', strtolower($str));
-	}
+    public function backend()
+    {
+        $str = get_class($this->_backend);
+        return str_replace('quickbooks_xml_backend_', '', strtolower($str));
+    }
 }

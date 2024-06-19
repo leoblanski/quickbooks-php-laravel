@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: PriceLevelQueryRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_PriceLevelQueryRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ListID' => 'IDTYPE',
   'FullName' => 'STRTYPE',
   'MaxReturned' => 'INTTYPE',
@@ -48,14 +48,14 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelQueryRq extends QuickBooks_QBXML_
   'ItemRef ListID' => 'IDTYPE',
   'ItemRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ListID' => 0,
   'FullName' => 0,
   'MaxReturned' => 0,
@@ -69,14 +69,14 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelQueryRq extends QuickBooks_QBXML_
   'ItemRef ListID' => 0,
   'ItemRef FullName' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ListID' => false,
   'FullName' => false,
   'MaxReturned' => true,
@@ -90,12 +90,12 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelQueryRq extends QuickBooks_QBXML_
   'ItemRef ListID' => false,
   'ItemRef FullName' => false,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ListID' => 999.99,
   'FullName' => 999.99,
   'MaxReturned' => 0,
@@ -109,14 +109,14 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelQueryRq extends QuickBooks_QBXML_
   'ItemRef ListID' => 999.99,
   'ItemRef FullName' => 999.99,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ListID' => true,
   'FullName' => true,
   'MaxReturned' => false,
@@ -130,26 +130,26 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelQueryRq extends QuickBooks_QBXML_
   'ItemRef ListID' => true,
   'ItemRef FullName' => true,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ListID',
   1 => 'FullName',
   2 => 'MaxReturned',
@@ -163,10 +163,8 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelQueryRq extends QuickBooks_QBXML_
   10 => 'ItemRef ListID',
   11 => 'ItemRef FullName',
   12 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

@@ -2,9 +2,8 @@
 
 require_once dirname(__FILE__) . '/config.php';
 
-if ($IntuitAnywhere->disconnect($the_username, $the_tenant))
-{
-	
+if ($IntuitAnywhere->disconnect($the_username, $the_tenant)) {
+
 }
 
 require_once dirname(__FILE__) . '/views/header.tpl.php';

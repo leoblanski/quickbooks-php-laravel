@@ -26,17 +26,14 @@ $Payments = new QuickBooks_Payments($oauth_consumer_key, $oauth_consumer_secret,
 
 $CreditCard = new QuickBooks_Payments_CreditCard($name, $number, $expyear, $expmonth, $street, $city, $region, $postalcode);
 
-if ($Transaction = $Payments->charge($Context, $CreditCard, $amount, $currency))
-{
-	//print_r($Transaction);
+if ($Transaction = $Payments->charge($Context, $CreditCard, $amount, $currency)) {
+    //print_r($Transaction);
 
-	print('Id: ' . $Transaction->getId() . '<br>');
-	print('Auth Code: ' . $Transaction->getAuthCode() . '<br>');
-	print('Status: ' . $Transaction->getStatus() . '<br>');
-}
-else
-{
-	print('Error while charging credit card: ' . $Payments->lastError());
+    print('Id: ' . $Transaction->getId() . '<br>');
+    print('Auth Code: ' . $Transaction->getAuthCode() . '<br>');
+    print('Status: ' . $Transaction->getStatus() . '<br>');
+} else {
+    print('Error while charging credit card: ' . $Payments->lastError());
 }
 
 print('<br><br><br><br>');

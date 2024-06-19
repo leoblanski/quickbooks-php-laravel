@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: EmployeeAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_EmployeeAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'EmployeeAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'EmployeeAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'IsActive' => 'BOOLTYPE',
   'Salutation' => 'STRTYPE',
   'FirstName' => 'STRTYPE',
@@ -91,14 +91,14 @@ class QuickBooks_QBXML_Schema_Object_EmployeeAddRq extends QuickBooks_QBXML_Sche
   'EmployeePayrollInfo VacationHours HoursUsed' => 'TIMEINTERVALTYPE',
   'EmployeePayrollInfo VacationHours AccrualStartDate' => 'DATETYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'IsActive' => 0,
   'Salutation' => 15,
   'FirstName' => 25,
@@ -155,14 +155,14 @@ class QuickBooks_QBXML_Schema_Object_EmployeeAddRq extends QuickBooks_QBXML_Sche
   'EmployeePayrollInfo VacationHours HoursUsed' => 0,
   'EmployeePayrollInfo VacationHours AccrualStartDate' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'IsActive' => true,
   'Salutation' => true,
   'FirstName' => true,
@@ -219,12 +219,12 @@ class QuickBooks_QBXML_Schema_Object_EmployeeAddRq extends QuickBooks_QBXML_Sche
   'EmployeePayrollInfo VacationHours HoursUsed' => true,
   'EmployeePayrollInfo VacationHours AccrualStartDate' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'IsActive' => 999.99,
   'Salutation' => 999.99,
   'FirstName' => 999.99,
@@ -281,14 +281,14 @@ class QuickBooks_QBXML_Schema_Object_EmployeeAddRq extends QuickBooks_QBXML_Sche
   'EmployeePayrollInfo VacationHours HoursUsed' => 5,
   'EmployeePayrollInfo VacationHours AccrualStartDate' => 5,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'IsActive' => false,
   'Salutation' => false,
   'FirstName' => false,
@@ -345,26 +345,26 @@ class QuickBooks_QBXML_Schema_Object_EmployeeAddRq extends QuickBooks_QBXML_Sche
   'EmployeePayrollInfo VacationHours HoursUsed' => false,
   'EmployeePayrollInfo VacationHours AccrualStartDate' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'IsActive',
   1 => 'Salutation',
   2 => 'FirstName',
@@ -424,10 +424,8 @@ class QuickBooks_QBXML_Schema_Object_EmployeeAddRq extends QuickBooks_QBXML_Sche
   56 => 'EmployeePayrollInfo VacationHours HoursUsed',
   57 => 'EmployeePayrollInfo VacationHours AccrualStartDate',
   58 => 'IncludeRetElement'
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

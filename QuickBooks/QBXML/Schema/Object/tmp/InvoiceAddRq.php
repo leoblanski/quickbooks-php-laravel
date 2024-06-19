@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: InvoiceAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'InvoiceAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'InvoiceAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => 'IDTYPE',
   'CustomerRef FullName' => 'STRTYPE',
   'ClassRef ListID' => 'IDTYPE',
@@ -135,14 +135,14 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => 'IDTYPE',
   'ShippingLineAdd AccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => 0,
   'CustomerRef FullName' => 209,
   'ClassRef ListID' => 0,
@@ -243,14 +243,14 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => 0,
   'ShippingLineAdd AccountRef FullName' => 209,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => true,
   'CustomerRef FullName' => true,
   'ClassRef ListID' => true,
@@ -351,12 +351,12 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => true,
   'ShippingLineAdd AccountRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => 999.99,
   'CustomerRef FullName' => 999.99,
   'ClassRef ListID' => 999.99,
@@ -457,14 +457,14 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => 999.99,
   'ShippingLineAdd AccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => false,
   'CustomerRef FullName' => false,
   'ClassRef ListID' => false,
@@ -565,29 +565,29 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   'ShippingLineAdd AccountRef ListID' => false,
   'ShippingLineAdd AccountRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'CustomerRef ListID',
   1 => 'CustomerRef FullName',
-  100 => 'CustomerRef ApplicationID', 
+  100 => 'CustomerRef ApplicationID',
   2 => 'ClassRef ListID',
   3 => 'ClassRef FullName',
   4 => 'ARAccountRef ListID',
@@ -640,8 +640,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   51 => 'Other',
   52 => 'LinkToTxnID',
   //53 => 'InvoiceLineAdd ItemRef ListID',
-  53 => 'InvoiceLineAdd', 
-  54 => 'InvoiceLineAdd ItemRef ListID', 
+  53 => 'InvoiceLineAdd',
+  54 => 'InvoiceLineAdd ItemRef ListID',
   55 => 'InvoiceLineAdd ItemRef FullName',
   55 => 'InvoiceLineAdd Desc',
   56 => 'InvoiceLineAdd Quantity',
@@ -688,10 +688,8 @@ class QuickBooks_QBXML_Schema_Object_InvoiceAddRq extends QuickBooks_QBXML_Schem
   97 => 'ShippingLineAdd AccountRef ListID',
   98 => 'ShippingLineAdd AccountRef FullName',
   99 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

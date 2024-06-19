@@ -9,7 +9,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 <pre>
 
 <?php
-	
+    
 $BillService = new QuickBooks_IPP_Service_Bill();
 
 $Bill = new QuickBooks_IPP_Object_Bill();
@@ -29,13 +29,10 @@ $Line->setAccountBasedExpenseLineDetail($AccountBasedExpenseLineDetail);
 
 $Bill->addLine($Line);
 
-if ($id = $BillService->add($Context, $realm, $Bill))
-{
-	print('New bill id is: ' . $id);
-}
-else
-{
-	print('Bill add failed...? ' . $BillService->lastError());
+if ($id = $BillService->add($Context, $realm, $Bill)) {
+    print('New bill id is: ' . $id);
+} else {
+    print('Bill add failed...? ' . $BillService->lastError());
 }
 
 /*

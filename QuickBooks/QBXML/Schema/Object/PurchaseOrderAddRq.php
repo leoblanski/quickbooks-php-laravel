@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: PurchaseOrderAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'PurchaseOrderAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'PurchaseOrderAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => 'IDTYPE',
   'VendorRef FullName' => 'STRTYPE',
   'ClassRef ListID' => 'IDTYPE',
@@ -113,14 +113,14 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupAdd DataExt DataExtName' => 'STRTYPE',
   'PurchaseOrderLineGroupAdd DataExt DataExtValue' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => 0,
   'VendorRef FullName' => 41,
   'ClassRef ListID' => 0,
@@ -199,14 +199,14 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupAdd DataExt DataExtName' => 31,
   'PurchaseOrderLineGroupAdd DataExt DataExtValue' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => true,
   'VendorRef FullName' => true,
   'ClassRef ListID' => true,
@@ -285,12 +285,12 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupAdd DataExt DataExtName' => false,
   'PurchaseOrderLineGroupAdd DataExt DataExtValue' => false,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => 999.99,
   'VendorRef FullName' => 999.99,
   'ClassRef ListID' => 999.99,
@@ -369,14 +369,14 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupAdd DataExt DataExtName' => 999.99,
   'PurchaseOrderLineGroupAdd DataExt DataExtValue' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => false,
   'VendorRef FullName' => false,
   'ClassRef ListID' => false,
@@ -455,26 +455,26 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupAdd DataExt DataExtName' => false,
   'PurchaseOrderLineGroupAdd DataExt DataExtValue' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'VendorRef ListID',
   1 => 'VendorRef FullName',
   2 => 'ClassRef ListID',
@@ -555,10 +555,8 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderAddRq extends QuickBooks_QBXML
   77 => 'PurchaseOrderLineGroupAdd DataExt DataExtName',
   78 => 'PurchaseOrderLineGroupAdd DataExt DataExtValue',
   79 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

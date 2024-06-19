@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: PurchaseOrderModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_PurchaseOrderModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'PurchaseOrderMod';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'PurchaseOrderMod';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'VendorRef ListID' => 'IDTYPE',
@@ -138,14 +138,14 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderModRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other1' => 'STRTYPE',
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other2' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'EditSequence' => 16,
   'VendorRef ListID' => 0,
@@ -249,14 +249,14 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderModRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other1' => 25,
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other2' => 29,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'VendorRef ListID' => true,
@@ -360,12 +360,12 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderModRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other1' => true,
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other2' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'EditSequence' => 999.99,
   'VendorRef ListID' => 999.99,
@@ -469,14 +469,14 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderModRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other1' => 6,
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other2' => 6,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'VendorRef ListID' => false,
@@ -580,26 +580,26 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderModRq extends QuickBooks_QBXML
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other1' => false,
   'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other2' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'TxnID',
   1 => 'EditSequence',
   2 => 'VendorRef ListID',
@@ -703,10 +703,8 @@ class QuickBooks_QBXML_Schema_Object_PurchaseOrderModRq extends QuickBooks_QBXML
   100 => 'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other1',
   101 => 'PurchaseOrderLineGroupMod PurchaseOrderLineMod Other2',
   102 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

@@ -15,17 +15,14 @@ $InvoiceService = new QuickBooks_IPP_Service_Invoice();
 $the_invoice_to_delete = '{-10}';
 
 $retr = $InvoiceService->delete($Context, $realm, $the_invoice_to_delete);
-if ($retr)
-{
-	print('The invoice was deleted!');
-}
-else
-{
-	print('Could not delete invoice: ' . $InvoiceService->lastError());
+if ($retr) {
+    print('The invoice was deleted!');
+} else {
+    print('Could not delete invoice: ' . $InvoiceService->lastError());
 }
 
 /*
-// For debugging 
+// For debugging
 
 print("\n\n\n\n");
 print('Request [' . $IPP->lastRequest() . ']');

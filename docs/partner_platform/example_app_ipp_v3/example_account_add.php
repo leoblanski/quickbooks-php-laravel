@@ -18,13 +18,10 @@ $Account->setName('My Test Name');
 $Account->setDescription('Here is my description');
 $Account->setAccountType('Income');
 
-if ($resp = $AccountService->add($Context, $realm, $Account))
-{
-	print('Our new Account ID is: [' . $resp . ']');
-}
-else
-{
-	print($AccountService->lastError());
+if ($resp = $AccountService->add($Context, $realm, $Account)) {
+    print('Our new Account ID is: [' . $resp . ']');
+} else {
+    print($AccountService->lastError());
 }
 
 /*

@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ItemNonInventoryModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ItemNonInventoryModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'ItemNonInventoryMod';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'ItemNonInventoryMod';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ListID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'Name' => 'STRTYPE',
@@ -69,14 +69,14 @@ class QuickBooks_QBXML_Schema_Object_ItemNonInventoryModRq extends QuickBooks_QB
   'SalesAndPurchaseMod PrefVendorRef ListID' => 'IDTYPE',
   'SalesAndPurchaseMod PrefVendorRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ListID' => 0,
   'EditSequence' => 16,
   'Name' => 31,
@@ -111,14 +111,14 @@ class QuickBooks_QBXML_Schema_Object_ItemNonInventoryModRq extends QuickBooks_QB
   'SalesAndPurchaseMod PrefVendorRef ListID' => 0,
   'SalesAndPurchaseMod PrefVendorRef FullName' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ListID' => false,
   'EditSequence' => false,
   'Name' => true,
@@ -153,12 +153,12 @@ class QuickBooks_QBXML_Schema_Object_ItemNonInventoryModRq extends QuickBooks_QB
   'SalesAndPurchaseMod PrefVendorRef ListID' => false,
   'SalesAndPurchaseMod PrefVendorRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ListID' => 999.99,
   'EditSequence' => 999.99,
   'Name' => 999.99,
@@ -193,14 +193,14 @@ class QuickBooks_QBXML_Schema_Object_ItemNonInventoryModRq extends QuickBooks_QB
   'SalesAndPurchaseMod PrefVendorRef ListID' => 999.99,
   'SalesAndPurchaseMod PrefVendorRef FullName' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ListID' => false,
   'EditSequence' => false,
   'Name' => false,
@@ -235,26 +235,26 @@ class QuickBooks_QBXML_Schema_Object_ItemNonInventoryModRq extends QuickBooks_QB
   'SalesAndPurchaseMod PrefVendorRef ListID' => false,
   'SalesAndPurchaseMod PrefVendorRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ListID',
   1 => 'EditSequence',
   2 => 'Name',
@@ -289,10 +289,8 @@ class QuickBooks_QBXML_Schema_Object_ItemNonInventoryModRq extends QuickBooks_QB
   31 => 'SalesAndPurchaseMod PrefVendorRef ListID',
   32 => 'SalesAndPurchaseMod PrefVendorRef FullName',
   33 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

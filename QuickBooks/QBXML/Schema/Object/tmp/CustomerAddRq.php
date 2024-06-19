@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: CustomerAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'CustomerAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'CustomerAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'Name' => 'STRTYPE',
   'IsActive' => 'BOOLTYPE',
   'ParentRef ListID' => 'IDTYPE',
@@ -111,14 +111,14 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PriceLevelRef ListID' => 'IDTYPE',
   'PriceLevelRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'Name' => 41,
   'IsActive' => 0,
   'ParentRef ListID' => 0,
@@ -195,14 +195,14 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PriceLevelRef ListID' => 0,
   'PriceLevelRef FullName' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => true,
   'ParentRef ListID' => true,
@@ -279,12 +279,12 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PriceLevelRef ListID' => true,
   'PriceLevelRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'Name' => 999.99,
   'IsActive' => 999.99,
   'ParentRef ListID' => 999.99,
@@ -361,14 +361,14 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PriceLevelRef ListID' => 999.99,
   'PriceLevelRef FullName' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => false,
   'ParentRef ListID' => false,
@@ -445,26 +445,26 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   'PriceLevelRef ListID' => false,
   'PriceLevelRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'Name',
   1 => 'IsActive',
   2 => 'ParentRef ListID',
@@ -541,10 +541,8 @@ class QuickBooks_QBXML_Schema_Object_CustomerAddRq extends QuickBooks_QBXML_Sche
   73 => 'PriceLevelRef ListID',
   74 => 'PriceLevelRef FullName',
   75 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

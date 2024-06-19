@@ -18,15 +18,11 @@ $Item->setName('My Item');
 $Item->setType('Inventory');
 $Item->setIncomeAccountRef('53');
 
-if ($resp = $ItemService->add($Context, $realm, $Item))
-{
-	print('Our new Item ID is: [' . $resp . ']');
+if ($resp = $ItemService->add($Context, $realm, $Item)) {
+    print('Our new Item ID is: [' . $resp . ']');
+} else {
+    print($ItemService->lastError($Context));
 }
-else
-{
-	print($ItemService->lastError($Context));
-}
-
 
 print('<br><br><br><br>');
 print("\n\n\n\n\n\n\n\n");

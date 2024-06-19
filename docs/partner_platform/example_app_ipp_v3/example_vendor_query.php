@@ -12,15 +12,14 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $VendorService = new QuickBooks_IPP_Service_Vendor();
 
-$vendors = $VendorService->query($Context, $realm, "SELECT * FROM Vendor");
+$vendors = $VendorService->query($Context, $realm, 'SELECT * FROM Vendor');
 
 //print_r($terms);
 
-foreach ($vendors as $Vendor)
-{
-	//print_r($Term);
+foreach ($vendors as $Vendor) {
+    //print_r($Term);
 
-	print('Vendor Id=' . $Vendor->getId() . ' is named: ' . $Vendor->getDisplayName() . '<br>');
+    print('Vendor Id=' . $Vendor->getId() . ' is named: ' . $Vendor->getDisplayName() . '<br>');
 }
 
 /*

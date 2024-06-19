@@ -12,21 +12,20 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $InvoiceService = new QuickBooks_IPP_Service_Invoice();
 
-$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice STARTPOSITION 1 MAXRESULTS 10");
+$invoices = $InvoiceService->query($Context, $realm, 'SELECT * FROM Invoice STARTPOSITION 1 MAXRESULTS 10');
 //$invoices = $InvoiceService->query($Context, $realm, "SELECT * FROM Invoice WHERE DocNumber = '1002' ");
 
 //print_r($customers);
 
-foreach ($invoices as $Invoice)
-{
-	print('Invoice # ' . $Invoice->getDocNumber() . ' has a total of $' . $Invoice->getTotalAmt() . "\n");
-	print('    First line item: ' . $Invoice->getLine(0)->getDescription() . "\n");
-	print('    Internal Id value: ' . $Invoice->getId() . "\n");
-	print("\n");
+foreach ($invoices as $Invoice) {
+    print('Invoice # ' . $Invoice->getDocNumber() . ' has a total of $' . $Invoice->getTotalAmt() . "\n");
+    print('    First line item: ' . $Invoice->getLine(0)->getDescription() . "\n");
+    print('    Internal Id value: ' . $Invoice->getId() . "\n");
+    print("\n");
 
-	//print_r($Invoice);
-	//$Line = $Invoice->getLine(0);
-	//print_r($Line);
+    //print_r($Invoice);
+    //$Line = $Invoice->getLine(0);
+    //print_r($Line);
 }
 
 /*

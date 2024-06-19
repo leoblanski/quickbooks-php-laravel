@@ -1,13 +1,15 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if (! defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
-$autoload['libraries'] = array('database');
+$autoload['libraries'] = ['database'];
 
-$autoload['helper'] = array();
+$autoload['helper'] = [];
 
-$autoload['plugin'] = array();
+$autoload['plugin'] = [];
 
-$autoload['config'] = array();
+$autoload['config'] = [];
 
-$autoload['language'] = array();
+$autoload['language'] = [];
 
-$autoload['model'] = array();
+$autoload['model'] = [];

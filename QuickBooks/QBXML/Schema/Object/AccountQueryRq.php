@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: AccountQueryRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_AccountQueryRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ListID' => 'IDTYPE',
   'FullName' => 'STRTYPE',
   'MaxReturned' => 'INTTYPE',
@@ -48,14 +48,14 @@ class QuickBooks_QBXML_Schema_Object_AccountQueryRq extends QuickBooks_QBXML_Sch
   'AccountType' => 'ENUMTYPE',
   'IncludeRetElement' => 'STRTYPE',
   'OwnerID' => 'GUIDTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ListID' => 0,
   'FullName' => 0,
   'MaxReturned' => 0,
@@ -69,14 +69,14 @@ class QuickBooks_QBXML_Schema_Object_AccountQueryRq extends QuickBooks_QBXML_Sch
   'AccountType' => 0,
   'IncludeRetElement' => 50,
   'OwnerID' => 0,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ListID' => false,
   'FullName' => false,
   'MaxReturned' => true,
@@ -90,12 +90,12 @@ class QuickBooks_QBXML_Schema_Object_AccountQueryRq extends QuickBooks_QBXML_Sch
   'AccountType' => true,
   'IncludeRetElement' => true,
   'OwnerID' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ListID' => 999.99,
   'FullName' => 999.99,
   'MaxReturned' => 0,
@@ -109,14 +109,14 @@ class QuickBooks_QBXML_Schema_Object_AccountQueryRq extends QuickBooks_QBXML_Sch
   'AccountType' => 999.99,
   'IncludeRetElement' => 4,
   'OwnerID' => 2,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ListID' => true,
   'FullName' => true,
   'MaxReturned' => false,
@@ -130,26 +130,26 @@ class QuickBooks_QBXML_Schema_Object_AccountQueryRq extends QuickBooks_QBXML_Sch
   'AccountType' => true,
   'IncludeRetElement' => true,
   'OwnerID' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ListID',
   1 => 'FullName',
   2 => 'MaxReturned',
@@ -163,10 +163,8 @@ class QuickBooks_QBXML_Schema_Object_AccountQueryRq extends QuickBooks_QBXML_Sch
   10 => 'AccountType',
   11 => 'IncludeRetElement',
   12 => 'OwnerID',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

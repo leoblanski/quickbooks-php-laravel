@@ -43,13 +43,10 @@ $Detail2->setAccountRef(56);
 $Line2->addJournalEntryLineDetail($Detail2);
 $JournalEntry->addLine($Line2);
 
-if ($resp = $JournalEntryService->add($Context, $realm, $JournalEntry))
-{
-	print('Our new journal entry ID is: [' . $resp . ']');
-}
-else
-{
-	print($JournalEntryService->lastError($Context));
+if ($resp = $JournalEntryService->add($Context, $realm, $JournalEntry)) {
+    print('Our new journal entry ID is: [' . $resp . ']');
+} else {
+    print($JournalEntryService->lastError($Context));
 }
 
 /*

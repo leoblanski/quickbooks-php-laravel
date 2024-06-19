@@ -16,9 +16,8 @@ $list = $JournalEntryService->query($Context, $realm, "SELECT * FROM JournalEntr
 
 //print_r($salesreceipts);
 
-foreach ($list as $JournalEntry)
-{
-	print_r($JournalEntry);
+foreach ($list as $JournalEntry) {
+    print_r($JournalEntry);
 }
 
 /*

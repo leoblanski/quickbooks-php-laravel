@@ -33,15 +33,12 @@ $id = 'aiztnxsv';
 
 $Payments = new QuickBooks_Payments($oauth_consumer_key, $oauth_consumer_secret, $sandbox);
 
-if ($Transaction = $Payments->getDebit($Context, $id))
-{
-	print('Id: ' . $Transaction->getId() . '<br>');
-	print('Auth Code: ' . $Transaction->getAuthCode() . '<br>');
-	print('Status: ' . $Transaction->getStatus() . '<br>');
-}
-else
-{
-	print('Error while getting eCheck/debit: ' . $Payments->lastResponse());
+if ($Transaction = $Payments->getDebit($Context, $id)) {
+    print('Id: ' . $Transaction->getId() . '<br>');
+    print('Auth Code: ' . $Transaction->getAuthCode() . '<br>');
+    print('Status: ' . $Transaction->getStatus() . '<br>');
+} else {
+    print('Error while getting eCheck/debit: ' . $Payments->lastResponse());
 }
 
 print('<br><br><br><br>');

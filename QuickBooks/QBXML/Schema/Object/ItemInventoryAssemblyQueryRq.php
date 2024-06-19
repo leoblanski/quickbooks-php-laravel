@@ -26,16 +26,16 @@ require_once 'QuickBooks/QBXML/Schema/Object.php';
  */
 class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
 
-		return $wrapper;
-	}
+        return $wrapper;
+    }
 
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ListID' => 'IDTYPE',
   'FullName' => 'STRTYPE',
   'MaxReturned' => 'INTTYPE',
@@ -48,14 +48,14 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRq extends QuickB
   'NameRangeFilter ToName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
   'OwnerID' => 'GUIDTYPE',
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ListID' => 0,
   'FullName' => 0,
   'MaxReturned' => 0,
@@ -68,14 +68,14 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRq extends QuickB
   'NameRangeFilter ToName' => 0,
   'IncludeRetElement' => 0,
   'OwnerID' => 0,
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ListID' => true,
   'FullName' => true,
   'MaxReturned' => true,
@@ -88,12 +88,12 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRq extends QuickB
   'NameRangeFilter ToName' => true,
   'IncludeRetElement' => true,
   'OwnerID' => true,
-);
-	}
+];
+    }
 
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ListID' => 999.99,
   'FullName' => 999.99,
   'MaxReturned' => 999.99,
@@ -106,14 +106,14 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRq extends QuickB
   'NameRangeFilter ToName' => 999.99,
   'IncludeRetElement' => 999.99,
   'OwnerID' => 999.99,
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ListID' => true,
   'FullName' => true,
   'MaxReturned' => false,
@@ -126,26 +126,26 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRq extends QuickB
   'NameRangeFilter ToName' => false,
   'IncludeRetElement' => true,
   'OwnerID' => true,
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
 
-		return $paths;
-	}
-	*/
+        return $paths;
+    }
+    */
 
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ListID',
   1 => 'FullName',
   2 => 'MaxReturned',
@@ -158,8 +158,8 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyQueryRq extends QuickB
   9 => 'NameRangeFilter ToName',
   10 => 'IncludeRetElement',
   11 => 'OwnerID',
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 }

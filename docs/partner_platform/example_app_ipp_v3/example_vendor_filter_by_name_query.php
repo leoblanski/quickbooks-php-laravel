@@ -16,11 +16,10 @@ $vendors = $VendorService->query($Context, $realm, "SELECT * FROM Vendor WHERE D
 
 //print_r($terms);
 
-foreach ($vendors as $Vendor)
-{
-	//print_r($Term);
+foreach ($vendors as $Vendor) {
+    //print_r($Term);
 
-	print('Vendor Id=' . $Vendor->getId() . ' is named: ' . $Vendor->getDisplayName() . '<br>');
+    print('Vendor Id=' . $Vendor->getId() . ' is named: ' . $Vendor->getDisplayName() . '<br>');
 }
 
 /*

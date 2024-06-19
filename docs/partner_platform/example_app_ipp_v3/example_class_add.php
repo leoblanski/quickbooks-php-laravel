@@ -16,15 +16,11 @@ $Class = new QuickBooks_IPP_Object_Class();
 
 $Class->setName('My Class');
 
-if ($resp = $ClassService->add($Context, $realm, $Class))
-{
-	print('Our new class ID is: [' . $resp . ']');
+if ($resp = $ClassService->add($Context, $realm, $Class)) {
+    print('Our new class ID is: [' . $resp . ']');
+} else {
+    print($ClassService->lastError());
 }
-else
-{
-	print($ClassService->lastError());
-}
-
 
 print('<br><br><br><br>');
 print("\n\n\n\n\n\n\n\n");

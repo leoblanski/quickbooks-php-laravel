@@ -12,13 +12,12 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $TaxCodeService = new QuickBooks_IPP_Service_TaxCode();
 
-$taxcodes = $TaxCodeService->query($Context, $realm, "SELECT * FROM TaxCode");
+$taxcodes = $TaxCodeService->query($Context, $realm, 'SELECT * FROM TaxCode');
 
-foreach ($taxcodes as $TaxCode)
-{
-	//print_r($Item);
+foreach ($taxcodes as $TaxCode) {
+    //print_r($Item);
 
-	print('TaxCode Id=' . $TaxCode->getId() . ' is named: ' . $TaxCode->getName() . '<br>');
+    print('TaxCode Id=' . $TaxCode->getId() . ' is named: ' . $TaxCode->getName() . '<br>');
 }
 
 /*

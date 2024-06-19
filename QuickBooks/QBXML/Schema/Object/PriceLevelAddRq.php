@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: PriceLevelAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'PriceLevelAdd Name' => 'STRTYPE',
   'PriceLevelAdd IsActive' => 'BOOLTYPE',
   'PriceLevelAdd PriceLevelFixedPercentage' => 'PERCENTTYPE',
@@ -45,14 +45,14 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'PriceLevelAdd PriceLevelPerItem AdjustPercentage' => 'PERCENTTYPE',
   'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo' => 'ENUMTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'PriceLevelAdd Name' => 31,
   'PriceLevelAdd IsActive' => 0,
   'PriceLevelAdd PriceLevelFixedPercentage' => 0,
@@ -63,14 +63,14 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'PriceLevelAdd PriceLevelPerItem AdjustPercentage' => 0,
   'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'PriceLevelAdd Name' => false,
   'PriceLevelAdd IsActive' => true,
   'PriceLevelAdd PriceLevelFixedPercentage' => false,
@@ -81,12 +81,12 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'PriceLevelAdd PriceLevelPerItem AdjustPercentage' => false,
   'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo' => false,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'PriceLevelAdd Name' => 999.99,
   'PriceLevelAdd IsActive' => 999.99,
   'PriceLevelAdd PriceLevelFixedPercentage' => 999.99,
@@ -97,14 +97,14 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'PriceLevelAdd PriceLevelPerItem AdjustPercentage' => 999.99,
   'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo' => 999.99,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'PriceLevelAdd Name' => false,
   'PriceLevelAdd IsActive' => false,
   'PriceLevelAdd PriceLevelFixedPercentage' => false,
@@ -115,26 +115,26 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   'PriceLevelAdd PriceLevelPerItem AdjustPercentage' => false,
   'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'PriceLevelAdd Name',
   1 => 'PriceLevelAdd IsActive',
   2 => 'PriceLevelAdd PriceLevelFixedPercentage',
@@ -148,10 +148,8 @@ class QuickBooks_QBXML_Schema_Object_PriceLevelAddRq extends QuickBooks_QBXML_Sc
   10 => 'PriceLevelAdd PriceLevelPerItem AdjustPercentage',
   11 => 'PriceLevelAdd PriceLevelPerItem AdjustRelativeTo',
   12 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

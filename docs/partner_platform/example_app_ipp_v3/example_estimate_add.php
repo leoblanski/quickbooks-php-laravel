@@ -32,14 +32,10 @@ $Estimate->addLine($Line);
 
 $Estimate->setCustomerRef('67');
 
-
-if ($resp = $EstimateService->add($Context, $realm, $Estimate))
-{
-	print('Our new Estimate ID is: [' . $resp . ']');
-}
-else
-{
-	print($EstimateService->lastError());
+if ($resp = $EstimateService->add($Context, $realm, $Estimate)) {
+    print('Our new Estimate ID is: [' . $resp . ']');
+} else {
+    print($EstimateService->lastError());
 }
 
 /*

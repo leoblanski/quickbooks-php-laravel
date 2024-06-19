@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: CreditCardCreditAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_CreditCardCreditAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'CreditCardCreditAdd AccountRef ListID' => 'IDTYPE',
   'CreditCardCreditAdd AccountRef FullName' => 'STRTYPE',
   'CreditCardCreditAdd PayeeEntityRef ListID' => 'IDTYPE',
@@ -79,14 +79,14 @@ class QuickBooks_QBXML_Schema_Object_CreditCardCreditAddRq extends QuickBooks_QB
   'CreditCardCreditAdd ItemGroupLineAdd Quantity' => 'QUANTYPE',
   'CreditCardCreditAdd ItemGroupLineAdd UnitOfMeasure' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'CreditCardCreditAdd AccountRef ListID' => 0,
   'CreditCardCreditAdd AccountRef FullName' => 159,
   'CreditCardCreditAdd PayeeEntityRef ListID' => 0,
@@ -131,14 +131,14 @@ class QuickBooks_QBXML_Schema_Object_CreditCardCreditAddRq extends QuickBooks_QB
   'CreditCardCreditAdd ItemGroupLineAdd Quantity' => 0,
   'CreditCardCreditAdd ItemGroupLineAdd UnitOfMeasure' => 31,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'CreditCardCreditAdd AccountRef ListID' => true,
   'CreditCardCreditAdd AccountRef FullName' => true,
   'CreditCardCreditAdd PayeeEntityRef ListID' => true,
@@ -183,12 +183,12 @@ class QuickBooks_QBXML_Schema_Object_CreditCardCreditAddRq extends QuickBooks_QB
   'CreditCardCreditAdd ItemGroupLineAdd Quantity' => true,
   'CreditCardCreditAdd ItemGroupLineAdd UnitOfMeasure' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'CreditCardCreditAdd AccountRef ListID' => 999.99,
   'CreditCardCreditAdd AccountRef FullName' => 999.99,
   'CreditCardCreditAdd PayeeEntityRef ListID' => 999.99,
@@ -233,14 +233,14 @@ class QuickBooks_QBXML_Schema_Object_CreditCardCreditAddRq extends QuickBooks_QB
   'CreditCardCreditAdd ItemGroupLineAdd Quantity' => 999.99,
   'CreditCardCreditAdd ItemGroupLineAdd UnitOfMeasure' => 7,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'CreditCardCreditAdd AccountRef ListID' => false,
   'CreditCardCreditAdd AccountRef FullName' => false,
   'CreditCardCreditAdd PayeeEntityRef ListID' => false,
@@ -285,26 +285,26 @@ class QuickBooks_QBXML_Schema_Object_CreditCardCreditAddRq extends QuickBooks_QB
   'CreditCardCreditAdd ItemGroupLineAdd Quantity' => false,
   'CreditCardCreditAdd ItemGroupLineAdd UnitOfMeasure' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'CreditCardCreditAdd',
   1 => 'CreditCardCreditAdd AccountRef',
   2 => 'CreditCardCreditAdd AccountRef ListID',
@@ -354,10 +354,8 @@ class QuickBooks_QBXML_Schema_Object_CreditCardCreditAddRq extends QuickBooks_QB
   46 => 'CreditCardCreditAdd ItemGroupLineAdd Quantity',
   47 => 'CreditCardCreditAdd ItemGroupLineAdd UnitOfMeasure',
   48 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

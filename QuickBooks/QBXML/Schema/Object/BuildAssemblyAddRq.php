@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: BuildAssemblyAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_BuildAssemblyAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'BuildAssemblyAdd ItemInventoryAssemblyRef ListID' => 'IDTYPE',
   'BuildAssemblyAdd ItemInventoryAssemblyRef FullName' => 'STRTYPE',
   'BuildAssemblyAdd TxnDate' => 'DATETYPE',
@@ -43,14 +43,14 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyAddRq extends QuickBooks_QBXML
   'BuildAssemblyAdd QuantityToBuild' => 'QUANTYPE',
   'BuildAssemblyAdd MarkPendingIfRequired' => 'BOOLTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'BuildAssemblyAdd ItemInventoryAssemblyRef ListID' => 0,
   'BuildAssemblyAdd ItemInventoryAssemblyRef FullName' => 159,
   'BuildAssemblyAdd TxnDate' => 0,
@@ -59,14 +59,14 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyAddRq extends QuickBooks_QBXML
   'BuildAssemblyAdd QuantityToBuild' => 0,
   'BuildAssemblyAdd MarkPendingIfRequired' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'BuildAssemblyAdd ItemInventoryAssemblyRef ListID' => true,
   'BuildAssemblyAdd ItemInventoryAssemblyRef FullName' => true,
   'BuildAssemblyAdd TxnDate' => true,
@@ -75,12 +75,12 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyAddRq extends QuickBooks_QBXML
   'BuildAssemblyAdd QuantityToBuild' => false,
   'BuildAssemblyAdd MarkPendingIfRequired' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'BuildAssemblyAdd ItemInventoryAssemblyRef ListID' => 999.99,
   'BuildAssemblyAdd ItemInventoryAssemblyRef FullName' => 999.99,
   'BuildAssemblyAdd TxnDate' => 999.99,
@@ -89,14 +89,14 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyAddRq extends QuickBooks_QBXML
   'BuildAssemblyAdd QuantityToBuild' => 999.99,
   'BuildAssemblyAdd MarkPendingIfRequired' => 7,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'BuildAssemblyAdd ItemInventoryAssemblyRef ListID' => false,
   'BuildAssemblyAdd ItemInventoryAssemblyRef FullName' => false,
   'BuildAssemblyAdd TxnDate' => false,
@@ -105,26 +105,26 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyAddRq extends QuickBooks_QBXML
   'BuildAssemblyAdd QuantityToBuild' => false,
   'BuildAssemblyAdd MarkPendingIfRequired' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'BuildAssemblyAdd',
   1 => 'BuildAssemblyAdd ItemInventoryAssemblyRef',
   2 => 'BuildAssemblyAdd ItemInventoryAssemblyRef ListID',
@@ -135,10 +135,8 @@ class QuickBooks_QBXML_Schema_Object_BuildAssemblyAddRq extends QuickBooks_QBXML
   7 => 'BuildAssemblyAdd QuantityToBuild',
   8 => 'BuildAssemblyAdd MarkPendingIfRequired',
   9 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

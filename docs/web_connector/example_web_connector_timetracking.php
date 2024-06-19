@@ -2,18 +2,18 @@
 
 function _quickbooks_timetracking_add_request($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale)
 {
-	$data = array(
-		'TxnDate' => date('Y-m-d'), 
-		'Entity_FullName' => 'My Vendor Name', 
-		'Customer_FullName' => 'My Customer Name', 
-		'ItemService_FullName' => 'My Item Name', 
-		'Duration' => 'PT2H0M0S', 
-		'PayrollItemWage_FullName' => 'Payroll Item Name', 
-		'Notes' => '', 
-		'BillableStatus' => 'Billable', 
-		);
+    $data = [
+        'TxnDate' => date('Y-m-d'),
+        'Entity_FullName' => 'My Vendor Name',
+        'Customer_FullName' => 'My Customer Name',
+        'ItemService_FullName' => 'My Item Name',
+        'Duration' => 'PT2H0M0S',
+        'PayrollItemWage_FullName' => 'Payroll Item Name',
+        'Notes' => '',
+        'BillableStatus' => 'Billable',
+        ];
 
-	$xml = '<?xml version="1.0" encoding="utf-8"?>
+    $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<?qbxml version="' . $version . '"?>
 		<QBXML>
 		  <QBXMLMsgsRq onError="stopOnError">
@@ -49,10 +49,10 @@ function _quickbooks_timetracking_add_request($requestID, $user, $action, $ID, $
 		  </QBXMLMsgsRq>
 		</QBXML>';
 
-	return $xml;
+    return $xml;
 }
 
 function _quickbooks_timetracking_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
-{	
-	
+{
+
 }

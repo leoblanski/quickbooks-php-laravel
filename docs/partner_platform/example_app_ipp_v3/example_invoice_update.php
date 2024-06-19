@@ -21,15 +21,12 @@ $Line->setDescription('Update of my description on ' . date('r'));
 
 print_r($Invoice);
 
-$Invoice->setTxnDate(date('Y-m-d'));  // Update the invoice date to today's date 
+$Invoice->setTxnDate(date('Y-m-d'));  // Update the invoice date to today's date
 
-if ($resp = $InvoiceService->update($Context, $realm, $Invoice->getId(), $Invoice))
-{
-	print('&nbsp; Updated!<br>');
-}
-else
-{
-	print('&nbsp; ' . $InvoiceService->lastError() . '<br>');
+if ($resp = $InvoiceService->update($Context, $realm, $Invoice->getId(), $Invoice)) {
+    print('&nbsp; Updated!<br>');
+} else {
+    print('&nbsp; ' . $InvoiceService->lastError() . '<br>');
 }
 
 /*

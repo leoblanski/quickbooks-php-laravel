@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: DepositAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'DepositAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'DepositAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnDate' => 'DATETYPE',
   'DepositToAccountRef ListID' => 'IDTYPE',
   'DepositToAccountRef FullName' => 'STRTYPE',
@@ -57,14 +57,14 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'DepositLineAdd ClassRef FullName' => 'STRTYPE',
   'DepositLineAdd Amount' => 'AMTTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnDate' => 0,
   'DepositToAccountRef ListID' => 0,
   'DepositToAccountRef FullName' => 159,
@@ -87,14 +87,14 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'DepositLineAdd ClassRef FullName' => 159,
   'DepositLineAdd Amount' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnDate' => true,
   'DepositToAccountRef ListID' => true,
   'DepositToAccountRef FullName' => true,
@@ -117,12 +117,12 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'DepositLineAdd ClassRef FullName' => true,
   'DepositLineAdd Amount' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnDate' => 999.99,
   'DepositToAccountRef ListID' => 999.99,
   'DepositToAccountRef FullName' => 999.99,
@@ -145,14 +145,14 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'DepositLineAdd ClassRef FullName' => 999.99,
   'DepositLineAdd Amount' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnDate' => false,
   'DepositToAccountRef ListID' => false,
   'DepositToAccountRef FullName' => false,
@@ -175,59 +175,59 @@ class QuickBooks_QBXML_Schema_Object_DepositAddRq extends QuickBooks_QBXML_Schem
   'DepositLineAdd ClassRef FullName' => false,
   'DepositLineAdd Amount' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
-			'TxnDate',
-			'DepositToAccountRef ListID',
-			'DepositToAccountRef FullName',
-			'Memo',
-			'CashBackInfoAdd',
-			'CashBackInfoAdd AccountRef',
-			'CashBackInfoAdd AccountRef ListID',
-			'CashBackInfoAdd AccountRef FullName',
-			'CashBackInfoAdd Memo',
-			'CashBackInfoAdd Amount',
-			'DepositLineAdd', 
-			'DepositLineAdd PaymentTxnID',
-			'DepositLineAdd PaymentTxnLineID',
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
 
-			'DepositLineAdd OverrideMemo',
-			'DepositLineAdd OverrideCheckNumber',
-			'DepositLineAdd ClassRef ListID',
-			'DepositLineAdd ClassRef FullName',
-			
-			'DepositLineAdd EntityRef ListID',
-			'DepositLineAdd EntityRef FullName',
-			'DepositLineAdd AccountRef ListID',
-			'DepositLineAdd AccountRef FullName',
-			'DepositLineAdd Memo',
-			'DepositLineAdd CheckNumber',
-			'DepositLineAdd PaymentMethodRef ListID',
-			'DepositLineAdd PaymentMethodRef FullName',
-			'DepositLineAdd ClassRef ListID',
-			'DepositLineAdd ClassRef FullName',
-			'DepositLineAdd Amount',
-			'IncludeRetElement',
-			);
-			
-		return $paths;
-	}
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
+            'TxnDate',
+            'DepositToAccountRef ListID',
+            'DepositToAccountRef FullName',
+            'Memo',
+            'CashBackInfoAdd',
+            'CashBackInfoAdd AccountRef',
+            'CashBackInfoAdd AccountRef ListID',
+            'CashBackInfoAdd AccountRef FullName',
+            'CashBackInfoAdd Memo',
+            'CashBackInfoAdd Amount',
+            'DepositLineAdd',
+            'DepositLineAdd PaymentTxnID',
+            'DepositLineAdd PaymentTxnLineID',
+
+            'DepositLineAdd OverrideMemo',
+            'DepositLineAdd OverrideCheckNumber',
+            'DepositLineAdd ClassRef ListID',
+            'DepositLineAdd ClassRef FullName',
+            
+            'DepositLineAdd EntityRef ListID',
+            'DepositLineAdd EntityRef FullName',
+            'DepositLineAdd AccountRef ListID',
+            'DepositLineAdd AccountRef FullName',
+            'DepositLineAdd Memo',
+            'DepositLineAdd CheckNumber',
+            'DepositLineAdd PaymentMethodRef ListID',
+            'DepositLineAdd PaymentMethodRef FullName',
+            'DepositLineAdd ClassRef ListID',
+            'DepositLineAdd ClassRef FullName',
+            'DepositLineAdd Amount',
+            'IncludeRetElement',
+            ];
+            
+        return $paths;
+    }
 }

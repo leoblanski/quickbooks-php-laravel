@@ -62,14 +62,11 @@ $qbxml='<ReceivePaymentRet>
     </AppliedToTxnRet>
 </ReceivePaymentRet>';
 
-
 $Object = QuickBooks_QBXML_Object::fromQBXML($qbxml, QUICKBOOKS_QUERY_RECEIVEPAYMENT);
 //print out the object
 print_r($Object);
 
 $list = $Object->listAppliedToTxns();
-foreach ($list as $AppliedToTxn)
-{
-	print_r($AppliedToTxn);
+foreach ($list as $AppliedToTxn) {
+    print_r($AppliedToTxn);
 }
-

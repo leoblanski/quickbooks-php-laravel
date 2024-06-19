@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: EstimateAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'EstimateAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'EstimateAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => 'IDTYPE',
   'CustomerRef FullName' => 'STRTYPE',
   'ClassRef ListID' => 'IDTYPE',
@@ -50,7 +50,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => 'STRTYPE',
   'BillAddress City' => 'STRTYPE',
   'BillAddress State' => 'STRTYPE',
-  'BillAddress Province' => 'STRTYPE', 
+  'BillAddress Province' => 'STRTYPE',
   'BillAddress PostalCode' => 'STRTYPE',
   'BillAddress Country' => 'STRTYPE',
   'BillAddress Note' => 'STRTYPE',
@@ -61,7 +61,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => 'STRTYPE',
   'ShipAddress City' => 'STRTYPE',
   'ShipAddress State' => 'STRTYPE',
-  'ShipAddress Province' => 'STRTYPE', 
+  'ShipAddress Province' => 'STRTYPE',
   'ShipAddress PostalCode' => 'STRTYPE',
   'ShipAddress Country' => 'STRTYPE',
   'ShipAddress Note' => 'STRTYPE',
@@ -93,8 +93,8 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineAdd ClassRef ListID' => 'IDTYPE',
   'EstimateLineAdd ClassRef FullName' => 'STRTYPE',
   'EstimateLineAdd Amount' => 'AMTTYPE',
-  'EstimateLineAdd InventorySiteRef ListID' => 'IDTYPE', 
-  'EstimateLineAdd InventorySiteRef FullName' => 'STRTYPE', 
+  'EstimateLineAdd InventorySiteRef ListID' => 'IDTYPE',
+  'EstimateLineAdd InventorySiteRef FullName' => 'STRTYPE',
   'EstimateLineAdd SalesTaxCodeRef ListID' => 'IDTYPE',
   'EstimateLineAdd SalesTaxCodeRef FullName' => 'STRTYPE',
   'EstimateLineAdd MarkupRate' => 'PRICETYPE',
@@ -117,14 +117,14 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtName' => 'STRTYPE',
   'EstimateLineGroupAdd DataExt DataExtValue' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => 0,
   'CustomerRef FullName' => 209,
   'ClassRef ListID' => 0,
@@ -140,7 +140,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => 41,
   'BillAddress City' => 31,
   'BillAddress State' => 21,
-  'BillAddress Province' => 21, 
+  'BillAddress Province' => 21,
   'BillAddress PostalCode' => 13,
   'BillAddress Country' => 31,
   'BillAddress Note' => 41,
@@ -151,7 +151,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => 41,
   'ShipAddress City' => 31,
   'ShipAddress State' => 21,
-  'ShipAddress Province' => 21, 
+  'ShipAddress Province' => 21,
   'ShipAddress PostalCode' => 13,
   'ShipAddress Country' => 31,
   'ShipAddress Note' => 41,
@@ -207,14 +207,14 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtName' => 31,
   'EstimateLineGroupAdd DataExt DataExtValue' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => true,
   'CustomerRef FullName' => true,
   'ClassRef ListID' => true,
@@ -230,7 +230,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => true,
   'BillAddress City' => true,
   'BillAddress State' => true,
-  'BillAddress Province' => true, 
+  'BillAddress Province' => true,
   'BillAddress PostalCode' => true,
   'BillAddress Country' => true,
   'BillAddress Note' => true,
@@ -241,7 +241,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => true,
   'ShipAddress City' => true,
   'ShipAddress State' => true,
-  'ShipAddress Province' => true, 
+  'ShipAddress Province' => true,
   'ShipAddress PostalCode' => true,
   'ShipAddress Country' => true,
   'ShipAddress Note' => true,
@@ -297,12 +297,12 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtName' => false,
   'EstimateLineGroupAdd DataExt DataExtValue' => false,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => 999.99,
   'CustomerRef FullName' => 999.99,
   'ClassRef ListID' => 999.99,
@@ -318,7 +318,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => 6,
   'BillAddress City' => 999.99,
   'BillAddress State' => 999.99,
-  'BillAddress Province' => 999.99, 
+  'BillAddress Province' => 999.99,
   'BillAddress PostalCode' => 999.99,
   'BillAddress Country' => 999.99,
   'BillAddress Note' => 6,
@@ -329,7 +329,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => 6,
   'ShipAddress City' => 999.99,
   'ShipAddress State' => 999.99,
-  'ShipAddress Province' => 999.99, 
+  'ShipAddress Province' => 999.99,
   'ShipAddress PostalCode' => 999.99,
   'ShipAddress Country' => 999.99,
   'ShipAddress Note' => 6,
@@ -385,14 +385,14 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtName' => 999.99,
   'EstimateLineGroupAdd DataExt DataExtValue' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'CustomerRef ListID' => false,
   'CustomerRef FullName' => false,
   'ClassRef ListID' => false,
@@ -408,7 +408,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'BillAddress Addr5' => false,
   'BillAddress City' => false,
   'BillAddress State' => false,
-  'BillAddress Province' => false, 
+  'BillAddress Province' => false,
   'BillAddress PostalCode' => false,
   'BillAddress Country' => false,
   'BillAddress Note' => false,
@@ -419,7 +419,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'ShipAddress Addr5' => false,
   'ShipAddress City' => false,
   'ShipAddress State' => false,
-  'ShipAddress Province' => false, 
+  'ShipAddress Province' => false,
   'ShipAddress PostalCode' => false,
   'ShipAddress Country' => false,
   'ShipAddress Note' => false,
@@ -475,113 +475,113 @@ class QuickBooks_QBXML_Schema_Object_EstimateAddRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupAdd DataExt DataExtName' => false,
   'EstimateLineGroupAdd DataExt DataExtValue' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
-			'CustomerRef ListID',
-			'CustomerRef FullName',
-			'ClassRef ListID',
-			'ClassRef FullName',
-			'TemplateRef ListID',
-			'TemplateRef FullName',
-			'TxnDate',
-			'RefNumber',
-			'BillAddress Addr1',
-			'BillAddress Addr2',
-			'BillAddress Addr3',
-			'BillAddress Addr4',
-			'BillAddress Addr5',
-			'BillAddress City',
-			'BillAddress State',
-			'BillAddress Province', 
-			'BillAddress PostalCode',
-			'BillAddress Country',
-			'BillAddress Note',
-			'ShipAddress Addr1',
-			'ShipAddress Addr2',
-			'ShipAddress Addr3',
-			'ShipAddress Addr4',
-			'ShipAddress Addr5',
-			'ShipAddress City',
-			'ShipAddress State',
-			'ShipAddress Province', 
-			'ShipAddress PostalCode',
-			'ShipAddress Country',
-			'ShipAddress Note',
-			'IsActive',
-			'PONumber',
-			'TermsRef ListID',
-			'TermsRef FullName',
-			'DueDate',
-			'SalesRepRef ListID',
-			'SalesRepRef FullName',
-			'FOB',
-			'ItemSalesTaxRef ListID',
-			'ItemSalesTaxRef FullName',
-			'Memo',
-			'CustomerMsgRef ListID',
-			'CustomerMsgRef FullName',
-			'IsToBeEmailed',
-			'IsTaxIncluded',
-			'CustomerSalesTaxCodeRef ListID',
-			'CustomerSalesTaxCodeRef FullName',
-			'Other',
-			'EstimateLineAdd',
-			'EstimateLineAdd ItemRef',
-			'EstimateLineAdd ItemRef ListID',
-			'EstimateLineAdd ItemRef FullName',
-			'EstimateLineAdd Desc',
-			'EstimateLineAdd Quantity',
-			'EstimateLineAdd UnitOfMeasure',
-			'EstimateLineAdd Rate',
-			'EstimateLineAdd RatePercent',
-			'EstimateLineAdd ClassRef ListID',
-			'EstimateLineAdd ClassRef FullName',
-			'EstimateLineAdd Amount',
-			'EstimateLineAdd InventorySiteRef ListID',
-			'EstimateLineAdd InventorySiteRef FullName',
-			'EstimateLineAdd SalesTaxCodeRef ListID',
-			'EstimateLineAdd SalesTaxCodeRef FullName',
-			'EstimateLineAdd MarkupRate',
-			'EstimateLineAdd MarkupRatePercent',
-			'EstimateLineAdd PriceLevelRef ListID',
-			'EstimateLineAdd PriceLevelRef FullName',
-			'EstimateLineAdd OverrideItemAccountRef ListID',
-			'EstimateLineAdd OverrideItemAccountRef FullName',
-			'EstimateLineAdd Other1',
-			'EstimateLineAdd Other2',
-			'EstimateLineAdd DataExt OwnerID',
-			'EstimateLineAdd DataExt DataExtName',
-			'EstimateLineAdd DataExt DataExtValue',
-			'EstimateLineGroupAdd', 
-			'EstimateLineGroupAdd ItemGroupRef ListID',
-			'EstimateLineGroupAdd ItemGroupRef FullName',
-			'EstimateLineGroupAdd Desc',
-			'EstimateLineGroupAdd Quantity',
-			'EstimateLineGroupAdd UnitOfMeasure',
-			'EstimateLineGroupAdd DataExt OwnerID',
-			'EstimateLineGroupAdd DataExt DataExtName',
-			'EstimateLineGroupAdd DataExt DataExtValue',
-			'IncludeRetElement',
-		);
-		
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
+            'CustomerRef ListID',
+            'CustomerRef FullName',
+            'ClassRef ListID',
+            'ClassRef FullName',
+            'TemplateRef ListID',
+            'TemplateRef FullName',
+            'TxnDate',
+            'RefNumber',
+            'BillAddress Addr1',
+            'BillAddress Addr2',
+            'BillAddress Addr3',
+            'BillAddress Addr4',
+            'BillAddress Addr5',
+            'BillAddress City',
+            'BillAddress State',
+            'BillAddress Province',
+            'BillAddress PostalCode',
+            'BillAddress Country',
+            'BillAddress Note',
+            'ShipAddress Addr1',
+            'ShipAddress Addr2',
+            'ShipAddress Addr3',
+            'ShipAddress Addr4',
+            'ShipAddress Addr5',
+            'ShipAddress City',
+            'ShipAddress State',
+            'ShipAddress Province',
+            'ShipAddress PostalCode',
+            'ShipAddress Country',
+            'ShipAddress Note',
+            'IsActive',
+            'PONumber',
+            'TermsRef ListID',
+            'TermsRef FullName',
+            'DueDate',
+            'SalesRepRef ListID',
+            'SalesRepRef FullName',
+            'FOB',
+            'ItemSalesTaxRef ListID',
+            'ItemSalesTaxRef FullName',
+            'Memo',
+            'CustomerMsgRef ListID',
+            'CustomerMsgRef FullName',
+            'IsToBeEmailed',
+            'IsTaxIncluded',
+            'CustomerSalesTaxCodeRef ListID',
+            'CustomerSalesTaxCodeRef FullName',
+            'Other',
+            'EstimateLineAdd',
+            'EstimateLineAdd ItemRef',
+            'EstimateLineAdd ItemRef ListID',
+            'EstimateLineAdd ItemRef FullName',
+            'EstimateLineAdd Desc',
+            'EstimateLineAdd Quantity',
+            'EstimateLineAdd UnitOfMeasure',
+            'EstimateLineAdd Rate',
+            'EstimateLineAdd RatePercent',
+            'EstimateLineAdd ClassRef ListID',
+            'EstimateLineAdd ClassRef FullName',
+            'EstimateLineAdd Amount',
+            'EstimateLineAdd InventorySiteRef ListID',
+            'EstimateLineAdd InventorySiteRef FullName',
+            'EstimateLineAdd SalesTaxCodeRef ListID',
+            'EstimateLineAdd SalesTaxCodeRef FullName',
+            'EstimateLineAdd MarkupRate',
+            'EstimateLineAdd MarkupRatePercent',
+            'EstimateLineAdd PriceLevelRef ListID',
+            'EstimateLineAdd PriceLevelRef FullName',
+            'EstimateLineAdd OverrideItemAccountRef ListID',
+            'EstimateLineAdd OverrideItemAccountRef FullName',
+            'EstimateLineAdd Other1',
+            'EstimateLineAdd Other2',
+            'EstimateLineAdd DataExt OwnerID',
+            'EstimateLineAdd DataExt DataExtName',
+            'EstimateLineAdd DataExt DataExtValue',
+            'EstimateLineGroupAdd',
+            'EstimateLineGroupAdd ItemGroupRef ListID',
+            'EstimateLineGroupAdd ItemGroupRef FullName',
+            'EstimateLineGroupAdd Desc',
+            'EstimateLineGroupAdd Quantity',
+            'EstimateLineGroupAdd UnitOfMeasure',
+            'EstimateLineGroupAdd DataExt OwnerID',
+            'EstimateLineGroupAdd DataExt DataExtName',
+            'EstimateLineGroupAdd DataExt DataExtValue',
+            'IncludeRetElement',
+        ];
+        
+        return $paths;
+    }
 }

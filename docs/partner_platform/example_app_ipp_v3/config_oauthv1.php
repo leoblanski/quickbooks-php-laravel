@@ -61,10 +61,9 @@ $the_tenant = 12345;
 $scope = null;  // n/a for OAuth1
 
 // Initialize the database tables for storing OAuth information
-if (!QuickBooks_Utilities::initialized($dsn))
-{
-	// Initialize creates the neccessary database schema for queueing up requests and logging
-	QuickBooks_Utilities::initialize($dsn);
+if (!QuickBooks_Utilities::initialized($dsn)) {
+    // Initialize creates the neccessary database schema for queueing up requests and logging
+    QuickBooks_Utilities::initialize($dsn);
 }
 
 // Instantiate our Intuit Anywhere auth handler
@@ -77,55 +76,53 @@ if (!QuickBooks_Utilities::initialized($dsn))
 //	$that_url				After the user authenticates, they will be forwarded to this URL
 //
 $IntuitAnywhere = new QuickBooks_IPP_IntuitAnywhere(
-	QuickBooks_IPP_IntuitAnywhere::OAUTH_V1,
-	$sandbox,
-	$scope,
-	$dsn,
-	$encryption_key,
-	$oauth_consumer_key,
-	$oauth_consumer_secret,
-	$quickbooks_oauth_url,
-	$quickbooks_success_url);
+    QuickBooks_IPP_IntuitAnywhere::OAUTH_V1,
+    $sandbox,
+    $scope,
+    $dsn,
+    $encryption_key,
+    $oauth_consumer_key,
+    $oauth_consumer_secret,
+    $quickbooks_oauth_url,
+    $quickbooks_success_url
+);
 
 // Are they connected to QuickBooks right now?
 if ($IntuitAnywhere->check($the_tenant) and
-	$IntuitAnywhere->test($the_tenant))
-{
-	// Yes, they are
-	$quickbooks_is_connected = true;
+    $IntuitAnywhere->test($the_tenant)) {
+    // Yes, they are
+    $quickbooks_is_connected = true;
 
-	// Set up the IPP instance
-	$IPP = new QuickBooks_IPP($dsn, $encryption_key);
+    // Set up the IPP instance
+    $IPP = new QuickBooks_IPP($dsn, $encryption_key);
 
-	// Get our OAuth credentials from the database
-	$creds = $IntuitAnywhere->load($the_tenant);
+    // Get our OAuth credentials from the database
+    $creds = $IntuitAnywhere->load($the_tenant);
 
-	// Tell the framework to load some data from the OAuth store
-	$IPP->authMode(
-		QuickBooks_IPP::AUTHMODE_OAUTHV1,
-		$creds);
+    // Tell the framework to load some data from the OAuth store
+    $IPP->authMode(
+        QuickBooks_IPP::AUTHMODE_OAUTHV1,
+        $creds
+    );
 
-	if ($sandbox)
-	{
-		// Turn on sandbox mode/URLs
-		$IPP->sandbox(true);
-	}
+    if ($sandbox) {
+        // Turn on sandbox mode/URLs
+        $IPP->sandbox(true);
+    }
 
-	// Print the credentials we're using
-	//print_r($creds);
+    // Print the credentials we're using
+    //print_r($creds);
 
-	// This is our current realm
-	$realm = $creds['qb_realm'];
+    // This is our current realm
+    $realm = $creds['qb_realm'];
 
-	// Load the OAuth information from the database
-	$Context = $IPP->context();
+    // Load the OAuth information from the database
+    $Context = $IPP->context();
 
-	// Get some company info
-	$CompanyInfoService = new QuickBooks_IPP_Service_CompanyInfo();
-	$quickbooks_CompanyInfo = $CompanyInfoService->get($Context, $realm);
-}
-else
-{
-	// No, they are not
-	$quickbooks_is_connected = false;
+    // Get some company info
+    $CompanyInfoService = new QuickBooks_IPP_Service_CompanyInfo();
+    $quickbooks_CompanyInfo = $CompanyInfoService->get($Context, $realm);
+} else {
+    // No, they are not
+    $quickbooks_is_connected = false;
 }

@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ReceivePaymentModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ReceivePaymentModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'ReceivePaymentMod';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'ReceivePaymentMod';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'CustomerRef ListID' => 'IDTYPE',
@@ -81,14 +81,14 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentModRq extends QuickBooks_QBXM
   'AppliedToTxnMod DiscountAccountRef ListID' => 'IDTYPE',
   'AppliedToTxnMod DiscountAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'EditSequence' => 16,
   'CustomerRef ListID' => 0,
@@ -135,14 +135,14 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentModRq extends QuickBooks_QBXM
   'AppliedToTxnMod DiscountAccountRef ListID' => 0,
   'AppliedToTxnMod DiscountAccountRef FullName' => 209,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'CustomerRef ListID' => true,
@@ -189,12 +189,12 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentModRq extends QuickBooks_QBXM
   'AppliedToTxnMod DiscountAccountRef ListID' => true,
   'AppliedToTxnMod DiscountAccountRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnID' => 999.99,
   'EditSequence' => 999.99,
   'CustomerRef ListID' => 999.99,
@@ -241,14 +241,14 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentModRq extends QuickBooks_QBXM
   'AppliedToTxnMod DiscountAccountRef ListID' => 999.99,
   'AppliedToTxnMod DiscountAccountRef FullName' => 999.99,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'CustomerRef ListID' => false,
@@ -295,26 +295,26 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentModRq extends QuickBooks_QBXM
   'AppliedToTxnMod DiscountAccountRef ListID' => false,
   'AppliedToTxnMod DiscountAccountRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'TxnID',
   1 => 'EditSequence',
   2 => 'CustomerRef ListID',
@@ -362,8 +362,8 @@ class QuickBooks_QBXML_Schema_Object_ReceivePaymentModRq extends QuickBooks_QBXM
   44 => 'AppliedToTxnMod DiscountAccountRef ListID',
   45 => 'AppliedToTxnMod DiscountAccountRef FullName',
   46 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }

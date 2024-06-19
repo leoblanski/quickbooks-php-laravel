@@ -12,15 +12,14 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $TermService = new QuickBooks_IPP_Service_Term();
 
-$terms = $TermService->query($Context, $realm, "SELECT * FROM Term");
+$terms = $TermService->query($Context, $realm, 'SELECT * FROM Term');
 
 //print_r($terms);
 
-foreach ($terms as $Term)
-{
-	//print_r($Term);
+foreach ($terms as $Term) {
+    //print_r($Term);
 
-	print('Term Id=' . $Term->getId() . ' is named: ' . $Term->getName() . '<br>');
+    print('Term Id=' . $Term->getId() . ' is named: ' . $Term->getName() . '<br>');
 }
 
 /*

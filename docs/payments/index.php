@@ -4,35 +4,32 @@ require_once dirname(__FILE__) . '/config.php';
 
 require_once dirname(__FILE__) . '/views/header.tpl.php';
 
-$examples = array();
+$examples = [];
 
 $dh = opendir(dirname(__FILE__));
-while (false !== ($file = readdir($dh)))
-{
-	if (substr($file, 0, 7) != 'example') 
-	{ 
-		continue; 
-	}
+while (false !== ($file = readdir($dh))) {
+    if (substr($file, 0, 7) != 'example') {
+        continue;
+    }
 
-	$tmp = explode('_', $file);
-	switch (end($tmp))
-	{
-		case 'get.php':
-			$examples[$file] = 'Get a ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'fail.php':
-			$examples[$file] = 'Try (and fail) to charge a ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'tokenize.php':
-			$examples[$file] = 'Tokenize a ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'charge.php':
-			$examples[$file] = 'Charge a ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-		case 'debit.php':
-			$examples[$file] = 'Debit a ' . implode(' ', array_slice($tmp, 1, -1));
-			break;
-	}
+    $tmp = explode('_', $file);
+    switch (end($tmp)) {
+        case 'get.php':
+            $examples[$file] = 'Get a ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'fail.php':
+            $examples[$file] = 'Try (and fail) to charge a ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'tokenize.php':
+            $examples[$file] = 'Tokenize a ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'charge.php':
+            $examples[$file] = 'Charge a ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+        case 'debit.php':
+            $examples[$file] = 'Debit a ' . implode(' ', array_slice($tmp, 1, -1));
+            break;
+    }
 }
 
 ?>

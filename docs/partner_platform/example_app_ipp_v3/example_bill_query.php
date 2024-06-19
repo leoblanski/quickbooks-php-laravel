@@ -12,20 +12,18 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $BillService = new QuickBooks_IPP_Service_Bill();
 
-$bills = $BillService->query($Context, $realm, "SELECT * FROM Bill ");
+$bills = $BillService->query($Context, $realm, 'SELECT * FROM Bill ');
 
 //print_r($customers);
 
-foreach ($bills as $Bill)
-{
-	print('Bill # ' . $Bill->getDocNumber() . ' has a total of $' . $Bill->getTotalAmt() . "\n");
-	
-	$num_line = $Bill->countLine();
-	for ($i = 0; $i < $num_line; $i++)
-	{
-		$Line = $Bill->getLine();
-		print_r($Line);
-	}
+foreach ($bills as $Bill) {
+    print('Bill # ' . $Bill->getDocNumber() . ' has a total of $' . $Bill->getTotalAmt() . "\n");
+    
+    $num_line = $Bill->countLine();
+    for ($i = 0; $i < $num_line; $i++) {
+        $Line = $Bill->getLine();
+        print_r($Line);
+    }
 }
 
 /*

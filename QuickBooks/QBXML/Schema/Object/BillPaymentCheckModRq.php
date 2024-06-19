@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: BillPaymentCheckModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_BillPaymentCheckModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'BillPaymentCheckMod TxnID' => 'IDTYPE',
   'BillPaymentCheckMod EditSequence' => 'STRTYPE',
   'BillPaymentCheckMod TxnDate' => 'DATETYPE',
@@ -53,14 +53,14 @@ class QuickBooks_QBXML_Schema_Object_BillPaymentCheckModRq extends QuickBooks_QB
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef ListID' => 'IDTYPE',
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'BillPaymentCheckMod TxnID' => 0,
   'BillPaymentCheckMod EditSequence' => 16,
   'BillPaymentCheckMod TxnDate' => 0,
@@ -79,14 +79,14 @@ class QuickBooks_QBXML_Schema_Object_BillPaymentCheckModRq extends QuickBooks_QB
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef ListID' => 0,
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef FullName' => 159,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'BillPaymentCheckMod TxnID' => false,
   'BillPaymentCheckMod EditSequence' => false,
   'BillPaymentCheckMod TxnDate' => true,
@@ -105,12 +105,12 @@ class QuickBooks_QBXML_Schema_Object_BillPaymentCheckModRq extends QuickBooks_QB
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef ListID' => true,
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'BillPaymentCheckMod TxnID' => 999.99,
   'BillPaymentCheckMod EditSequence' => 999.99,
   'BillPaymentCheckMod TxnDate' => 999.99,
@@ -129,14 +129,14 @@ class QuickBooks_QBXML_Schema_Object_BillPaymentCheckModRq extends QuickBooks_QB
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef ListID' => 999.99,
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef FullName' => 999.99,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'BillPaymentCheckMod TxnID' => false,
   'BillPaymentCheckMod EditSequence' => false,
   'BillPaymentCheckMod TxnDate' => false,
@@ -155,26 +155,26 @@ class QuickBooks_QBXML_Schema_Object_BillPaymentCheckModRq extends QuickBooks_QB
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef ListID' => false,
   'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'BillPaymentCheckMod TxnID',
   1 => 'BillPaymentCheckMod EditSequence',
   2 => 'BillPaymentCheckMod TxnDate',
@@ -193,10 +193,8 @@ class QuickBooks_QBXML_Schema_Object_BillPaymentCheckModRq extends QuickBooks_QB
   15 => 'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef ListID',
   16 => 'BillPaymentCheckMod AppliedToTxnMod DiscountAccountRef FullName',
   17 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

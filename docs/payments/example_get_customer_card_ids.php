@@ -16,8 +16,7 @@ $CustomerService = new QuickBooks_IPP_Service_Customer();
 
 $customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer WHERE Id = '91' ");
 
-foreach ($customers as $Customer)
-{
+foreach ($customers as $Customer) {
     print('Customer Id=' . $Customer->getId() . ' is named: ' . $Customer->getFullyQualifiedName() . '<br>');
 
     $result = $Payments->getCards($Context, $Customer->getId());

@@ -15,17 +15,14 @@ $PaymentService = new QuickBooks_IPP_Service_Payment();
 $the_payment_to_delete = '{-12}';
 
 $retr = $PaymentService->delete($Context, $realm, $the_payment_to_delete);
-if ($retr)
-{
-	print('The payment was deleted!');
-}
-else
-{
-	print('Could not delete payment: ' . $PaymentService->lastError());
+if ($retr) {
+    print('The payment was deleted!');
+} else {
+    print('Could not delete payment: ' . $PaymentService->lastError());
 }
 
 /*
-// For debugging 
+// For debugging
 
 print("\n\n\n\n");
 print('Request [' . $IPP->lastRequest() . ']');

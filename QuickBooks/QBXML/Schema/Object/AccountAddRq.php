@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: AccountAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_AccountAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'AccountAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'AccountAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'Name' => 'STRTYPE',
   'IsActive' => 'BOOLTYPE',
   'ParentRef ListID' => 'IDTYPE',
@@ -50,14 +50,14 @@ class QuickBooks_QBXML_Schema_Object_AccountAddRq extends QuickBooks_QBXML_Schem
   'SalesTaxCodeRef FullName' => 'STRTYPE',
   'TaxLineID' => 'INTTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'Name' => 31,
   'IsActive' => 0,
   'ParentRef ListID' => 0,
@@ -73,14 +73,14 @@ class QuickBooks_QBXML_Schema_Object_AccountAddRq extends QuickBooks_QBXML_Schem
   'SalesTaxCodeRef FullName' => 0,
   'TaxLineID' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => true,
   'ParentRef ListID' => true,
@@ -96,12 +96,12 @@ class QuickBooks_QBXML_Schema_Object_AccountAddRq extends QuickBooks_QBXML_Schem
   'SalesTaxCodeRef FullName' => true,
   'TaxLineID' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'Name' => 999.99,
   'IsActive' => 999.99,
   'ParentRef ListID' => 999.99,
@@ -117,14 +117,14 @@ class QuickBooks_QBXML_Schema_Object_AccountAddRq extends QuickBooks_QBXML_Schem
   'SalesTaxCodeRef FullName' => 999.99,
   'TaxLineID' => 7,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => false,
   'ParentRef ListID' => false,
@@ -140,26 +140,26 @@ class QuickBooks_QBXML_Schema_Object_AccountAddRq extends QuickBooks_QBXML_Schem
   'SalesTaxCodeRef FullName' => false,
   'TaxLineID' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'Name',
   1 => 'IsActive',
   2 => 'ParentRef ListID',
@@ -175,10 +175,8 @@ class QuickBooks_QBXML_Schema_Object_AccountAddRq extends QuickBooks_QBXML_Schem
   12 => 'SalesTaxCodeRef FullName',
   13 => 'TaxLineID',
   14 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

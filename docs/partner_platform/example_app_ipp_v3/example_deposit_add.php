@@ -27,15 +27,11 @@ $Deposit->addLine($Line);
 $Deposit->setGlobalTaxCalculation('NotApplicable');
 $Deposit->setDepositToAccountRef('{-87}');
 
-
 // Send payment to QBO
 
-if ($resp = $DepositService->add($Context, $realm, $Deposit))
-{
+if ($resp = $DepositService->add($Context, $realm, $Deposit)) {
     print('Our new Deposit ID is: [' . $resp . ']');
-}
-else
-{
+} else {
     print($DepositService->lastError());
 }
 

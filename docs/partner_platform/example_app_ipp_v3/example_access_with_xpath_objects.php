@@ -12,15 +12,14 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $CustomerService = new QuickBooks_IPP_Service_Customer();
 
-$customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer ");
+$customers = $CustomerService->query($Context, $realm, 'SELECT * FROM Customer ');
 
-foreach ($customers as $Customer)
-{
-	//print_r($Customer);
+foreach ($customers as $Customer) {
+    //print_r($Customer);
 
-	print('Customer #' . $Customer->getXPath('//Customer/Id') . "\n");
-	print('  Phone: ' . $Customer->getXPath('//Customer/PrimaryPhone/FreeFormNumber') . "\n");
-	print('  Email: ' . $Customer->getXPath('//Customer/PrimaryEmailAddr/Address') . "\n\n");
+    print('Customer #' . $Customer->getXPath('//Customer/Id') . "\n");
+    print('  Phone: ' . $Customer->getXPath('//Customer/PrimaryPhone/FreeFormNumber') . "\n");
+    print('  Email: ' . $Customer->getXPath('//Customer/PrimaryEmailAddr/Address') . "\n\n");
 }
 
 /*

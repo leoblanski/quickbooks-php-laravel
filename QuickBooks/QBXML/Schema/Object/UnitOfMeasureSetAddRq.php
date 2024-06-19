@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: UnitOfMeasureSetAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_UnitOfMeasureSetAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'UnitOfMeasureSetAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'UnitOfMeasureSetAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'Name' => 'STRTYPE',
   'IsActive' => 'BOOLTYPE',
   'UnitOfMeasureType' => 'ENUMTYPE',
@@ -46,14 +46,14 @@ class QuickBooks_QBXML_Schema_Object_UnitOfMeasureSetAddRq extends QuickBooks_QB
   'DefaultUnit UnitUsedFor' => 'ENUMTYPE',
   'DefaultUnit Unit' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'Name' => 31,
   'IsActive' => 0,
   'UnitOfMeasureType' => 0,
@@ -65,14 +65,14 @@ class QuickBooks_QBXML_Schema_Object_UnitOfMeasureSetAddRq extends QuickBooks_QB
   'DefaultUnit UnitUsedFor' => 0,
   'DefaultUnit Unit' => 31,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => true,
   'UnitOfMeasureType' => false,
@@ -84,12 +84,12 @@ class QuickBooks_QBXML_Schema_Object_UnitOfMeasureSetAddRq extends QuickBooks_QB
   'DefaultUnit UnitUsedFor' => false,
   'DefaultUnit Unit' => false,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'Name' => 999.99,
   'IsActive' => 999.99,
   'UnitOfMeasureType' => 999.99,
@@ -101,62 +101,62 @@ class QuickBooks_QBXML_Schema_Object_UnitOfMeasureSetAddRq extends QuickBooks_QB
   'DefaultUnit UnitUsedFor' => 999.99,
   'DefaultUnit Unit' => 999.99,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => false,
   'UnitOfMeasureType' => false,
   'BaseUnit Name' => false,
   'BaseUnit Abbreviation' => false,
-  'RelatedUnit' => true, 
+  'RelatedUnit' => true,
   'RelatedUnit Name' => false,
   'RelatedUnit Abbreviation' => false,
   'RelatedUnit ConversionRatio' => false,
-  'DefaultUnit' => true, 
+  'DefaultUnit' => true,
   'DefaultUnit UnitUsedFor' => false,
   'DefaultUnit Unit' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'Name',
   1 => 'IsActive',
   2 => 'UnitOfMeasureType',
   3 => 'BaseUnit Name',
   4 => 'BaseUnit Abbreviation',
-  5 => 'RelatedUnit', 
+  5 => 'RelatedUnit',
   6 => 'RelatedUnit Name',
   7 => 'RelatedUnit Abbreviation',
   8 => 'RelatedUnit ConversionRatio',
-  9 => 'DefaultUnit', 
+  9 => 'DefaultUnit',
   10 => 'DefaultUnit UnitUsedFor',
   11 => 'DefaultUnit Unit',
   12 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }

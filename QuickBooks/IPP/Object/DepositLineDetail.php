@@ -14,7 +14,7 @@ class QuickBooks_IPP_Object_DepositLineDetail extends QuickBooks_IPP_Object
 
     protected function _order()
     {
-        return array(
+        return [
             'Id' => true,
             'Desc' => true,
             'GroupMember' => true,
@@ -45,7 +45,7 @@ class QuickBooks_IPP_Object_DepositLineDetail extends QuickBooks_IPP_Object
             'Entity' => true,
             'Entity_type' => true,
             'AccountRef' => true,
-        );
+        ];
     }
 
 }

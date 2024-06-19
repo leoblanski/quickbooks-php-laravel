@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: CheckAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_CheckAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'CheckAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'CheckAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'AccountRef ListID' => 'IDTYPE',
   'AccountRef FullName' => 'STRTYPE',
   'PayeeEntityRef ListID' => 'IDTYPE',
@@ -95,14 +95,14 @@ class QuickBooks_QBXML_Schema_Object_CheckAddRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineAdd Quantity' => 'QUANTYPE',
   'ItemGroupLineAdd UnitOfMeasure' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'AccountRef ListID' => 0,
   'AccountRef FullName' => 159,
   'PayeeEntityRef ListID' => 0,
@@ -163,14 +163,14 @@ class QuickBooks_QBXML_Schema_Object_CheckAddRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineAdd Quantity' => 0,
   'ItemGroupLineAdd UnitOfMeasure' => 31,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'AccountRef ListID' => true,
   'AccountRef FullName' => true,
   'PayeeEntityRef ListID' => true,
@@ -231,12 +231,12 @@ class QuickBooks_QBXML_Schema_Object_CheckAddRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineAdd Quantity' => true,
   'ItemGroupLineAdd UnitOfMeasure' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'AccountRef ListID' => 999.99,
   'AccountRef FullName' => 999.99,
   'PayeeEntityRef ListID' => 999.99,
@@ -297,14 +297,14 @@ class QuickBooks_QBXML_Schema_Object_CheckAddRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineAdd Quantity' => 999.99,
   'ItemGroupLineAdd UnitOfMeasure' => 7,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'AccountRef ListID' => false,
   'AccountRef FullName' => false,
   'PayeeEntityRef ListID' => false,
@@ -365,26 +365,26 @@ class QuickBooks_QBXML_Schema_Object_CheckAddRq extends QuickBooks_QBXML_Schema_
   'ItemGroupLineAdd Quantity' => false,
   'ItemGroupLineAdd UnitOfMeasure' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'AccountRef ListID',
   1 => 'AccountRef FullName',
   2 => 'PayeeEntityRef ListID',
@@ -406,10 +406,10 @@ class QuickBooks_QBXML_Schema_Object_CheckAddRq extends QuickBooks_QBXML_Schema_
   18 => 'IsTaxIncluded',
   19 => 'SalesTaxCodeRef ListID',
   20 => 'SalesTaxCodeRef FullName',
-  21 => 'ApplyCheckToTxnAdd', 
+  21 => 'ApplyCheckToTxnAdd',
   22 => 'ApplyCheckToTxnAdd TxnID',
   23 => 'ApplyCheckToTxnAdd Amount',
-  24 => 'ExpenseLineAdd', 
+  24 => 'ExpenseLineAdd',
   25 => 'ExpenseLineAdd AccountRef ListID',
   26 => 'ExpenseLineAdd AccountRef FullName',
   27 => 'ExpenseLineAdd Amount',
@@ -422,7 +422,7 @@ class QuickBooks_QBXML_Schema_Object_CheckAddRq extends QuickBooks_QBXML_Schema_
   34 => 'ExpenseLineAdd SalesTaxCodeRef ListID',
   35 => 'ExpenseLineAdd SalesTaxCodeRef FullName',
   36 => 'ExpenseLineAdd BillableStatus',
-  37 => 'ItemLineAdd', 
+  37 => 'ItemLineAdd',
   38 => 'ItemLineAdd ItemRef ListID',
   39 => 'ItemLineAdd ItemRef FullName',
   40 => 'ItemLineAdd Desc',
@@ -442,17 +442,15 @@ class QuickBooks_QBXML_Schema_Object_CheckAddRq extends QuickBooks_QBXML_Schema_
   54 => 'ItemLineAdd OverrideItemAccountRef FullName',
   55 => 'ItemLineAdd LinkToTxn TxnID',
   56 => 'ItemLineAdd LinkToTxn TxnLineID',
-  57 => 'ItemGroupLineAdd', 
+  57 => 'ItemGroupLineAdd',
   58 => 'ItemGroupLineAdd ItemGroupRef ListID',
   59 => 'ItemGroupLineAdd ItemGroupRef FullName',
   60 => 'ItemGroupLineAdd Desc',
   61 => 'ItemGroupLineAdd Quantity',
   62 => 'ItemGroupLineAdd UnitOfMeasure',
   63 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

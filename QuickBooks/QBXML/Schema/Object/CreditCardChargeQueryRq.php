@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: CreditCardChargeQueryRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_CreditCardChargeQueryRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnID' => 'IDTYPE',
   'RefNumber' => 'STRTYPE',
   'RefNumberCaseSensitive' => 'STRTYPE',
@@ -59,14 +59,14 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeQueryRq extends QuickBooks_
   'IncludeLineItems' => 'BOOLTYPE',
   'IncludeRetElement' => 'STRTYPE',
   'OwnerID' => 'GUIDTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'RefNumber' => 0,
   'RefNumberCaseSensitive' => 0,
@@ -91,14 +91,14 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeQueryRq extends QuickBooks_
   'IncludeLineItems' => 0,
   'IncludeRetElement' => 50,
   'OwnerID' => 0,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'RefNumber' => false,
   'RefNumberCaseSensitive' => false,
@@ -123,12 +123,12 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeQueryRq extends QuickBooks_
   'IncludeLineItems' => true,
   'IncludeRetElement' => true,
   'OwnerID' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnID' => 999.99,
   'RefNumber' => 999.99,
   'RefNumberCaseSensitive' => 4,
@@ -153,14 +153,14 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeQueryRq extends QuickBooks_
   'IncludeLineItems' => 999.99,
   'IncludeRetElement' => 4,
   'OwnerID' => 2,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnID' => true,
   'RefNumber' => true,
   'RefNumberCaseSensitive' => true,
@@ -185,26 +185,26 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeQueryRq extends QuickBooks_
   'IncludeLineItems' => false,
   'IncludeRetElement' => true,
   'OwnerID' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'TxnID',
   1 => 'RefNumber',
   2 => 'RefNumberCaseSensitive',
@@ -229,10 +229,8 @@ class QuickBooks_QBXML_Schema_Object_CreditCardChargeQueryRq extends QuickBooks_
   21 => 'IncludeLineItems',
   22 => 'IncludeRetElement',
   23 => 'OwnerID',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

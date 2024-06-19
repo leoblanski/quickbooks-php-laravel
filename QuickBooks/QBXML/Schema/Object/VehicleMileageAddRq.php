@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: VehicleMileageAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_VehicleMileageAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'VehicleMileageAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'VehicleMileageAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'VehicleRef ListID' => 'IDTYPE',
   'VehicleRef FullName' => 'STRTYPE',
   'CustomerRef ListID' => 'IDTYPE',
@@ -51,14 +51,14 @@ class QuickBooks_QBXML_Schema_Object_VehicleMileageAddRq extends QuickBooks_QBXM
   'Notes' => 'STRTYPE',
   'BillableStatus' => 'ENUMTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'VehicleRef ListID' => 0,
   'VehicleRef FullName' => 31,
   'CustomerRef ListID' => 0,
@@ -75,14 +75,14 @@ class QuickBooks_QBXML_Schema_Object_VehicleMileageAddRq extends QuickBooks_QBXM
   'Notes' => 4095,
   'BillableStatus' => 0,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'VehicleRef ListID' => true,
   'VehicleRef FullName' => true,
   'CustomerRef ListID' => true,
@@ -99,12 +99,12 @@ class QuickBooks_QBXML_Schema_Object_VehicleMileageAddRq extends QuickBooks_QBXM
   'Notes' => true,
   'BillableStatus' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'VehicleRef ListID' => 999.99,
   'VehicleRef FullName' => 999.99,
   'CustomerRef ListID' => 999.99,
@@ -121,14 +121,14 @@ class QuickBooks_QBXML_Schema_Object_VehicleMileageAddRq extends QuickBooks_QBXM
   'Notes' => 999.99,
   'BillableStatus' => 999.99,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'VehicleRef ListID' => false,
   'VehicleRef FullName' => false,
   'CustomerRef ListID' => false,
@@ -145,26 +145,26 @@ class QuickBooks_QBXML_Schema_Object_VehicleMileageAddRq extends QuickBooks_QBXM
   'Notes' => false,
   'BillableStatus' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'VehicleRef ListID',
   1 => 'VehicleRef FullName',
   2 => 'CustomerRef ListID',
@@ -181,10 +181,8 @@ class QuickBooks_QBXML_Schema_Object_VehicleMileageAddRq extends QuickBooks_QBXM
   13 => 'Notes',
   14 => 'BillableStatus',
   15 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

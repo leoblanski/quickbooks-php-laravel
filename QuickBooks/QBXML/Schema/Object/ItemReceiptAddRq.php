@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ItemReceiptAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'ItemReceiptAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'ItemReceiptAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => 'IDTYPE',
   'VendorRef FullName' => 'STRTYPE',
   'APAccountRef ListID' => 'IDTYPE',
@@ -80,14 +80,14 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'ItemGroupLineAdd Quantity' => 'QUANTYPE',
   'ItemGroupLineAdd UnitOfMeasure' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => 0,
   'VendorRef FullName' => 41,
   'APAccountRef ListID' => 0,
@@ -133,14 +133,14 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'ItemGroupLineAdd Quantity' => 0,
   'ItemGroupLineAdd UnitOfMeasure' => 31,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => true,
   'VendorRef FullName' => true,
   'APAccountRef ListID' => true,
@@ -186,12 +186,12 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'ItemGroupLineAdd Quantity' => true,
   'ItemGroupLineAdd UnitOfMeasure' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => 999.99,
   'VendorRef FullName' => 999.99,
   'APAccountRef ListID' => 999.99,
@@ -237,14 +237,14 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'ItemGroupLineAdd Quantity' => 999.99,
   'ItemGroupLineAdd UnitOfMeasure' => 7,
   'IncludeRetElement' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'VendorRef ListID' => false,
   'VendorRef FullName' => false,
   'APAccountRef ListID' => false,
@@ -290,26 +290,26 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   'ItemGroupLineAdd Quantity' => false,
   'ItemGroupLineAdd UnitOfMeasure' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ItemReceiptAdd',
   1 => 'VendorRef',
   2 => 'VendorRef ListID',
@@ -362,9 +362,8 @@ class QuickBooks_QBXML_Schema_Object_ItemReceiptAddRq extends QuickBooks_QBXML_S
   48 => 'ItemGroupLineAdd Quantity',
   49 => 'ItemGroupLineAdd UnitOfMeasure',
   50 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-

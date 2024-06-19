@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: EstimateModRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'EstimateMod';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'EstimateMod';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'TxnID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'CustomerRef ListID' => 'IDTYPE',
@@ -55,7 +55,7 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'BillAddress PostalCode' => 'STRTYPE',
   'BillAddress Country' => 'STRTYPE',
   'BillAddress Note' => 'STRTYPE',
-  'ShipAddress Addr1' => 'STRTYPE',			// This OSR says this is supported, but it's actually not... 
+  'ShipAddress Addr1' => 'STRTYPE',			// This OSR says this is supported, but it's actually not...
   'ShipAddress Addr2' => 'STRTYPE',
   'ShipAddress Addr3' => 'STRTYPE',
   'ShipAddress Addr4' => 'STRTYPE',
@@ -136,14 +136,14 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupMod EstimateLineMod Other1' => 'STRTYPE',
   'EstimateLineGroupMod EstimateLineMod Other2' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'TxnID' => 0,
   'EditSequence' => 16,
   'CustomerRef ListID' => 0,
@@ -245,14 +245,14 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupMod EstimateLineMod Other1' => 29,
   'EstimateLineGroupMod EstimateLineMod Other2' => 29,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'CustomerRef ListID' => true,
@@ -354,12 +354,12 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupMod EstimateLineMod Other1' => true,
   'EstimateLineGroupMod EstimateLineMod Other2' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'TxnID' => 999.99,
   'EditSequence' => 999.99,
   'CustomerRef ListID' => 999.99,
@@ -461,14 +461,14 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupMod EstimateLineMod Other1' => 6,
   'EstimateLineGroupMod EstimateLineMod Other2' => 6,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'TxnID' => false,
   'EditSequence' => false,
   'CustomerRef ListID' => false,
@@ -570,131 +570,131 @@ class QuickBooks_QBXML_Schema_Object_EstimateModRq extends QuickBooks_QBXML_Sche
   'EstimateLineGroupMod EstimateLineMod Other1' => false,
   'EstimateLineGroupMod EstimateLineMod Other2' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
-			'TxnID',
-			'EditSequence',
-			'CustomerRef ListID',
-			'CustomerRef FullName',
-			'ClassRef ListID',
-			'ClassRef FullName',
-			'TemplateRef ListID',
-			'TemplateRef FullName',
-			'TxnDate',
-			'RefNumber',
-			'BillAddress Addr1',
-			'BillAddress Addr2',
-			'BillAddress Addr3',
-			'BillAddress Addr4',
-			'BillAddress Addr5',
-			'BillAddress City',
-			'BillAddress State',
-			'BillAddress PostalCode',
-			'BillAddress Country',
-			'BillAddress Note',
-			'ShipAddress Addr1',
-			'ShipAddress Addr2',
-			'ShipAddress Addr3',
-			'ShipAddress Addr4',
-			'ShipAddress Addr5',
-			'ShipAddress City',
-			'ShipAddress State',
-			'ShipAddress PostalCode',
-			'ShipAddress Country',
-			'ShipAddress Note',
-			'IsActive',
-			'CreateChangeOrder',
-			'PONumber',
-			'TermsRef ListID',
-			'TermsRef FullName',
-			'DueDate',
-			'SalesRepRef ListID',
-			'SalesRepRef FullName',
-			'FOB',
-			'ItemSalesTaxRef ListID',
-			'ItemSalesTaxRef FullName',
-			'Memo',
-			'CustomerMsgRef ListID',
-			'CustomerMsgRef FullName',
-			'IsToBeEmailed',
-			'IsTaxIncluded',
-			'CustomerSalesTaxCodeRef ListID',
-			'CustomerSalesTaxCodeRef FullName',
-			'Other',
-			'EstimateLineMod', 
-			'EstimateLineMod TxnLineID',
-			'EstimateLineMod ItemRef ListID',
-			'EstimateLineMod ItemRef FullName',
-			'EstimateLineMod Desc',
-			'EstimateLineMod Quantity',
-			'EstimateLineMod UnitOfMeasure',
-			'EstimateLineMod OverrideUOMSetRef ListID',
-			'EstimateLineMod OverrideUOMSetRef FullName',
-			'EstimateLineMod Rate',
-			'EstimateLineMod RatePercent',
-			'EstimateLineMod ClassRef ListID',
-			'EstimateLineMod ClassRef FullName',
-			'EstimateLineMod Amount',
-			'EstimateLineMod InventorySiteRef ListID',
-			'EstimateLineMod InventorySiteRef FullName',
-			'EstimateLineMod SalesTaxCodeRef ListID',
-			'EstimateLineMod SalesTaxCodeRef FullName',
-			'EstimateLineMod MarkupRate',
-			'EstimateLineMod MarkupRatePercent',
-			'EstimateLineMod PriceLevelRef ListID',
-			'EstimateLineMod PriceLevelRef FullName',
-			'EstimateLineMod Other1',
-			'EstimateLineMod Other2',
-			'EstimateLineGroupMod', 
-			'EstimateLineGroupMod TxnLineID',
-			'EstimateLineGroupMod ItemGroupRef ListID',
-			'EstimateLineGroupMod ItemGroupRef FullName',
-			'EstimateLineGroupMod Quantity',
-			'EstimateLineGroupMod UnitOfMeasure',
-			'EstimateLineGroupMod OverrideUOMSetRef ListID',
-			'EstimateLineGroupMod OverrideUOMSetRef FullName',
-			'EstimateLineGroupMod EstimateLineMod TxnLineID',
-			'EstimateLineGroupMod EstimateLineMod ItemRef ListID',
-			'EstimateLineGroupMod EstimateLineMod ItemRef FullName',
-			'EstimateLineGroupMod EstimateLineMod Desc',
-			'EstimateLineGroupMod EstimateLineMod Quantity',
-			'EstimateLineGroupMod EstimateLineMod UnitOfMeasure',
-			'EstimateLineGroupMod EstimateLineMod OverrideUOMSetRef ListID',
-			'EstimateLineGroupMod EstimateLineMod OverrideUOMSetRef FullName',
-			'EstimateLineGroupMod EstimateLineMod Rate',
-			'EstimateLineGroupMod EstimateLineMod RatePercent',
-			'EstimateLineGroupMod EstimateLineMod ClassRef ListID',
-			'EstimateLineGroupMod EstimateLineMod ClassRef FullName',
-			'EstimateLineGroupMod EstimateLineMod Amount',
-			'EstimateLineGroupMod EstimateLineMod SalesTaxCodeRef ListID',
-			'EstimateLineGroupMod EstimateLineMod SalesTaxCodeRef FullName',
-			'EstimateLineGroupMod EstimateLineMod MarkupRate',
-			'EstimateLineGroupMod EstimateLineMod MarkupRatePercent',
-			'EstimateLineGroupMod EstimateLineMod PriceLevelRef ListID',
-			'EstimateLineGroupMod EstimateLineMod PriceLevelRef FullName',
-			'EstimateLineGroupMod EstimateLineMod Other1',
-			'EstimateLineGroupMod EstimateLineMod Other2',
-			'IncludeRetElement',
-		);
-		
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
+            'TxnID',
+            'EditSequence',
+            'CustomerRef ListID',
+            'CustomerRef FullName',
+            'ClassRef ListID',
+            'ClassRef FullName',
+            'TemplateRef ListID',
+            'TemplateRef FullName',
+            'TxnDate',
+            'RefNumber',
+            'BillAddress Addr1',
+            'BillAddress Addr2',
+            'BillAddress Addr3',
+            'BillAddress Addr4',
+            'BillAddress Addr5',
+            'BillAddress City',
+            'BillAddress State',
+            'BillAddress PostalCode',
+            'BillAddress Country',
+            'BillAddress Note',
+            'ShipAddress Addr1',
+            'ShipAddress Addr2',
+            'ShipAddress Addr3',
+            'ShipAddress Addr4',
+            'ShipAddress Addr5',
+            'ShipAddress City',
+            'ShipAddress State',
+            'ShipAddress PostalCode',
+            'ShipAddress Country',
+            'ShipAddress Note',
+            'IsActive',
+            'CreateChangeOrder',
+            'PONumber',
+            'TermsRef ListID',
+            'TermsRef FullName',
+            'DueDate',
+            'SalesRepRef ListID',
+            'SalesRepRef FullName',
+            'FOB',
+            'ItemSalesTaxRef ListID',
+            'ItemSalesTaxRef FullName',
+            'Memo',
+            'CustomerMsgRef ListID',
+            'CustomerMsgRef FullName',
+            'IsToBeEmailed',
+            'IsTaxIncluded',
+            'CustomerSalesTaxCodeRef ListID',
+            'CustomerSalesTaxCodeRef FullName',
+            'Other',
+            'EstimateLineMod',
+            'EstimateLineMod TxnLineID',
+            'EstimateLineMod ItemRef ListID',
+            'EstimateLineMod ItemRef FullName',
+            'EstimateLineMod Desc',
+            'EstimateLineMod Quantity',
+            'EstimateLineMod UnitOfMeasure',
+            'EstimateLineMod OverrideUOMSetRef ListID',
+            'EstimateLineMod OverrideUOMSetRef FullName',
+            'EstimateLineMod Rate',
+            'EstimateLineMod RatePercent',
+            'EstimateLineMod ClassRef ListID',
+            'EstimateLineMod ClassRef FullName',
+            'EstimateLineMod Amount',
+            'EstimateLineMod InventorySiteRef ListID',
+            'EstimateLineMod InventorySiteRef FullName',
+            'EstimateLineMod SalesTaxCodeRef ListID',
+            'EstimateLineMod SalesTaxCodeRef FullName',
+            'EstimateLineMod MarkupRate',
+            'EstimateLineMod MarkupRatePercent',
+            'EstimateLineMod PriceLevelRef ListID',
+            'EstimateLineMod PriceLevelRef FullName',
+            'EstimateLineMod Other1',
+            'EstimateLineMod Other2',
+            'EstimateLineGroupMod',
+            'EstimateLineGroupMod TxnLineID',
+            'EstimateLineGroupMod ItemGroupRef ListID',
+            'EstimateLineGroupMod ItemGroupRef FullName',
+            'EstimateLineGroupMod Quantity',
+            'EstimateLineGroupMod UnitOfMeasure',
+            'EstimateLineGroupMod OverrideUOMSetRef ListID',
+            'EstimateLineGroupMod OverrideUOMSetRef FullName',
+            'EstimateLineGroupMod EstimateLineMod TxnLineID',
+            'EstimateLineGroupMod EstimateLineMod ItemRef ListID',
+            'EstimateLineGroupMod EstimateLineMod ItemRef FullName',
+            'EstimateLineGroupMod EstimateLineMod Desc',
+            'EstimateLineGroupMod EstimateLineMod Quantity',
+            'EstimateLineGroupMod EstimateLineMod UnitOfMeasure',
+            'EstimateLineGroupMod EstimateLineMod OverrideUOMSetRef ListID',
+            'EstimateLineGroupMod EstimateLineMod OverrideUOMSetRef FullName',
+            'EstimateLineGroupMod EstimateLineMod Rate',
+            'EstimateLineGroupMod EstimateLineMod RatePercent',
+            'EstimateLineGroupMod EstimateLineMod ClassRef ListID',
+            'EstimateLineGroupMod EstimateLineMod ClassRef FullName',
+            'EstimateLineGroupMod EstimateLineMod Amount',
+            'EstimateLineGroupMod EstimateLineMod SalesTaxCodeRef ListID',
+            'EstimateLineGroupMod EstimateLineMod SalesTaxCodeRef FullName',
+            'EstimateLineGroupMod EstimateLineMod MarkupRate',
+            'EstimateLineGroupMod EstimateLineMod MarkupRatePercent',
+            'EstimateLineGroupMod EstimateLineMod PriceLevelRef ListID',
+            'EstimateLineGroupMod EstimateLineMod PriceLevelRef FullName',
+            'EstimateLineGroupMod EstimateLineMod Other1',
+            'EstimateLineGroupMod EstimateLineMod Other2',
+            'IncludeRetElement',
+        ];
+        
+        return $paths;
+    }
 }

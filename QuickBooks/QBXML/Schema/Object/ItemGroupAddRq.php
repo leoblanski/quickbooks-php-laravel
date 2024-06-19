@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ItemGroupAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'ItemGroupAdd';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'ItemGroupAdd';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'Name' => 'STRTYPE',
   'IsActive' => 'BOOLTYPE',
   'ItemDesc' => 'STRTYPE',
@@ -46,14 +46,14 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'ItemGroupLine Quantity' => 'QUANTYPE',
   'ItemGroupLine UnitOfMeasure' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'Name' => 31,
   'IsActive' => 0,
   'ItemDesc' => 4095,
@@ -65,14 +65,14 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'ItemGroupLine Quantity' => 0,
   'ItemGroupLine UnitOfMeasure' => 31,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => true,
   'ItemDesc' => true,
@@ -84,12 +84,12 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'ItemGroupLine Quantity' => true,
   'ItemGroupLine UnitOfMeasure' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'Name' => 999.99,
   'IsActive' => 999.99,
   'ItemDesc' => 999.99,
@@ -101,14 +101,14 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'ItemGroupLine Quantity' => 999.99,
   'ItemGroupLine UnitOfMeasure' => 7,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'Name' => false,
   'IsActive' => false,
   'ItemDesc' => false,
@@ -120,26 +120,26 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   'ItemGroupLine Quantity' => false,
   'ItemGroupLine UnitOfMeasure' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'Name',
   1 => 'IsActive',
   2 => 'ItemDesc',
@@ -153,10 +153,8 @@ class QuickBooks_QBXML_Schema_Object_ItemGroupAddRq extends QuickBooks_QBXML_Sch
   10 => 'ItemGroupLine Quantity',
   11 => 'ItemGroupLine UnitOfMeasure',
   12 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

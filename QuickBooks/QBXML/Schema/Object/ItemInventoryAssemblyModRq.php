@@ -26,16 +26,16 @@ require_once 'QuickBooks/QBXML/Schema/Object.php';
  */
 class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyModRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = 'ItemInventoryAssemblyMod';
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = 'ItemInventoryAssemblyMod';
 
-		return $wrapper;
-	}
+        return $wrapper;
+    }
 
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ListID' => 'IDTYPE',
   'EditSequence' => 'STRTYPE',
   'Name' => 'STRTYPE',
@@ -66,14 +66,14 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyModRq extends QuickBoo
   'ItemInventoryAssemblyLine ItemInventoryRef FullName' => 'STRTYPE',
   'ItemInventoryAssemblyLine Quantity' => 'QUANTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ListID' => 0,
   'EditSequence' => 0,
   'Name' => 0,
@@ -104,14 +104,14 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyModRq extends QuickBoo
   'ItemInventoryAssemblyLine ItemInventoryRef FullName' => 0,
   'ItemInventoryAssemblyLine Quantity' => 0,
   'IncludeRetElement' => 0,
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ListID' => false,
   'EditSequence' => false,
   'Name' => true,
@@ -142,12 +142,12 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyModRq extends QuickBoo
   'ItemInventoryAssemblyLine ItemInventoryRef FullName' => true,
   'ItemInventoryAssemblyLine Quantity' => true,
   'IncludeRetElement' => true,
-);
-	}
+];
+    }
 
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ListID' => 999.99,
   'EditSequence' => 999.99,
   'Name' => 999.99,
@@ -178,14 +178,14 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyModRq extends QuickBoo
   'ItemInventoryAssemblyLine ItemInventoryRef FullName' => 999.99,
   'ItemInventoryAssemblyLine Quantity' => 999.99,
   'IncludeRetElement' => 999.99,
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ListID' => false,
   'EditSequence' => false,
   'Name' => false,
@@ -216,26 +216,26 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyModRq extends QuickBoo
   'ItemInventoryAssemblyLine ItemInventoryRef FullName' => false,
   'ItemInventoryAssemblyLine Quantity' => false,
   'IncludeRetElement' => true,
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
 
-		return $paths;
-	}
-	*/
+        return $paths;
+    }
+    */
 
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ListID',
   1 => 'EditSequence',
   2 => 'Name',
@@ -268,8 +268,8 @@ class QuickBooks_QBXML_Schema_Object_ItemInventoryAssemblyModRq extends QuickBoo
   29 => 'ItemInventoryAssemblyLine ItemInventoryRef FullName',
   30 => 'ItemInventoryAssemblyLine Quantity',
   31 => 'IncludeRetElement',
-);
+];
 
-		return $paths;
-	}
+        return $paths;
+    }
 }

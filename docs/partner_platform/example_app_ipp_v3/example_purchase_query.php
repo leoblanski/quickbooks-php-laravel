@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . '/views/header.tpl.php';
 
 $PurchaseService = new QuickBooks_IPP_Service_Purchase();
 
-$purchases = $PurchaseService->query($Context, $realm, "SELECT * FROM Purchase");
+$purchases = $PurchaseService->query($Context, $realm, 'SELECT * FROM Purchase');
 print_r($purchases);
 
 /*

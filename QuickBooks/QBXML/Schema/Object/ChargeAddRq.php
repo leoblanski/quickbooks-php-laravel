@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: ChargeAddRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_ChargeAddRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'ChargeAdd CustomerRef ListID' => 'IDTYPE',
   'ChargeAdd CustomerRef FullName' => 'STRTYPE',
   'ChargeAdd TxnDate' => 'DATETYPE',
@@ -55,14 +55,14 @@ class QuickBooks_QBXML_Schema_Object_ChargeAddRq extends QuickBooks_QBXML_Schema
   'ChargeAdd OverrideItemAccountRef ListID' => 'IDTYPE',
   'ChargeAdd OverrideItemAccountRef FullName' => 'STRTYPE',
   'IncludeRetElement' => 'STRTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'ChargeAdd CustomerRef ListID' => 0,
   'ChargeAdd CustomerRef FullName' => 209,
   'ChargeAdd TxnDate' => 0,
@@ -83,14 +83,14 @@ class QuickBooks_QBXML_Schema_Object_ChargeAddRq extends QuickBooks_QBXML_Schema
   'ChargeAdd OverrideItemAccountRef ListID' => 0,
   'ChargeAdd OverrideItemAccountRef FullName' => 209,
   'IncludeRetElement' => 50,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'ChargeAdd CustomerRef ListID' => true,
   'ChargeAdd CustomerRef FullName' => true,
   'ChargeAdd TxnDate' => true,
@@ -111,12 +111,12 @@ class QuickBooks_QBXML_Schema_Object_ChargeAddRq extends QuickBooks_QBXML_Schema
   'ChargeAdd OverrideItemAccountRef ListID' => true,
   'ChargeAdd OverrideItemAccountRef FullName' => true,
   'IncludeRetElement' => true,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'ChargeAdd CustomerRef ListID' => 999.99,
   'ChargeAdd CustomerRef FullName' => 999.99,
   'ChargeAdd TxnDate' => 999.99,
@@ -137,14 +137,14 @@ class QuickBooks_QBXML_Schema_Object_ChargeAddRq extends QuickBooks_QBXML_Schema
   'ChargeAdd OverrideItemAccountRef ListID' => 999.99,
   'ChargeAdd OverrideItemAccountRef FullName' => 999.99,
   'IncludeRetElement' => 4,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'ChargeAdd CustomerRef ListID' => false,
   'ChargeAdd CustomerRef FullName' => false,
   'ChargeAdd TxnDate' => false,
@@ -165,26 +165,26 @@ class QuickBooks_QBXML_Schema_Object_ChargeAddRq extends QuickBooks_QBXML_Schema
   'ChargeAdd OverrideItemAccountRef ListID' => false,
   'ChargeAdd OverrideItemAccountRef FullName' => false,
   'IncludeRetElement' => true,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'ChargeAdd',
   1 => 'ChargeAdd CustomerRef',
   2 => 'ChargeAdd CustomerRef ListID',
@@ -207,10 +207,8 @@ class QuickBooks_QBXML_Schema_Object_ChargeAddRq extends QuickBooks_QBXML_Schema
   19 => 'ChargeAdd OverrideItemAccountRef ListID',
   20 => 'ChargeAdd OverrideItemAccountRef FullName',
   21 => 'IncludeRetElement',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

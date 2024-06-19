@@ -2,39 +2,39 @@
 
 /**
  * Schema object for: DataExtDelRq
- * 
+ *
  * @author "Keith Palmer Jr." <Keith@ConsoliByte.com>
  * @license LICENSE.txt
- * 
+ *
  * @package QuickBooks
  * @subpackage QBXML
  */
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks.php';
 
 /**
- * 
+ *
  */
 require_once 'QuickBooks/QBXML/Schema/Object.php';
 
 /**
- * 
+ *
  */
 class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schema_Object
 {
-	protected function &_qbxmlWrapper()
-	{
-		static $wrapper = '';
-		
-		return $wrapper;
-	}
-	
-	protected function &_dataTypePaths()
-	{
-		static $paths = array (
+    protected function &_qbxmlWrapper()
+    {
+        static $wrapper = '';
+        
+        return $wrapper;
+    }
+    
+    protected function &_dataTypePaths()
+    {
+        static $paths =  [
   'DataExtDel OwnerID' => 'GUIDTYPE',
   'DataExtDel DataExtName' => 'STRTYPE',
   'DataExtDel ListDataExtType' => 'ENUMTYPE',
@@ -44,14 +44,14 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel TxnID' => 'IDTYPE',
   'DataExtDel TxnLineID' => 'IDTYPE',
   'DataExtDel OtherDataExtType' => 'ENUMTYPE',
-);
-		
-		return $paths;
-	}
-	
-	protected function &_maxLengthPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_maxLengthPaths()
+    {
+        static $paths =  [
   'DataExtDel OwnerID' => 0,
   'DataExtDel DataExtName' => 31,
   'DataExtDel ListDataExtType' => 0,
@@ -61,14 +61,14 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel TxnID' => 0,
   'DataExtDel TxnLineID' => 0,
   'DataExtDel OtherDataExtType' => 0,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isOptionalPaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isOptionalPaths()
+    {
+        static $paths =  [
   'DataExtDel OwnerID' => false,
   'DataExtDel DataExtName' => false,
   'DataExtDel ListDataExtType' => false,
@@ -78,12 +78,12 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel TxnID' => false,
   'DataExtDel TxnLineID' => true,
   'DataExtDel OtherDataExtType' => false,
-);
-	}
-	
-	protected function &_sinceVersionPaths()
-	{
-		static $paths = array (
+];
+    }
+    
+    protected function &_sinceVersionPaths()
+    {
+        static $paths =  [
   'DataExtDel OwnerID' => 999.99,
   'DataExtDel DataExtName' => 999.99,
   'DataExtDel ListDataExtType' => 999.99,
@@ -93,14 +93,14 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel TxnID' => 999.99,
   'DataExtDel TxnLineID' => 3,
   'DataExtDel OtherDataExtType' => 999.99,
-);
-		
-		return $paths;
-	}
-	
-	protected function &_isRepeatablePaths()
-	{
-		static $paths = array (
+];
+        
+        return $paths;
+    }
+    
+    protected function &_isRepeatablePaths()
+    {
+        static $paths =  [
   'DataExtDel OwnerID' => false,
   'DataExtDel DataExtName' => false,
   'DataExtDel ListDataExtType' => false,
@@ -110,26 +110,26 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   'DataExtDel TxnID' => false,
   'DataExtDel TxnLineID' => false,
   'DataExtDel OtherDataExtType' => false,
-);
-			
-		return $paths;
-	}
-	
-	/*
-	abstract protected function &_inLocalePaths()
-	{
-		static $paths = array(
-			'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ), 
-			'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
-			);
-		
-		return $paths;
-	}
-	*/
-	
-	protected function &_reorderPathsPaths()
-	{
-		static $paths = array (
+];
+            
+        return $paths;
+    }
+    
+    /*
+    abstract protected function &_inLocalePaths()
+    {
+        static $paths = array(
+            'FirstName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            'LastName' => array( 'QBD', 'QBCA', 'QBUK', 'QBAU' ),
+            );
+
+        return $paths;
+    }
+    */
+    
+    protected function &_reorderPathsPaths()
+    {
+        static $paths =  [
   0 => 'DataExtDel OwnerID',
   1 => 'DataExtDel DataExtName',
   2 => 'DataExtDel ListDataExtType',
@@ -139,10 +139,8 @@ class QuickBooks_QBXML_Schema_Object_DataExtDelRq extends QuickBooks_QBXML_Schem
   6 => 'DataExtDel TxnID',
   7 => 'DataExtDel TxnLineID',
   8 => 'DataExtDel OtherDataExtType',
-);
-			
-		return $paths;
-	}
+];
+            
+        return $paths;
+    }
 }
-
-?>

@@ -28,51 +28,48 @@
  */
 class QuickBooks_WebConnector_Queue_Singleton
 {
-	/**
-	 * Initialize the queueing object
-	 *
-	 * @param string $dsn
-	 * @param string $user
-	 * @param array  $config
-	 * @param bool   $return_boolean
-	 * @return QuickBooks_WebConnector_Queue
-	 */
-	static public function initialize($dsn = null, $user = null, $config = array(), $return_boolean = true)
-	{
-		static $instance;
-		if (empty($instance))
-		{
-			if (empty($dsn))
-			{
-				return false;
-			}
+    /**
+     * Initialize the queueing object
+     *
+     * @param string $dsn
+     * @param string $user
+     * @param array  $config
+     * @param bool   $return_boolean
+     * @return QuickBooks_WebConnector_Queue
+     */
+    public static function initialize($dsn = null, $user = null, $config = [], $return_boolean = true)
+    {
+        static $instance;
+        if (empty($instance)) {
+            if (empty($dsn)) {
+                return false;
+            }
 
-			$instance = new QuickBooks_WebConnector_Queue($dsn, $user, $config);
-		}
+            $instance = new QuickBooks_WebConnector_Queue($dsn, $user, $config);
+        }
 
-		if ($return_boolean and $instance)
-		{
-			return true;
-		}
+        if ($return_boolean and $instance) {
+            return true;
+        }
 
-		return $instance;
-	}
+        return $instance;
+    }
 
-	/**
-	 * ???
-	 */
-	static protected function _hash($dsn, $config)
-	{
-		return md5(serialize($dsn) . serialize($config));
-	}
+    /**
+     * ???
+     */
+    protected static function _hash($dsn, $config)
+    {
+        return md5(serialize($dsn) . serialize($config));
+    }
 
-	/**
-	 * Get the instance of the queueing class
-	 *
-	 * @return QuickBooks_WebConnector_Queue
-	 */
-	static public function getInstance()
-	{
-		return QuickBooks_WebConnector_Queue_Singleton::initialize(null, null, null, false);
-	}
+    /**
+     * Get the instance of the queueing class
+     *
+     * @return QuickBooks_WebConnector_Queue
+     */
+    public static function getInstance()
+    {
+        return QuickBooks_WebConnector_Queue_Singleton::initialize(null, null, null, false);
+    }
 }
