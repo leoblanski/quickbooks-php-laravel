@@ -91,3 +91,11 @@ There is additional documentation and additional examples on our legacy and new 
 -------------------------------------
 ###Keith Palmer###
 - Follow me on Twitter for updates: https://twitter.com/keith_palmer_jr
+
+# Forked from [consolibyte/quickbooks-php](https://github.com/consolibyte/quickbooks-php)
+
+This project is a fork of [consolibyte/quickbooks-php](https://github.com/consolibyte/quickbooks-php) by [Keith Palmer](https://github.com/consolibyte).
+
+## Changes from Original Repository
+- Cleaned using phpcs
+- Refactored using Rector
