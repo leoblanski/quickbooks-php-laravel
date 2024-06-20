@@ -61,7 +61,7 @@ class QuickBooks_MerchantService_CheckingAccount
         $this->_last_name = $last_name;
 
         $phone = trim(str_replace(['(', ')', '+', ' ', '.', '-'], '', $phone));
-        if (strlen($phone) == 11 && $phone{0} === '1') {
+        if (strlen($phone) == 11 && $phone[0] === '1') {
             $phone = substr($phone, 1);
         }
 

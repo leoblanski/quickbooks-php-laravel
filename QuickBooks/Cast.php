@@ -250,7 +250,7 @@ class QuickBooks_Cast
         if (count($files) === 0) {
             $dh = opendir(dirname(__FILE__) . '/QBXML/Schema/Object');
             while (false !== ($file = readdir($dh))) {
-                if ($file{0} === '.') {
+                if ($file[0] === '.') {
                     continue;
                 }
 
