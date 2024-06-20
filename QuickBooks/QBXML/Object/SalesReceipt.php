@@ -629,7 +629,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
      */
     public function setShipAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $province = '', $postalcode = '', $country = '', $note = '')
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $this->set('ShipAddress Addr' . $i, ${'addr' . $i});
         }
 
@@ -675,7 +675,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
      */
     public function setBillAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $province = '', $postalcode = '', $country = '', $note = '')
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $this->set('BillAddress Addr' . $i, ${'addr' . $i});
         }
 
@@ -760,24 +760,24 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
                 //	$this->_object['InvoiceLineAdd'] = $this->_object['InvoiceLine'];
                 //}
 
-                foreach ($object['SalesReceiptLineAdd'] as $key => $obj) {
+                foreach ($object['SalesReceiptLineAdd'] as $obj) {
                     $obj->setOverride('SalesReceiptLineAdd');
                 }
 
                 if (!empty($object['ShippingLineAdd'])) {
-                    foreach ($object['ShippingLineAdd'] as $key => $obj) {
+                    foreach ($object['ShippingLineAdd'] as $obj) {
                         $obj->setOverride('ShippingLineAdd');
                     }
                 }
 
                 if (!empty($object['DiscountLineAdd'])) {
-                    foreach ($object['DiscountLineAdd'] as $key => $obj) {
+                    foreach ($object['DiscountLineAdd'] as $obj) {
                         $obj->setOverride('DiscountLineAdd');
                     }
                 }
 
                 if (!empty($object['SalesTaxLineAdd'])) {
-                    foreach ($object['SalesTaxLineAdd'] as $key => $obj) {
+                    foreach ($object['SalesTaxLineAdd'] as $obj) {
                         $obj->setOverride('SalesTaxLineAdd');
                     }
                 }
@@ -787,6 +787,7 @@ class QuickBooks_QBXML_Object_SalesReceipt extends QuickBooks_QBXML_Object
                 if (isset($object['SalesReceiptLine'])) {
                     $object['SalesReceiptLineMod'] = $object['SalesReceiptLine'];
                 }
+                
                 break;
         }
 

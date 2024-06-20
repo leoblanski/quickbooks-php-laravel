@@ -13,17 +13,17 @@ QuickBooks_Loader::load('/QuickBooks/UnitTest/Result.php');
 
 class QuickBooks_UnitTest
 {
+    public $__lastError;
+
     protected $__result;
 
     protected $__lastStatus;
+    
     protected $__lastMessage;
+    
     protected $__lastActual;
+    
     protected $__lastExpected;
-
-    public function __construct()
-    {
-
-    }
 
     final public function markTestSkipped()
     {
@@ -46,7 +46,7 @@ class QuickBooks_UnitTest
         $methods = get_class_methods($this);
 
         foreach ($methods as $method) {
-            if (strtolower(substr($method, 0, 4)) == 'test') {
+            if (strtolower(substr($method, 0, 4)) === 'test') {
                 $this->__clearLastStatus();
 
                 $this->$method();
@@ -83,7 +83,7 @@ class QuickBooks_UnitTest
                 print($class . '->' . $Result->name() . ' PASSED!' . "\n");
             } else {
                 print($class . '->' . $Result->name() . ' FAILED! ' . "\n");
-                print("\t\t" . 'Expected: ' . $Result->expected() . ', Actual: ' . $Result->actual() . "\n");
+                print('		Expected: ' . $Result->expected() . ', Actual: ' . $Result->actual() . "\n");
                 print("\t\t" . $Result->message() . "\n");
             }
         }
@@ -190,8 +190,7 @@ class QuickBooks_UnitTest
         $this->__setLastActual($actual);
 
         $this->__setLastStatus(
-            is_null($actual) or
-            ($or_blank and strlen($actual) == 0)
+            is_null($actual) || $or_blank && strlen($actual) == 0
         );
     }
 
@@ -209,11 +208,9 @@ class QuickBooks_UnitTest
 
     public function setUp()
     {
-        return;
     }
 
     public function tearDown()
     {
-        return;
     }
 }

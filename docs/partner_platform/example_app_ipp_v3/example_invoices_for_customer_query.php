@@ -17,7 +17,7 @@ $customers = $CustomerService->query($Context, $realm, "SELECT * FROM Customer W
 
 //print_r($customers);
 
-if (count($customers)) {
+if (count($customers) > 0) {
     foreach ($customers as $Customer) {
         print('Customer Id=' . $Customer->getId() . ' is named: ' . $Customer->getFullyQualifiedName() . '<br>');
 
@@ -32,7 +32,7 @@ if (count($customers)) {
         exit;
         */
 
-        if (count($invoices)) {
+        if (count($invoices) > 0) {
             foreach ($invoices as $Invoice) {
                 print(' &nbsp; &nbsp; Invoice #' . $Invoice->getDocNumber() . ' on date ' . $Invoice->getTxnDate() . '<br>');
             }

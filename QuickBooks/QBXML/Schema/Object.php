@@ -70,12 +70,13 @@ abstract class QuickBooks_QBXML_Schema_Object
         */
 
         $paths = $this->_dataTypePaths();
-
         if (isset($paths[$path])) {
             return $paths[$path];
-        } elseif ($case_doesnt_matter) {
+        }
+
+        if ($case_doesnt_matter) {
             foreach ($paths as $dtpath => $datatype) {
-                if (strtolower($dtpath) == strtolower($path)) {
+                if (strtolower($dtpath) === strtolower($path)) {
                     return $datatype;
                 }
             }
@@ -104,12 +105,13 @@ abstract class QuickBooks_QBXML_Schema_Object
         */
 
         $paths = $this->_maxLengthPaths();
-
         if (isset($paths[$path])) {
             return $paths[$path];
-        } elseif ($case_doesnt_matter) {
+        }
+
+        if ($case_doesnt_matter) {
             foreach ($paths as $mlpath => $maxlength) {
-                if (strtolower($mlpath) == strtolower($path)) {
+                if (strtolower($mlpath) === strtolower($path)) {
                     return $paths[$mlpath];
                 }
             }
@@ -194,12 +196,13 @@ abstract class QuickBooks_QBXML_Schema_Object
     public function exists($path, $case_doesnt_matter = true, $is_end_element = false)
     {
         $ordered_paths = $this->_reorderPathsPaths();
-
         if (in_array($path, $ordered_paths)) {
             return true;
-        } elseif ($case_doesnt_matter) {
+        }
+
+        if ($case_doesnt_matter) {
             foreach ($ordered_paths as $ordered_path) {
-                if (strtolower($path) == strtolower($ordered_path)) {
+                if (strtolower($path) === strtolower($ordered_path)) {
                     return true;
                 }
             }
@@ -301,6 +304,7 @@ abstract class QuickBooks_QBXML_Schema_Object
             if (in_array($path, $unordered_paths)) {
                 $tmp[$key] = $path;
             }
+            
             /*else if (substr($path, -6) == 'ListID' and $allow_application_id)
             {
                 // Modify and add:  (so that application IDs are supported and in the correct place)

@@ -27,45 +27,38 @@
 /**
  * Base QuickBooks constants
  */
-require_once 'QuickBooks.php';
+require_once __DIR__ . '/QuickBooks.php';
 
 /**
  * QuickBooks driver base class
  */
-require_once 'QuickBooks/Driver.php';
+require_once __DIR__ . '/QuickBooks/Driver.php';
 
 /**
  * QuickBooks driver SQL base class
  */
-require_once 'QuickBooks/Driver/Sql.php';
+require_once __DIR__ . '/QuickBooks/Driver/Sql.php';
 
 /**
  * QuickBooks utilities class
  */
-require_once 'QuickBooks/Utilities.php';
+require_once __DIR__ . '/QuickBooks/Utilities.php';
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_SALT')) {
     /**
      * Salt used when hashing to create ticket values
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_SALT', QUICKBOOKS_DRIVER_SQL_SALT);
 }
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_PREFIX')) {
-    /**
-     *
-     *
-     * @var string
-     */
+    
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_PREFIX', QUICKBOOKS_DRIVER_SQL_PREFIX);
 }
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_QUEUETABLE')) {
     /**
      * MySQL table name to store queued requests in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_QUEUETABLE', QUICKBOOKS_DRIVER_SQL_QUEUETABLE);
 }
@@ -73,8 +66,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_QUEUETABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_USERTABLE')) {
     /**
      * MySQL table name to store usernames/passwords for the QuickBooks SOAP server
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_USERTABLE', QUICKBOOKS_DRIVER_SQL_USERTABLE);
 }
@@ -82,8 +73,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_USERTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_TICKETTABLE')) {
     /**
      * The table name to store session tickets in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_TICKETTABLE', QUICKBOOKS_DRIVER_SQL_TICKETTABLE);
 }
@@ -91,8 +80,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_TICKETTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_LOGTABLE')) {
     /**
      * The table name to store log data in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_LOGTABLE', QUICKBOOKS_DRIVER_SQL_LOGTABLE);
 }
@@ -100,8 +87,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_LOGTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_RECURTABLE')) {
     /**
      * The table name to store recurring events in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_RECURTABLE', QUICKBOOKS_DRIVER_SQL_RECURTABLE);
 }
@@ -109,8 +94,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_RECURTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_IDENTTABLE')) {
     /**
      * The table name to store identifiers in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_IDENTTABLE', QUICKBOOKS_DRIVER_SQL_IDENTTABLE);
 }
@@ -118,8 +101,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_IDENTTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_CONFIGTABLE')) {
     /**
      * The table name to store configuration options in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_CONFIGTABLE', QUICKBOOKS_DRIVER_SQL_CONFIGTABLE);
 }
@@ -127,8 +108,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_CONFIGTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_NOTIFYTABLE')) {
     /**
      * The table name to store notifications in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_NOTIFYTABLE', QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE);
 }
@@ -136,8 +115,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_NOTIFYTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_CONNECTIONTABLE')) {
     /**
      * The table name to store connection data in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_CONNECTIONTABLE', QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE);
 }
@@ -145,8 +122,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_CONNECTIONTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_OAUTHTABLE')) {
     /**
      * The table name to store oauth data in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_OAUTHTABLE', QUICKBOOKS_DRIVER_SQL_OAUTHTABLE);
 }
@@ -154,8 +129,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_OAUTHTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_MESSAGE_LEVEL')) {
     /**
      * Define the default message level to set the SQL server connection to (set to 17 to ignore notices)
-     *
-     * @var integer
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_MESSAGE_LEVEL', 1);
 }
@@ -163,8 +136,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_MESSAGE_LEVEL')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MSSQL_ERROR_LEVEL')) {
     /**
      * Define the minimum error level MS SQL will report
-     *
-     * @var integer
      */
     define('QUICKBOOKS_DRIVER_SQL_MSSQL_ERROR_LEVEL', 0);
 }
@@ -277,7 +248,7 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
             }
         }
 
-        foreach ($required as $table => $exists) {
+        foreach ($required as $exists) {
             if (!$exists) {
                 return false;
             }
@@ -304,9 +275,9 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
         mssql_min_error_severity(QUICKBOOKS_DRIVER_SQL_MSSQL_ERROR_LEVEL);
 
         if ($port) {
-            $this->_conn = mssql_connect($host, $user, $pass, $new_link) or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysql_error(): ' . mssql_get_last_message());
+            ($this->_conn = mssql_connect($host, $user, $pass, $new_link)) || die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysql_error(): ' . mssql_get_last_message());
         } else {
-            $this->_conn = mssql_connect($host . ':' . $port, $user, $pass, $new_link) or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysql_error(): ' . mssql_get_last_message());
+            ($this->_conn = mssql_connect($host . ':' . $port, $user, $pass, $new_link)) || die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysql_error(): ' . mssql_get_last_message());
         }
 
         return mssql_select_db($db, $this->_conn);
@@ -340,22 +311,6 @@ class QuickBooks_Driver_Sql_Mssql extends QuickBooks_Driver_Sql
     {
         if ($limit) {
             $sql = str_replace([ 'SELECT ', "SELECT\n", "SELECT\r" ], 'SELECT TOP ' . (int) $limit . ' ' . "\n", $sql);
-
-            /*
-select * from (
- select top 10 emp_id,lname,fname from (
-    select top 30 emp_id,lname,fname
-    from employee
-   order by lname asc
- ) as newtbl order by lname desc
-) as newtbl2 order by lname asc
-            */
-
-            if ($offset) {
-
-            } else {
-
-            }
         } elseif ($offset) {
             // @todo Does this need to be implemented...?
         }
@@ -405,8 +360,6 @@ select * from (
      */
     public function last()
     {
-        $errnum = 0;
-        $errmsg = null;
         if ($res = $this->_query('SELECT SCOPE_IDENTITY() AS last_insert_id')) {
             $arr = $this->_fetch($res);
             return $arr['last_insert_id'];
@@ -472,9 +425,8 @@ select * from (
     protected function _escape($str)
     {
         $str = str_replace("\0", '[NULL]', $str);
-        $str = str_replace("'", "''", $str);
 
-        return $str;
+        return str_replace("'", "''", $str);
     }
 
     /**
@@ -509,20 +461,19 @@ select * from (
         switch ($def[0]) {
             case QUICKBOOKS_DRIVER_SQL_SERIAL:
 
-                $sql = $name . ' integer NOT NULL IDENTITY(1, 1) '; // AUTO_INCREMENT
-                return $sql;
+                // AUTO_INCREMENT
+                return $name . ' integer NOT NULL IDENTITY(1, 1) ';
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT_OR_UPDATE:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_UPDATE:
 
-                $sql = $name . ' TIMESTAMP ';
-                return $sql;
+                return $name . ' TIMESTAMP ';
             case QUICKBOOKS_DRIVER_SQL_DATETIME:
             case QUICKBOOKS_DRIVER_SQL_DATE:
                 $sql = $name . ' DATETIME ';
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' NULL ';
                     }
                 } else {
@@ -544,7 +495,7 @@ select * from (
                 }
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' NULL ';
                     } elseif ($def[2] === false) {
                         $sql .= ' NOT NULL ';
@@ -564,7 +515,7 @@ select * from (
                 }
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' NULL ';
                     } else {
                         $sql .= " NOT NULL DEFAULT '" . $def[2] . "' ";
@@ -578,7 +529,7 @@ select * from (
                 $sql = $name . ' TEXT ';
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' NULL ';
                     } else {
                         $sql .= " NOT NULL DEFAULT '" . $def[2] . "' ";
@@ -593,7 +544,7 @@ select * from (
                 $sql = $name . ' INTEGER ';
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' NULL ';
                     } else {
                         $sql .= ' DEFAULT ' . (int) $def[2];
@@ -605,7 +556,7 @@ select * from (
                 $sql = $name . ' tinyint ';
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' NULL ';
                     } elseif ($def[2]) {
                         $sql .= ' DEFAULT 1 ';

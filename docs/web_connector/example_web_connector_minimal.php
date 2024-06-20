@@ -27,7 +27,7 @@ if (function_exists('date_default_timezone_set')) {
 }
 
 // Require the framework
-require_once '../../QuickBooks.php';
+require_once __DIR__ . '/../../QuickBooks.php';
 
 // A username and password you'll use in:
 //	a) Your .QWC file
@@ -115,5 +115,4 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
  */
 function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-    return;
 }

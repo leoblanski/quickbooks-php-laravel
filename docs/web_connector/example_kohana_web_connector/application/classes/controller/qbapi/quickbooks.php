@@ -1,6 +1,6 @@
 <?php
 
-defined('SYSPATH') or die('No direct script access.');
+defined('SYSPATH') || die('No direct script access.');
 
 /**
  * QuickBooks Kohana Integration Example
@@ -16,7 +16,7 @@ defined('SYSPATH') or die('No direct script access.');
  */
 
 //set this to the framework directory
-require_once 'framework/QuickBooks.php';
+require_once __DIR__ . '/framework/QuickBooks.php';
 
 class Controller_Qbapi_Quickbooks extends Controller
 {
@@ -66,20 +66,36 @@ class Controller_Qbapi_Quickbooks extends Controller
 
         // Maps inbound requests to functions
         $map = [
-            QUICKBOOKS_ADD_CUSTOMER => [ [$this, '_quickbooks_customer_add_request'], [$this,'_quickbooks_customer_add_response' ]],
-            QUICKBOOKS_MOD_CUSTOMER => [ [$this, '_quickbooks_customer_mod_request'], [$this, '_quickbooks_customer_mod_response']],
+            QUICKBOOKS_ADD_CUSTOMER => [ function ($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale) {
+                return $this->_quickbooks_customer_add_request($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale);
+            }, function ($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents) {
+                return $this->_quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents);
+            }],
+            QUICKBOOKS_MOD_CUSTOMER => [ function ($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale) {
+                return $this->_quickbooks_customer_mod_request($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale);
+            }, function ($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents) {
+                return $this->_quickbooks_customer_mod_response($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents);
+            }],
         ];
 
         //Map error handling to functions
         $errmap = [
-            3070 => [$this, '_quickbooks_error_stringtoolong'],
-            3140	=> [$this, '_quickbooks_reference_error'],
-            '*'	=>	[$this, '_quickbooks_error_handler'],
+            3070 => function ($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg) {
+                return $this->_quickbooks_error_stringtoolong($requestID, $user, $action, $ID, $extra, $err, $xml, $errnum, $errmsg);
+            },
+            3140	=> function ($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg) {
+                return $this->_quickbooks_reference_error($requestID, $user, $action, $ID, $extra, $err, $xml, $errnum, $errmsg);
+            },
+            '*'	=>	function ($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg) {
+                return $this->_quickbooks_error_handler($requestID, $user, $action, $ID, $extra, $err, $xml, $errnum, $errmsg);
+            },
         ];
 
         //Login success callback
         $hooks = [
-            QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => [[$this,'_quickbooks_hook_loginsuccess']],
+            QuickBooks_WebConnector_Handlers::HOOK_LOGINSUCCESS => [function ($requestID, $user, $hook, &$err, $hook_data, $callback_config) {
+                return $this->_quickbooks_hook_loginsuccess($requestID, $user, $hook, $err, $hook_data, $callback_config);
+            }],
             ];
 
         //MySQL database name containing the QuickBooks tables is named 'quickbooks' (if the tables don't exist, they'll be created for you)
@@ -98,10 +114,10 @@ class Controller_Qbapi_Quickbooks extends Controller
             $primary_key_of_new_customer = 512;
 
             // Fire up the Queue
-            $Queue = new QuickBooks_WebConnector_Queue($dsn);
+            $quickBooksWebConnectorQueue = new QuickBooks_WebConnector_Queue($dsn);
 
             // Drop the directive and the customer into the queue
-            $Queue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_new_customer);
+            $quickBooksWebConnectorQueue->enqueue(QUICKBOOKS_ADD_CUSTOMER, $primary_key_of_new_customer);
 
             // Also note the that ->enqueue() method supports some other parameters:
             // 	string $action				The type of action to queue up
@@ -112,6 +128,7 @@ class Controller_Qbapi_Quickbooks extends Controller
             //	$qbxml = null
             //	$replace = true
         }
+        
         //To be used with singleton queue
         $driver_options = [];
 
@@ -122,10 +139,10 @@ class Controller_Qbapi_Quickbooks extends Controller
         $soap_options = [];
 
         //construct a new instance of the web connector server
-        $Server = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
+        $quickBooksWebConnectorServer = new QuickBooks_WebConnector_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
 
         //instruct server to handle responses
-        $response = $Server->handle(true, true);
+        $quickBooksWebConnectorServer->handle(true, true);
     }
 
     public function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_data, $callback_config)
@@ -143,14 +160,14 @@ class Controller_Qbapi_Quickbooks extends Controller
         $lastname = $mycustomer->lastname;
         $fullname = $firstname . ' ' . $lastname;
         //Generate a QBXML object
-        $Customer = new QuickBooks_QBXML_Object_Customer();
-        $Customer->setFullName($fullname);
-        $Customer->setFirstName($firstname);
-        $Customer->setLastName($lastname);
-        $Customer->setCompanyName($companyname);
+        $quickBooksQBXMLObjectCustomer = new QuickBooks_QBXML_Object_Customer();
+        $quickBooksQBXMLObjectCustomer->setFullName($fullname);
+        $quickBooksQBXMLObjectCustomer->setFirstName($firstname);
+        $quickBooksQBXMLObjectCustomer->setLastName($lastname);
+        $quickBooksQBXMLObjectCustomer->setCompanyName($companyname);
 
         //Format the proper QBXML to return to the web connector
-        $qbxml = $Customer->asQBXML('CustomerAddRq');
+        $qbxml = $quickBooksQBXMLObjectCustomer->asQBXML('CustomerAddRq');
         $qbxml = $this->formatForOutput($qbxml);
 
         //Log that the customer has been generated
@@ -166,7 +183,7 @@ class Controller_Qbapi_Quickbooks extends Controller
         Kohana::$log->add(Log::NOTICE, 'Applying QB_LISTID to customer: ' . $ID . ', listid: ' . $idents['ListID']);
 
         //fetch the customer
-        $mycustomer = ORM::factory('customer', $ID);
+        ORM::factory('customer', $ID);
         //Save the list id
         $customerdata->listid = $idents['ListID'];
         //save an edit sequence
@@ -190,14 +207,13 @@ class Controller_Qbapi_Quickbooks extends Controller
 
     private function formatForOutput($string)
     {
-        $return = '<?xml version="1.0" encoding="utf-8"?>
+        return '<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="2.0"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="continueOnError">
 				' . $string . '
 				</QBXMLMsgsRq>
 				</QBXML>';
-        return $return;
     }
 
     public function _quickbooks_error_stringtoolong($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)

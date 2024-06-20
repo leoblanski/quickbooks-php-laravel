@@ -60,10 +60,6 @@ class QuickBooks_Driver_Singleton
      */
     public static function initialize($dsn_or_conn, $options = [], $hooks = [], $log_level = null)
     {
-        if ($obj = QuickBooks_Driver_Singleton::getInstance($dsn_or_conn, $options, $hooks, $log_level)) {
-            return true;
-        }
-
-        return false;
+        return (bool) ($obj = QuickBooks_Driver_Singleton::getInstance($dsn_or_conn, $options, $hooks, $log_level));
     }
 }

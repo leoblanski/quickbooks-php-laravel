@@ -25,9 +25,9 @@ if ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_SOON) {
 } elseif ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_NOTYET) {
     $err = 'This connection is not old enough to require reconnect/refresh.';
 } elseif ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_EXPIRED) {
-    $err = 'This connection has already expired. You\'ll have to go through the initial connection process again.';
+    $err = "This connection has already expired. You'll have to go through the initial connection process again.";
 } elseif ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_UNKNOWN) {
-    $err = 'Are you sure you\'re connected? No connection information was found for this user/tenant...';
+    $err = "Are you sure you're connected? No connection information was found for this user/tenant...";
 }
 
 ?>
@@ -44,7 +44,8 @@ if ($expiry == QuickBooks_IPP_IntuitAnywhere::EXPIRY_SOON) {
 			ERROR: <?php print($err); ?>
 		</div>
 
-	<?php endif; ?>
+	<?php endif;
+ ?>
 			
 <?php
 

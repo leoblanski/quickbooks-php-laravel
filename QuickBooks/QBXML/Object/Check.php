@@ -236,6 +236,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
     {
         return $this->getTxnDate($format = null);
     }
+    
     // Path: Memo, datatype: STRTYPE
 
     /**
@@ -394,7 +395,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
 
     protected function _setAddress($post, $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note)
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $this->set('Address' . $post . ' Addr' . $i, ${'addr' . $i});
         }
 
@@ -404,6 +405,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
         $this->set('Address' . $post . ' Country', $country);
         $this->set('Address' . $post . ' Note', $note);
     }
+    
     public function asList($request)
     {
         switch ($request) {
@@ -444,25 +446,25 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
             case QUICKBOOKS_ADD_CHECK:
 
                 if (!empty($object['ItemLineAdd'])) {
-                    foreach ($object['ItemLineAdd'] as $key => $obj) {
+                    foreach ($object['ItemLineAdd'] as $obj) {
                         $obj->setOverride('ItemLineAdd');
                     }
                 }
 
                 if (!empty($object['ItemGroupLineAdd'])) {
-                    foreach ($object['ItemGroupLineAdd'] as $key => $obj) {
+                    foreach ($object['ItemGroupLineAdd'] as $obj) {
                         $obj->setOverride('ItemGroupLineAdd');
                     }
                 }
 
                 if (!empty($object['ExpenseLineAdd'])) {
-                    foreach ($object['ExpenseLineAdd'] as $key => $obj) {
+                    foreach ($object['ExpenseLineAdd'] as $obj) {
                         $obj->setOverride('ExpenseLineAdd');
                     }
                 }
 
                 if (!empty($object['ApplyCheckToTxnAdd'])) {
-                    foreach ($object['ApplyCheckToTxnAdd'] as $key => $obj) {
+                    foreach ($object['ApplyCheckToTxnAdd'] as $obj) {
                         $obj->setOverride('ApplyCheckToTxnAdd');
                     }
                 }
@@ -472,6 +474,7 @@ class QuickBooks_QBXML_Object_Check extends QuickBooks_QBXML_Object
                 if (isset($object['ItemLine'])) {
                     $object['ItemLineMod'] = $object['ItemLine'];
                 }
+                
                 break;
         }
 

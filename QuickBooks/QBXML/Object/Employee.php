@@ -58,10 +58,8 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
      */
     public function getName()
     {
-        if (!$this->exists('Name')) {
-            if (!is_null($this->getFirstName()) || !is_null($this->getLastName())) {
-                $this->setNameAsFirstLast();
-            }
+        if (!$this->exists('Name') && (!is_null($this->getFirstName()) || !is_null($this->getLastName()))) {
+            $this->setNameAsFirstLast();
         }
 
         return $this->get('Name');
@@ -116,6 +114,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
         if (is_null($first)) {
             $first = '';
         }
+        
         if (is_null($last)) {
             $last = '';
         }
@@ -187,7 +186,7 @@ class QuickBooks_QBXML_Object_Employee extends QuickBooks_QBXML_Object
 
     protected function _setXYZAddress($pre, $post, $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $province, $postalcode, $country, $note)
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $this->set($pre . 'Address' . $post . ' Addr' . $i, ${'addr' . $i});
         }
 

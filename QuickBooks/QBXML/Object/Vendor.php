@@ -175,7 +175,7 @@ class QuickBooks_QBXML_Object_Vendor extends QuickBooks_QBXML_Object
 
     protected function _setXYZAddress($pre, $post, $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $postalcode, $country, $note)
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $this->set($pre . 'Address' . $post . ' Addr' . $i, ${'addr' . $i});
         }
 

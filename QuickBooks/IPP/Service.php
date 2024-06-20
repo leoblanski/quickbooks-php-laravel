@@ -37,7 +37,7 @@ abstract class QuickBooks_IPP_Service
      *
      * @var unknown_type
      */
-    protected $_last_debug;
+    protected $_last_debug = [];
 
     /**
      *
@@ -48,7 +48,7 @@ abstract class QuickBooks_IPP_Service
      * The last error code
      * @var string
      */
-    protected $_errcode;
+    protected $_errcode = QuickBooks_IPP::ERROR_OK;
 
     /**
      * The last error message
@@ -68,13 +68,7 @@ abstract class QuickBooks_IPP_Service
      */
     public function __construct()
     {
-        $this->_errcode = QuickBooks_IPP::ERROR_OK;
-
-        $this->_last_request = null;
-        $this->_last_response = null;
-        $this->_last_debug = [];
-
-        $this->_flavor = null;		// auto-detect
+        // auto-detect
     }
 
     public function useIDSParser($Context, $true_or_false)
@@ -138,13 +132,11 @@ abstract class QuickBooks_IPP_Service
     protected function _syncStatus($Context, $realmID, $resource, $IDType)
     {
         $IPP = $Context->IPP();
-
-        switch ($IPP->version()) {
-            case QuickBooks_IPP_IDS::VERSION_2:
-                return $this->_syncStatus_v2($Context, $realmID, $resource, $IDType);
-                break;
-                return false;
+        if ($IPP->version() === QuickBooks_IPP_IDS::VERSION_2) {
+            return $this->_syncStatus_v2($Context, $realmID, $resource, $IDType);
         }
+
+        return null;
     }
 
     protected function _syncStatus_v2($Context, $realmID, $resource, $IDType)
@@ -240,7 +232,7 @@ abstract class QuickBooks_IPP_Service
      */
     public function rawQuery($Context, $realmID, $xml, $resource = null)
     {
-        $IPP = $Context->IPP();
+        $Context->IPP();
 
         if (!$resource) {
             $resource = $this->_guessResource($xml, QuickBooks_IPP_IDS::OPTYPE_QUERY);
@@ -338,16 +330,13 @@ abstract class QuickBooks_IPP_Service
             }
         } elseif ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE) {
             if (!$xml) {
-                if (is_array($query) and count($query) > 0) {
+                if (is_array($query) && $query !== []) {
                     $xml = http_build_query(array_merge([
                         'PageNum' => (int) $page,
                         'ResultsPerPage' => (int) $size,
                         ], (array) $query));
                 } else {
-                    $xml = http_build_query(array_merge([
-                        'PageNum' => (int) $page,
-                        'ResultsPerPage' => (int) $size,
-                        ]));
+                    $xml = http_build_query(['PageNum' => (int) $page, 'ResultsPerPage' => (int) $size]);
 
                     $xml .= $query;
                 }
@@ -400,7 +389,7 @@ abstract class QuickBooks_IPP_Service
         $this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
         $this->_setLastDebug($Context->lastDebug());
 
-        if (count($return)) {
+        if (count($return) > 0) {
             return $return[0];
         }
 
@@ -426,6 +415,8 @@ abstract class QuickBooks_IPP_Service
             case QuickBooks_IPP_IDS::VERSION_3:
                 return $this->_add_v3($Context, $realmID, $resource, $Object);
         }
+
+        return null;
     }
 
     protected function _add_v3($Context, $realmID, $resource, $Object)
@@ -534,8 +525,7 @@ abstract class QuickBooks_IPP_Service
         //	want to delete... *sigh*
         $objects = $this->_query($Context, $realmID, 'SELECT * FROM ' . $resource . " WHERE Id = '" . QuickBooks_IPP_IDS::usableIDType($ID) . "' ");
 
-        if (isset($objects[0]) and
-            is_object($objects[0])) {
+        if (isset($objects[0]) && is_object($objects[0])) {
             $Object = $objects[0];
 
             $unsets = [];
@@ -589,8 +579,7 @@ abstract class QuickBooks_IPP_Service
         //	want to delete... *sigh*
         $objects = $this->_query($Context, $realmID, 'SELECT * FROM ' . $resource . " WHERE Id = '" . QuickBooks_IPP_IDS::usableIDType($ID) . "' ");
 
-        if (isset($objects[0]) and
-            is_object($objects[0])) {
+        if (isset($objects[0]) && is_object($objects[0])) {
             $Object = $objects[0];
 
             $unsets = [];
@@ -841,7 +830,7 @@ abstract class QuickBooks_IPP_Service
         $this->_setLastRequestResponse($Context->lastRequest(), $Context->lastResponse());
         $this->_setLastDebug($Context->lastDebug());
 
-        if (count($return)) {
+        if (count($return) > 0) {
             return $return[0];
         }
 

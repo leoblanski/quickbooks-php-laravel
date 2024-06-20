@@ -38,7 +38,7 @@ if (function_exists('date_default_timezone_set')) {
 }
 
 // Require the framework
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 // Web Connector username/password
 $user = 'user';
@@ -107,10 +107,10 @@ $response = $Server->handle(true, true);
 function _quickbooks_hook_loginsuccess($requestID, $user, $hook, &$err, $hook_data, $callback_config)
 {
     // Fetch the queue instance
-    $Queue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
+    $quickBooksWebConnectorQueue = QuickBooks_WebConnector_Queue_Singleton::getInstance();
 
     // Queue request
-    $Queue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1);
+    $quickBooksWebConnectorQueue->enqueue(QUICKBOOKS_IMPORT_CUSTOMER, 1);
 }
 
 /**
@@ -204,20 +204,25 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML/QBXMLMsgsRs/CustomerQueryRs');
 
-        foreach ($List->children() as $Customer) {
+        foreach ($List->children() as $quickBooksXMLNode) {
             $values = [
-                'ListID' => $Customer->getChildDataAt('CustomerRet ListID'),
-                'FullName' => $Customer->getChildDataAt('CustomerRet FullName'),
-                'FirstName' => $Customer->getChildDataAt('CustomerRet FirstName'),
-                'LastName' => $Customer->getChildDataAt('CustomerRet LastName'),
+                'ListID' => $quickBooksXMLNode->getChildDataAt('CustomerRet ListID'),
+                'FullName' => $quickBooksXMLNode->getChildDataAt('CustomerRet FullName'),
+                'FirstName' => $quickBooksXMLNode->getChildDataAt('CustomerRet FirstName'),
+                'LastName' => $quickBooksXMLNode->getChildDataAt('CustomerRet LastName'),
                 ];
 
-            foreach ($Customer->children() as $Node) {
+            foreach ($quickBooksXMLNode->children() as $Node) {
                 // Be careful! Custom field names are case sensitive!
-                if ($Node->name() === 'DataExtRet' and
-                    $Node->getChildDataAt('DataExtRet DataExtName') == 'Your Custom Field Name Goes Here') {
-                    $values['Your Custom Field Names Goes Here'] = $Node->getChildDataAt('DataExtRet DataExtValue');
+                if ($Node->name() !== 'DataExtRet') {
+                    continue;
                 }
+
+                if ($Node->getChildDataAt('DataExtRet DataExtName') != 'Your Custom Field Name Goes Here') {
+                    continue;
+                }
+
+                $values['Your Custom Field Names Goes Here'] = $Node->getChildDataAt('DataExtRet DataExtValue');
             }
 
             // Do something with that data...
@@ -237,11 +242,7 @@ function _quickbooks_customer_import_response($requestID, $user, $action, $ID, $
  */
 function _quickbooks_error_e500_notfound($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg)
 {
-    if ($action == QUICKBOOKS_IMPORT_CUSTOMER) {
-        return true;
-    }
-
-    return false;
+    return $action == QUICKBOOKS_IMPORT_CUSTOMER;
 }
 
 /**

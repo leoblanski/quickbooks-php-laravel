@@ -27,44 +27,38 @@
 /**
  * Base QuickBooks constants
  */
-require_once 'QuickBooks.php';
+require_once __DIR__ . '/QuickBooks.php';
 
 /**
  * QuickBooks driver base class
  */
-require_once 'QuickBooks/Driver.php';
+require_once __DIR__ . '/QuickBooks/Driver.php';
 
 /**
  * QuickBooks driver SQL base class
  */
-require_once 'QuickBooks/Driver/Sql.php';
+require_once __DIR__ . '/QuickBooks/Driver/Sql.php';
 
 /**
  * QuickBooks utilities class
  */
-require_once 'QuickBooks/Utilities.php';
+require_once __DIR__ . '/QuickBooks/Utilities.php';
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_SALT')) {
     /**
      * Salt used when hashing to create ticket values
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_SALT', QUICKBOOKS_DRIVER_SQL_SALT);
 }
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX')) {
-    /**
-     *
-     * @var string
-     */
+    
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_PREFIX', QUICKBOOKS_DRIVER_SQL_PREFIX);
 }
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_QUEUETABLE')) {
     /**
      * MySQL table name to store queued requests in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_QUEUETABLE', QUICKBOOKS_DRIVER_SQL_QUEUETABLE);
 }
@@ -72,8 +66,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_QUEUETABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_USERTABLE')) {
     /**
      * MySQL table name to store usernames/passwords for the QuickBooks SOAP server
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_USERTABLE', QUICKBOOKS_DRIVER_SQL_USERTABLE);
 }
@@ -81,8 +73,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_USERTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_TICKETTABLE')) {
     /**
      * The table name to store session tickets in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_TICKETTABLE', QUICKBOOKS_DRIVER_SQL_TICKETTABLE);
 }
@@ -90,8 +80,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_TICKETTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_LOGTABLE')) {
     /**
      * The table name to store log data in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_LOGTABLE', QUICKBOOKS_DRIVER_SQL_LOGTABLE);
 }
@@ -99,8 +87,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_LOGTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_RECURTABLE')) {
     /**
      * The table name to store recurring events in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_RECURTABLE', QUICKBOOKS_DRIVER_SQL_RECURTABLE);
 }
@@ -108,8 +94,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_RECURTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_IDENTTABLE')) {
     /**
      * The table name to store identifiers in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_IDENTTABLE', QUICKBOOKS_DRIVER_SQL_IDENTTABLE);
 }
@@ -117,8 +101,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_IDENTTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_CONFIGTABLE')) {
     /**
      * The table name to store configuration options in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_CONFIGTABLE', QUICKBOOKS_DRIVER_SQL_CONFIGTABLE);
 }
@@ -126,8 +108,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_CONFIGTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_NOTIFYTABLE')) {
     /**
      * The table name to store notifications in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_NOTIFYTABLE', QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE);
 }
@@ -135,8 +115,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_NOTIFYTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_SQLITE_CONNECTIONTABLE')) {
     /**
      * The table name to store connection data in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_SQLITE_CONNECTIONTABLE', QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE);
 }
@@ -264,7 +242,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
             }
         }
 
-        foreach ($required as $table => $exists) {
+        foreach ($required as $exists) {
             if (!$exists) {
                 return false;
             }
@@ -287,7 +265,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
      */
     protected function _connect($host, $port, $user, $pass, $db, $new_link, $client_flags)
     {
-        $this->_conn = sqlite_open($db) or die('db: ' . $db . '');
+        ($this->_conn = sqlite_open($db)) || die('db: ' . $db . '');
 
         return true;
     }
@@ -311,19 +289,19 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
      */
     protected function _query($sql, &$errnum, &$errmsg, $offset = 0, $limit = null)
     {
-        if ($limit and strtoupper(substr(trim($sql), 0, 6)) == 'SELECT') {
+        if ($limit && strtoupper(substr(trim($sql), 0, 6)) === 'SELECT') {
             if ($offset) {
                 $sql .= ' LIMIT ' . (int) $offset . ', ' . (int) $limit;
             } else {
                 $sql .= ' LIMIT ' . (int) $limit;
             }
-        } elseif ($offset and strtoupper(substr(trim($sql), 0, 6)) == 'SELECT') {
+        } elseif ($offset && strtoupper(substr(trim($sql), 0, 6)) === 'SELECT') {
             // @todo Should this be implemented...?
         }
 
-        $res = sqlite_query($this->_conn, $sql);
+        $sqLiteResult = sqlite_query($this->_conn, $sql);
 
-        if (!$res) {
+        if (!$sqLiteResult) {
             //$errnum = mysql_errno($this->_conn);
             //$errmsg = mysql_error($this->_conn);
             $errnum = -99;
@@ -335,7 +313,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
             return false;
         }
 
-        return $res;
+        return $sqLiteResult;
     }
 
     /**
@@ -474,26 +452,23 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
         switch ($def[0]) {
             case QUICKBOOKS_DRIVER_SQL_SERIAL:
 
-                $sql = $name . ' INTEGER PRIMARY KEY  '; // AUTO_INCREMENT
-                return $sql;
+                // AUTO_INCREMENT
+                return $name . ' INTEGER PRIMARY KEY  ';
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT_OR_UPDATE:
 
-                $sql = $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ';
-                return $sql;
+                return $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ';
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_UPDATE:
 
-                $sql = $name . ' TIMESTAMP DEFAULT 0 ON UPDATE CURRENT_TIMESTAMP ';
-                return $sql;
+                return $name . ' TIMESTAMP DEFAULT 0 ON UPDATE CURRENT_TIMESTAMP ';
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT:
 
-                $sql = $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ';
-                return $sql;
+                return $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ';
             case QUICKBOOKS_DRIVER_SQL_BOOLEAN:
                 $sql = $name . ' tinyint(1) ';
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' DEFAULT NULL ';
                     } elseif ($def[2]) {
                         $sql .= ' DEFAULT 1 ';
@@ -507,7 +482,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
                 $sql = $name . ' int(10) ';
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' DEFAULT NULL ';
                     } else {
                         $sql .= ' DEFAULT ' . (int) $def[2];
@@ -569,7 +544,7 @@ class QuickBooks_Driver_Sql_Sqlite extends QuickBooks_Driver_Sql
     {
         $arr_sql = parent::_generateCreateTable($name, $arr, $primary, $keys, $uniques, $if_not_exists);
 
-        if (is_array($primary) and count($primary) == 1) {
+        if (is_array($primary) && count($primary) == 1) {
             $primary = current($primary);
         }
 

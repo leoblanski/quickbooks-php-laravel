@@ -17,16 +17,18 @@
 
 class QuickBooks_IPP_OAuthv1
 {
-    private $_secrets;
-
     protected $_oauth_consumer_key;
+    
     protected $_oauth_consumer_secret;
 
     protected $_oauth_access_token;
+    
     protected $_oauth_access_token_secret;
 
-    protected $_version = null;
-    protected $_signature = null;
+    protected $_version = self::DEFAULT_VERSION;
+    
+    protected $_signature = self::DEFAULT_SIGNATURE;
+    
     protected $_keyfile;
 
     /**
@@ -35,15 +37,21 @@ class QuickBooks_IPP_OAuthv1
     public const NONCE = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     public const METHOD_POST = 'POST';
+    
     public const METHOD_GET = 'GET';
+    
     public const METHOD_PUT = 'PUT';
+    
     public const METHOD_DELETE = 'DELETE';
 
     public const DEFAULT_VERSION = '1.0';
+    
     public const DEFAULT_SIGNATURE = 'HMAC-SHA1';
 
     public const SIGNATURE_PLAINTEXT = 'PLAINTEXT';
+    
     public const SIGNATURE_HMAC = 'HMAC-SHA1';
+    
     public const SIGNATURE_RSA = 'RSA-SHA1';
 
     /**
@@ -53,9 +61,6 @@ class QuickBooks_IPP_OAuthv1
     {
         $this->_oauth_consumer_key = $oauth_consumer_key;
         $this->_oauth_consumer_secret = $oauth_consumer_secret;
-
-        $this->_version = self::DEFAULT_VERSION;
-        $this->_signature = self::DEFAULT_SIGNATURE;
     }
 
     /**
@@ -164,9 +169,9 @@ class QuickBooks_IPP_OAuthv1
     {
         if ($str === false) {
             return $str;
-        } else {
-            return str_replace('+', ' ', str_replace('%7E', '~', rawurlencode($str)));
         }
+
+        return str_replace('+', ' ', str_replace('%7E', '~', rawurlencode($str)));
     }
 
     protected function _timestamp()
@@ -199,7 +204,7 @@ class QuickBooks_IPP_OAuthv1
                 if (is_array($value)) {
                     $sort = $value;
                     sort($sort);
-                    foreach ($sort as $subkey => $subvalue) {
+                    foreach ($sort as $subvalue) {
                         $normalized[] = $this->_escape($key) . '=' . $this->_escape($subvalue);
                     }
                 } else {
@@ -297,7 +302,7 @@ class QuickBooks_IPP_OAuthv1
         */
 
         $signature = null;
-        $retr = openssl_sign($sbs, $signature, $res);
+        openssl_sign($sbs, $signature, $res);
 
         openssl_free_key($res);
 

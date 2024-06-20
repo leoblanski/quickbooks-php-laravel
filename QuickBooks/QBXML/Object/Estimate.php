@@ -340,7 +340,7 @@ class QuickBooks_QBXML_Object_Estimate extends QuickBooks_QBXML_Object
      */
     public function setBillAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $province = '', $postalcode = '', $country = '', $note = '')
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $this->set('BillAddress Addr' . $i, ${'addr' . $i});
         }
 
@@ -530,9 +530,6 @@ class QuickBooks_QBXML_Object_Estimate extends QuickBooks_QBXML_Object
     public function setEstimateLineData($i, $key, $value)
     {
         $lines = $this->getEstimateLines();
-        if (isset($lines[$i])) {
-
-        }
 
         return $this->set('EstimateLine', $lines);
     }
@@ -609,7 +606,7 @@ class QuickBooks_QBXML_Object_Estimate extends QuickBooks_QBXML_Object
         switch ($root) {
             case QUICKBOOKS_ADD_ESTIMATE:
 
-                foreach ($object['EstimateLineAdd'] as $key => $obj) {
+                foreach ($object['EstimateLineAdd'] as $obj) {
                     $obj->setOverride('EstimateLineAdd');
                 }
 
@@ -618,6 +615,7 @@ class QuickBooks_QBXML_Object_Estimate extends QuickBooks_QBXML_Object
                 if (isset($object['EstimateLine'])) {
                     $object['EstimateLineMod'] = $object['EstimateLine'];
                 }
+                
                 break;
         }
 

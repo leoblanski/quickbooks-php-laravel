@@ -190,11 +190,10 @@ class QuickBooks_Status_Report
             QUICKBOOKS_STATUS_NOOP => 'No operation occurred',
             ];
 
-        foreach ($list as $key => $arr) {
+        foreach ($list as $arr) {
             $errnum = '';
             $errmsg = '';
-            if ($arr['msg'] and
-                $pos = strpos($arr['msg'], ':')) {
+            if ($arr['msg'] && ($pos = strpos($arr['msg'], ':'))) {
                 $errnum = substr($arr['msg'], 0, $pos);
                 $errmsg = substr($arr['msg'], $pos + 2);
             } elseif ($arr['msg']) {
@@ -243,8 +242,7 @@ class QuickBooks_Status_Report
 
             //print('checking object [' . $object . ']' . "<br />");
 
-            if ($do_restrict and
-                !in_array($object, $restrict)) {
+            if ($do_restrict && !in_array($object, $restrict)) {
                 continue;
             }
 
@@ -257,8 +255,7 @@ class QuickBooks_Status_Report
 
             //print_r($table_and_field);
 
-            if (!empty($table_and_field[0]) and
-                !empty($table_and_field[1])) {
+            if (!empty($table_and_field[0]) && !empty($table_and_field[1])) {
                 $sql = '
 					SELECT 
 						*
@@ -272,13 +269,11 @@ class QuickBooks_Status_Report
                     $sql .= ' 1 ';
                 }
 
-                if ($timestamp = strtotime($date_from) and
-                    $timestamp > 0) {
+                if (($timestamp = strtotime($date_from)) && $timestamp > 0) {
                     $sql .= " AND TimeCreated >= '" . date('Y-m-d H:i:s', $timestamp) . "' ";
                 }
 
-                if ($timestamp = strtotime($date_to) and
-                    $timestamp > 0) {
+                if (($timestamp = strtotime($date_to)) && $timestamp > 0) {
                     $sql .= " AND TimeCreated <= '" . date('Y-m-d H:i:s', $timestamp) . "' ";
                 }
 
@@ -342,10 +337,10 @@ class QuickBooks_Status_Report
         //$constant = str_replace('Import', '', $constant);
 
         $strlen = strlen($constant);
-        for ($i = 1; $i < $strlen; $i++) {
+        for ($i = 1; $i < $strlen; ++$i) {
             if (strtoupper($constant[$i]) == $constant[$i]) {
                 $constant = substr($constant, 0, $i) . ' ' . substr($constant, $i);
-                $i = $i + 2;
+                $i += 2;
             }
         }
 
@@ -405,9 +400,8 @@ class QuickBooks_Status_Report
         }
 
         $html .= '	</tbody>' . QUICKBOOKS_CRLF;
-        $html .= '</table>' . QUICKBOOKS_CRLF;
 
-        return $html;
+        return $html . ('</table>' . QUICKBOOKS_CRLF);
     }
 
     protected function _htmlForMirror($report, $skip_empties)
@@ -415,8 +409,7 @@ class QuickBooks_Status_Report
         $html = '';
 
         foreach ($report as $type => $records) {
-            if ($skip_empties and
-                !count($records)) {
+            if ($skip_empties && !count($records)) {
                 continue;
             }
 

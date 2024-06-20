@@ -183,6 +183,7 @@ class QuickBooks_IPP_IDS
     public const RESOURCE_SALESTERM = 'Sales-Term';
 
     public const RESOURCE_UOM = 'UOM';
+
     public const RESOURCE_UNITOFMEASURE = 'UOM';
 
     public const RESOURCE_VENDOR = 'Vendor';

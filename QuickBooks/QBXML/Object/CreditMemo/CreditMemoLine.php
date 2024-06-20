@@ -118,6 +118,7 @@ class QuickBooks_QBXML_Object_CreditMemo_CreditMemoLine extends QuickBooks_QBXML
         if ($amount = $this->get('Amount')) {
             return $this->get('Amount');
         }
+
         return $this->get('Rate') * $this->get('Quantity');
     }
 

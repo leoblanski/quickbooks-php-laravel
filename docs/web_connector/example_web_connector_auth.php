@@ -86,8 +86,7 @@ $response = $Server->handle(true, true);
  */
 function _quickbooks_custom_auth($username, $password, &$qb_company_file)
 {
-    if ($username == 'keith' and
-        $password == 'rocks') {
+    if ($username == 'keith' && $password == 'rocks') {
         // Use this company file and auth successfully
         $qb_company_file = 'C:\path\to\the\file-function.QBW';
 
@@ -168,5 +167,4 @@ function _quickbooks_customer_add_request($requestID, $user, $action, $ID, $extr
  */
 function _quickbooks_customer_add_response($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents)
 {
-    return;
 }

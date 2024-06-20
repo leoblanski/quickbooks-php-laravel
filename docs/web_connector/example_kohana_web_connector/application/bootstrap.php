@@ -1,6 +1,6 @@
 <?php
 
-defined('SYSPATH') or die('No direct access allowed.');
+defined('SYSPATH') || die('No direct access allowed.');
 
 /**
  * THIS FILE IS NOT THE REAL BOOTSTRAPPER

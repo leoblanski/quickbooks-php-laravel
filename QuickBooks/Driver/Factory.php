@@ -53,7 +53,7 @@ class QuickBooks_Driver_Factory
         if (is_object($dsn_or_conn)) {
             $key = get_class($dsn_or_conn) . serialize($config) . $log_level;
         } else {
-            $key = (string) $dsn_or_conn . serialize($config) . $log_level;
+            $key = $dsn_or_conn . serialize($config) . $log_level;
         }
 
         if (!isset($instances[$key])) {
@@ -65,11 +65,7 @@ class QuickBooks_Driver_Factory
                 $scheme = QuickBooks_Utilities::parseDSN($dsn_or_conn, [], 'scheme');
             }
 
-            if (false !== strpos($scheme, 'sql')) {		// SQL drivers are subclassed... change class/scheme name
-                $scheme = 'Sql_' . ucfirst(strtolower($scheme));
-            } else {
-                $scheme = ucfirst(strtolower($scheme));
-            }
+            $scheme = false !== strpos($scheme, 'sql') ? 'Sql_' . ucfirst(strtolower($scheme)) : ucfirst(strtolower($scheme));
 
             $class = 'QuickBooks_Driver_' . $scheme;
             $file = '/QuickBooks/Driver/' . str_replace(' ', '/', ucwords(str_replace('_', ' ', strtolower($scheme)))) . '.php';

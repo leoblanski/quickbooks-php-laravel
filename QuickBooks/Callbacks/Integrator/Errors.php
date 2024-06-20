@@ -101,38 +101,16 @@ class QuickBooks_Callbacks_Integrator_Errors
                 //	it already exists we're golden, or...?
 
                 return true;
-
-                switch ($action) {
-                    case QUICKBOOKS_ADD_SERVICEITEM:
-
-                        break;
-                    case QUICKBOOKS_ADD_DISCOUNTITEM:
-
-                        break;
-                    case QUICKBOOKS_ADD_OTHERCHARGEITEM:
-
-                        break;
-                }
-
-                return true;
         }
 
         switch ($action) {
             case QUICKBOOKS_ADD_PAYMENTMETHOD:
-
-                break;
             case QUICKBOOKS_ADD_SHIPMETHOD:
-
-                break;
             case QUICKBOOKS_ADD_NONINVENTORYITEM:
-
-                break;
             case QUICKBOOKS_ADD_INVENTORYITEM:
 
                 break;
             case QUICKBOOKS_ADD_SERVICEITEM:
-
-                return true;
             case QUICKBOOKS_ADD_CUSTOMER:
 
                 // Do a query for the customer
@@ -152,22 +130,14 @@ class QuickBooks_Callbacks_Integrator_Errors
      */
     public static function e0x80040400_foundanerror($requestID, $user, $action, $ident, $extra, &$err, $xml, $errnum, $errmsg, $config)
     {
-        if ($action == QUICKBOOKS_QUERY_UNITOFMEASURESET) {
-            // Some versions don't support this query, so ignore this error
-            return true;
-        }
-
-        return false;
+        // Some versions don't support this query, so ignore this error
+        return $action == QUICKBOOKS_QUERY_UNITOFMEASURESET;
     }
 
     public static function e3250_featurenotenabled($requestID, $user, $action, $ident, $extra, &$err, $xml, $errnum, $errmsg, $config)
     {
-        if ($action == QUICKBOOKS_QUERY_UNITOFMEASURESET) {
-            // Some versions don't support UnitOfMeasureSetQuery
-            return true;
-        }
-
-        return false;
+        // Some versions don't support UnitOfMeasureSetQuery
+        return $action == QUICKBOOKS_QUERY_UNITOFMEASURESET;
     }
 
     /**

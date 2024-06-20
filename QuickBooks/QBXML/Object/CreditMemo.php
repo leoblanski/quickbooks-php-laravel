@@ -221,6 +221,7 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
                 if (isset($this->_object['CreditMemoLine'])) {
                     $this->_object['CreditMemoLineAdd'] = $this->_object['CreditMemoLine'];
                 }
+                
                 break;
 
             case 'CreditMemoModRq':
@@ -228,8 +229,10 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
                 if (isset($this->_object['CreditMemoLine'])) {
                     $this->_object['CreditMemoLineMod'] = $this->_object['CreditMemoLine'];
                 }
+                
                 break;
         }
+        
         return parent::asList($request);
     }
 
@@ -242,16 +245,19 @@ class Quickbooks_QBXML_Object_CreditMemo extends QuickBooks_QBXML_Object
         switch ($root) {
             case QUICKBOOKS_ADD_CREDITMEMO:
 
-                foreach ($object['CreditMemoLineAdd'] as $key => $obj) {
+                foreach ($object['CreditMemoLineAdd'] as $obj) {
                     $obj->setOverride('CreditMemoLineAdd');
                 }
+                
                 break;
             case QUICKBOOKS_MOD_CREDITMEMO:
-                foreach ($object['CreditMemoLineAdd'] as $key => $obj) {
+                foreach ($object['CreditMemoLineAdd'] as $obj) {
                     $obj->setOverride('CreditMemoLineMod');
                 }
+                
                 break;
         }
+        
         return parent::asXML($root, $parent, $object);
     }
 

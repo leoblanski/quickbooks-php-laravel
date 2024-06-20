@@ -31,13 +31,11 @@ QuickBooks_Loader::load('/QuickBooks/Utilities.php');
 
 /**
  * Map a SQL schema to a qbXML schema
- * @var char
  */
 define('QUICKBOOKS_SQL_SCHEMA_MAP_TO_XML', 'q');
 
 /**
  * Map a qbXML schema to an SQL schema
- * @var char
  */
 define('QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL', 's');
 
@@ -61,13 +59,14 @@ class QuickBooks_SQL_Schema
      */
     public static function mapSchemaToSQLDefinition($xml, &$tables)
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $tmp = $Parser->parse($errnum, $errmsg);
+        $tmp = $quickBooksXMLParser->parse($errnum, $errmsg);
 
         $tmp = $tmp->children();
+        
         $base = current($tmp);
 
         $tmp = $base->children();
@@ -152,9 +151,7 @@ class QuickBooks_SQL_Schema
             $indexes = [];
 
             foreach ($tabledef[1] as $field => $fielddef) {
-                if ($field == 'ListID' or 		// Unique keys
-                    $field == 'TxnID' or
-                    $field == 'Name') {
+                if ($field == 'ListID' || $field == 'TxnID' || $field == 'Name') {
                     // We can't apply indexes to TEXT columns, so we need to
                     //	check and make sure the column isn't of type TEXT
                     //	before we decide to use this as an index
@@ -162,11 +159,7 @@ class QuickBooks_SQL_Schema
                     if ($fielddef[0] != QUICKBOOKS_DRIVER_SQL_TEXT) {
                         $uniques[] = $field;
                     }
-                } elseif (substr($field, -6, 6) == 'ListID' or 		// Other things we should index for performance
-                    substr($field, -5, 5) == 'TxnID' or
-                    substr($field, -6, 6) == 'LineID' or
-                    in_array($field, $always_index_fields) or
-                    in_array($table . '.' . $field, $always_index_tablefields)) {
+                } elseif (substr($field, -6, 6) === 'ListID' || substr($field, -5, 5) === 'TxnID' || substr($field, -6, 6) === 'LineID' || in_array($field, $always_index_fields) || in_array($table . '.' . $field, $always_index_tablefields)) {
                     // We can't apply indexes to TEXT columns, so we need to
                     //	check and make sure the column isn't of type TEXT
                     //	before we decide to use this as an index
@@ -222,28 +215,30 @@ class QuickBooks_SQL_Schema
             }
             */
 
-            if ($table) {
-                if (!isset($tables[$table])) {
-                    $tables[$table] = [
-                        0 => $table,
-                        1 => [],		// fields
-                        2 => null, 			// primary key
-                        3 => [], 		// other keys
-                        4 => [  ], 		// uniques
-                        ];
-                }
+            if ($table && !isset($tables[$table])) {
+                $tables[$table] = [
+                    0 => $table,
+                    1 => [],		// fields
+                    2 => null, 			// primary key
+                    3 => [], 		// other keys
+                    4 => [  ], 		// uniques
+                    ];
             }
 
-            if ($table and $field) {
-                if (!isset($tables[$table][1][$field])) {
-                    $tables[$table][1][$field] = QuickBooks_SQL_Schema::mapFieldToSQLDefinition($table, $field, $node->data());
-                }
+            if (!($table && $field)) {
+                continue;
             }
+
+            if (isset($tables[$table][1][$field])) {
+                continue;
+            }
+
+            $tables[$table][1][$field] = QuickBooks_SQL_Schema::mapFieldToSQLDefinition($table, $field, $node->data());
         }
 
         if ($node->childCount()) {
-            foreach ($node->children() as $child) {
-                QuickBooks_SQL_Schema::_transform($curpath . ' ' . $node->name(), $child, $tables);
+            foreach ($node->children() as $quickBooksXMLNode) {
+                QuickBooks_SQL_Schema::_transform($curpath . ' ' . $node->name(), $quickBooksXMLNode, $tables);
             }
         }
 
@@ -477,7 +472,7 @@ class QuickBooks_SQL_Schema
 
         if ($mode == QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL) {
             if (!isset($xml_to_sql[$path_or_tablefield])) {
-                if (substr($path_or_tablefield, -3, 3) != 'Ret') {
+                if (substr($path_or_tablefield, -3, 3) !== 'Ret') {
                     //$path_or_tablefield = substr($path_or_tablefield, 0, -3);
                     $path_or_tablefield .= 'Ret';
 
@@ -493,8 +488,6 @@ class QuickBooks_SQL_Schema
         } else {
 
         }
-
-        return;
     }
 
     /**
@@ -1315,8 +1308,6 @@ class QuickBooks_SQL_Schema
             'ItemNonInventoryRet ParentRef *' => 							[ 'ItemNonInventory', 'Parent_*' ],
             'ItemNonInventoryRet UnitOfMeasureRef' => 						[ null, null ],
             'ItemNonInventoryRet UnitOfMeasureRef *' => 					[ 'itemnoninventory', 'UnitOfMeasure_*' ],
-            'ItemNonInventoryRet SalesTaxCodeRef' => 						[ null, null ],
-            'ItemNonInventoryRet SalesTaxCodeRef' => 						[ 'itemnoninventory', 'SalesTaxCode_*' ],
             'ItemNonInventoryRet UnitOfMeasureSetRef' => 					[ null, null ],
             'ItemNonInventoryRet UnitOfMeasureSetRef *' => 					[ 'ItemNonInventory', 'UnitOfMeasureSet_*' ],
             'ItemNonInventoryRet SalesTaxCodeRef' => 						[ null, null ],
@@ -1614,7 +1605,6 @@ class QuickBooks_SQL_Schema
             'PurchaseOrderRet PurchaseOrderLineGroupRet PurchaseOrderLineRet CustomerRef *' => 			[ 'PurchaseOrder_PurchaseOrderLineGroup_PurchaseOrderLine', 'Customer_*' ],
 
             'PurchaseOrderRet PurchaseOrderLineGroupRet PurchaseOrderLineRet DataExtRet' => 			[ null, null ],
-            'PurchaseOrderRet PurchaseOrderLineGroupRet PurchaseOrderLineRet DataExtRet *' => 			[ null, null ],
             'PurchaseOrderRet PurchaseOrderLineGroupRet PurchaseOrderLineRet DataExtRet *' => 			[ 'DataExt', '*' ],
 
             'PurchaseOrderRet PurchaseOrderLineGroupRet PurchaseOrderLineRet *' => 						[ 'PurchaseOrder_PurchaseOrderLineGroup_PurchaseOrderLine', '*' ],
@@ -1844,10 +1834,6 @@ class QuickBooks_SQL_Schema
 
             'ShipMethodRet' => 								[ 'ShipMethod', null ],
             'ShipMethodRet *' => 							[ 'ShipMethod', '*' ],
-
-            'StandardTermsRet' => 							[ 'StandardTerms', null ],
-
-            'StandardTermsRet *' => 						[ 'StandardTerms', '*' ],
 
             'StandardTermsRet' => 							[ null, null ],
             'StandardTermsRet *' =>		 					[ 'StandardTerms', '*' ],
@@ -2319,11 +2305,10 @@ class QuickBooks_SQL_Schema
             // @todo Can we break out of this big loop early to improve performance?
 
             foreach ($xml_to_sql as $pattern => $table_and_field) {
-                if (substr_count($pattern, ' ') == $spaces and 		// check path depth
-                    false !== strpos($pattern, '*')) {
+                if (substr_count($pattern, ' ') === $spaces && false !== strpos($pattern, '*')) {
                     if (QuickBooks_SQL_Schema::_fnmatch($pattern, $path)) { 	// check it to see if this pattern matches
                         foreach (explode(' ', $pattern) as $kpart => $vpart) {
-                            if ($vpart == '*') {
+                            if ($vpart === '*') {
                                 $xml = explode(' ', $path);
                                 $match = $xml[$kpart];
 
@@ -2385,15 +2370,13 @@ class QuickBooks_SQL_Schema
 
             foreach ($sql_to_xml as $pattern => $path) {
                 $pattern_compare = strtolower($pattern);
-                if ($pattern_compare == $tablefield_compare) {
+                if ($pattern_compare === $tablefield_compare) {
                     $map = $path;
                     break;
-                } elseif (substr_count($pattern, '_') == $underscores and
-                    false !== strpos($pattern, '*')) {
+                } elseif (substr_count($pattern, '_') === $underscores && false !== strpos($pattern, '*')) {
                     if (QuickBooks_SQL_Schema::_fnmatch($pattern_compare, $tablefield_compare)) {
                         $tmp_pattern = explode('.', $pattern);
-                        if (count($tmp_pattern) == 2 and
-                            $tmp_pattern[1] == '*') {
+                        if (count($tmp_pattern) == 2 && $tmp_pattern[1] === '*') {
                             // table.* pattern
                             $tmp_tablefield = explode('.', $tablefield);
 
@@ -2433,24 +2416,24 @@ class QuickBooks_SQL_Schema
 
             if ($options['uppercase_tables']) {
                 $path_or_arrtablefield[0] = strtoupper($path_or_arrtablefield[0]);
-                $applied++;
+                ++$applied;
             } elseif ($options['lowercase_tables']) {
                 $path_or_arrtablefield[0] = strtolower($path_or_arrtablefield[0]);
-                $applied++;
+                ++$applied;
             }
 
             if ($options['uppercase_fields']) {
                 $path_or_arrtablefield[1] = strtoupper($path_or_arrtablefield[1]);
-                $applied++;
+                ++$applied;
             } elseif ($options['lowercase_fields']) {
                 $path_or_arrtablefield[1] = strtolower($path_or_arrtablefield[1]);
-                $applied++;
+                ++$applied;
             }
 
             return $applied;
-        } else {
-
         }
+
+        return null;
     }
 
     /**
@@ -2649,12 +2632,6 @@ class QuickBooks_SQL_Schema
 
                 break;
             case 'IDTYPE':
-
-                $type = QUICKBOOKS_DRIVER_SQL_VARCHAR;
-                $length = 40;
-                $default = 'null';
-
-                break;
             case 'ENUMTYPE':
 
                 $type = QUICKBOOKS_DRIVER_SQL_VARCHAR;
@@ -2672,21 +2649,16 @@ class QuickBooks_SQL_Schema
                 $length = strlen(QuickBooks_Cast::cast($object_type, $field, $x));
 
                 // All FullName and *_FullName fields should be VARCHAR(255) so we can add INDEXes to them
-                if ($length > 255 and
-                    strtolower(substr($field, -8)) == 'fullname') {
+                if ($length > 255 && strtolower(substr($field, -8)) === 'fullname') {
                     $length = 255;
                 }
 
                 // If the length is really long, put it in a TEXT field instead of a VARCHAR
-                if ($length > 255) {
-                    $type = QUICKBOOKS_DRIVER_SQL_TEXT;
-                } else {
-                    $type = QUICKBOOKS_DRIVER_SQL_VARCHAR;
-                }
+                $type = $length > 255 ? QUICKBOOKS_DRIVER_SQL_TEXT : QUICKBOOKS_DRIVER_SQL_VARCHAR;
 
                 $default = 'null';
 
-                if ($field == 'EditSequence') {
+                if ($field === 'EditSequence') {
                     $length = 16;
                 } elseif (isset($overrides[$object_type][$field])) {
                     //
@@ -2724,11 +2696,11 @@ class QuickBooks_SQL_Schema
         }*/
 
         // @TODO -- Keith, is this a good way to accomplish converting all txnid/listid fields to varchar? ~Garrett
-        if (stripos($field, 'listid') !== false or stripos($field, 'txnid') !== false) {
+        if (stripos($field, 'listid') !== false || stripos($field, 'txnid') !== false) {
             $type = QUICKBOOKS_DRIVER_SQL_VARCHAR;
             $length = 40;
             $default = 'null';
-        } elseif (strtolower($field) == 'sortorder') {
+        } elseif (strtolower($field) === 'sortorder') {
             $type = QUICKBOOKS_DRIVER_SQL_INTEGER;
             $length = null;
             $default = 0;

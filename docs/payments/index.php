@@ -8,7 +8,7 @@ $examples = [];
 
 $dh = opendir(dirname(__FILE__));
 while (false !== ($file = readdir($dh))) {
-    if (substr($file, 0, 7) != 'example') {
+    if (substr($file, 0, 7) !== 'example') {
         continue;
     }
 
@@ -80,7 +80,8 @@ while (false !== ($file = readdir($dh))) {
 							<a href="source.php?file=<?php print($file); ?>">(view source)</a>
 						</td>
 					</tr>
-				<?php endforeach; ?>
+				<?php endforeach;
+ ?>
 				<tr>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
@@ -119,7 +120,7 @@ while (false !== ($file = readdir($dh))) {
 				</tr>
 			</table>
 
-		<?php else: ?>
+<?php else: ?>
 			<div style="border: 2px solid red; text-align: center; padding: 8px; color: red;">
 				<b>NOT</b> CONNECTED!<br>
 				<br>

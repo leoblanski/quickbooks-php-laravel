@@ -132,6 +132,7 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
     {
         $this->getTxnDate($format = null);
     }
+    
     // Path: RefNumber, datatype: STRTYPE
 
     public function setDueDate($date)
@@ -230,13 +231,13 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
             case QUICKBOOKS_ADD_BILL:
 
                 if (!empty($object['ItemLineAdd'])) {
-                    foreach ($object['ItemLineAdd'] as $key => $obj) {
+                    foreach ($object['ItemLineAdd'] as $obj) {
                         $obj->setOverride('ItemLineAdd');
                     }
                 }
 
                 if (!empty($object['ExpenseLineAdd'])) {
-                    foreach ($object['ExpenseLineAdd'] as $key => $obj) {
+                    foreach ($object['ExpenseLineAdd'] as $obj) {
                         $obj->setOverride('ExpenseLineAdd');
                     }
                 }
@@ -245,13 +246,13 @@ class QuickBooks_QBXML_Object_Bill extends QuickBooks_QBXML_Object
             case QUICKBOOKS_MOD_BILL:
 
                 if (!empty($object['ItemLineMod'])) {
-                    foreach ($object['ItemLineMod'] as $key => $obj) {
+                    foreach ($object['ItemLineMod'] as $obj) {
                         $obj->setOverride('ItemLineMod');
                     }
                 }
 
                 if (!empty($object['ExpenseLineMod'])) {
-                    foreach ($object['ExpenseLineMod'] as $key => $obj) {
+                    foreach ($object['ExpenseLineMod'] as $obj) {
                         $obj->setOverride('ExpenseLineMod');
                     }
                 }

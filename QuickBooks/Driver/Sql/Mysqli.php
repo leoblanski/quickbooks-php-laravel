@@ -38,25 +38,18 @@ QuickBooks_Loader::load('/QuickBooks/Utilities.php');
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_SALT')) {
     /**
      * Salt used when hashing to create ticket values
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_SALT', QUICKBOOKS_DRIVER_SQL_SALT);
 }
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_PREFIX')) {
-    /**
-     *
-     *
-     * @var string
-     */
+    
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_PREFIX', QUICKBOOKS_DRIVER_SQL_PREFIX);
 }
 
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_QUEUETABLE')) {
     /**
      * MySQL table name to store queued requests in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_QUEUETABLE', QUICKBOOKS_DRIVER_SQL_QUEUETABLE);
 }
@@ -64,8 +57,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_QUEUETABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_USERTABLE')) {
     /**
      * MySQL table name to store usernames/passwords for the QuickBooks SOAP server
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_USERTABLE', QUICKBOOKS_DRIVER_SQL_USERTABLE);
 }
@@ -73,8 +64,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_USERTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_TICKETTABLE')) {
     /**
      * The table name to store session tickets in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_TICKETTABLE', QUICKBOOKS_DRIVER_SQL_TICKETTABLE);
 }
@@ -82,8 +71,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_TICKETTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_LOGTABLE')) {
     /**
      * The table name to store log data in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_LOGTABLE', QUICKBOOKS_DRIVER_SQL_LOGTABLE);
 }
@@ -91,8 +78,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_LOGTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_RECURTABLE')) {
     /**
      * The table name to store recurring events in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_RECURTABLE', QUICKBOOKS_DRIVER_SQL_RECURTABLE);
 }
@@ -100,8 +85,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_RECURTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_IDENTTABLE')) {
     /**
      * The table name to store identifiers in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_IDENTTABLE', QUICKBOOKS_DRIVER_SQL_IDENTTABLE);
 }
@@ -109,8 +92,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_IDENTTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_CONFIGTABLE')) {
     /**
      * The table name to store configuration options in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_CONFIGTABLE', QUICKBOOKS_DRIVER_SQL_CONFIGTABLE);
 }
@@ -118,8 +99,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_CONFIGTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_NOTIFYTABLE')) {
     /**
      * The table name to store notifications in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_NOTIFYTABLE', QUICKBOOKS_DRIVER_SQL_NOTIFYTABLE);
 }
@@ -127,8 +106,6 @@ if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_NOTIFYTABLE')) {
 if (!defined('QUICKBOOKS_DRIVER_SQL_MYSQLI_CONNECTIONTABLE')) {
     /**
      * The table name to store connection data in
-     *
-     * @var string
      */
     define('QUICKBOOKS_DRIVER_SQL_MYSQLI_CONNECTIONTABLE', QUICKBOOKS_DRIVER_SQL_CONNECTIONTABLE);
 }
@@ -189,7 +166,7 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
         $config = $this->_defaults($config);
         $this->_log_level = (int) $config['log_level'];
 
-        if (is_resource($dsn_or_conn) or ($dsn_or_conn instanceof mysqli)) {
+        if (is_resource($dsn_or_conn) || $dsn_or_conn instanceof mysqli) {
             $this->_conn = $dsn_or_conn;
         } else {
             $defaults = [
@@ -259,7 +236,7 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
             }
         }
 
-        foreach ($required as $table => $exists) {
+        foreach ($required as $exists) {
             if (!$exists) {
                 return false;
             }
@@ -283,9 +260,9 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
     protected function _connect($host, $port, $user, $pass, $db, $new_link, $client_flags)
     {
         if ($port) {
-            $this->_conn = new mysqli($host, $user, $pass, $db, $port) or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysqli_error(): ' . mysqli_connect_error());
+            ($this->_conn = new mysqli($host, $user, $pass, $db, $port)) || die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysqli_error(): ' . mysqli_connect_error());
         } else {
-            $this->_conn = new mysqli($host, $user, $pass, $db)  or die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysqli_error(): ' . mysqli_connect_error());
+            ($this->_conn = new mysqli($host, $user, $pass, $db)) || die('host: ' . $host . ', user: ' . $user . ', pass: ' . $pass . ' mysqli_error(): ' . mysqli_connect_error());
         }
 
         return true;
@@ -428,11 +405,15 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
      */
     public function rewind($res)
     {
-        if ($res and $res->num_rows > 0) {
-            return $res->data_seek(0);
+        if (!$res) {
+            return true;
         }
 
-        return true;
+        if ($res->num_rows <= 0) {
+            return true;
+        }
+
+        return $res->data_seek(0);
     }
 
     /**
@@ -479,26 +460,23 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
         switch ($def[0]) {
             case QUICKBOOKS_DRIVER_SQL_SERIAL:
 
-                $sql = $name . ' INT(10) UNSIGNED NOT NULL '; // AUTO_INCREMENT
-                return $sql;
+                // AUTO_INCREMENT
+                return $name . ' INT(10) UNSIGNED NOT NULL ';
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP:
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT_OR_UPDATE:
 
-                $sql = $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ';
-                return $sql;
+                return $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ';
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_UPDATE:
 
-                $sql = $name . ' TIMESTAMP DEFAULT 0 ON UPDATE CURRENT_TIMESTAMP ';
-                return $sql;
+                return $name . ' TIMESTAMP DEFAULT 0 ON UPDATE CURRENT_TIMESTAMP ';
             case QUICKBOOKS_DRIVER_SQL_TIMESTAMP_ON_INSERT:
 
-                $sql = $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ';
-                return $sql;
+                return $name . ' TIMESTAMP DEFAULT CURRENT_TIMESTAMP ';
             case QUICKBOOKS_DRIVER_SQL_BOOLEAN:
                 $sql = $name . ' tinyint(1) ';
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' DEFAULT NULL ';
                     } elseif ($def[2]) {
                         $sql .= ' DEFAULT 1 ';
@@ -512,7 +490,7 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
                 $sql = $name . ' int(10) unsigned ';
 
                 if (isset($def[2])) {
-                    if (strtolower($def[2]) == 'null') {
+                    if (strtolower($def[2]) === 'null') {
                         $sql .= ' DEFAULT NULL ';
                     } else {
                         $sql .= ' DEFAULT ' . (int) $def[2];
@@ -574,7 +552,7 @@ class QuickBooks_Driver_Sql_Mysqli extends QuickBooks_Driver_Sql
     {
         $arr_sql = parent::_generateCreateTable($name, $arr, $primary, $keys, $uniques, $if_not_exists);
 
-        if (is_array($primary) and count($primary) == 1) {
+        if (is_array($primary) && count($primary) == 1) {
             $primary = current($primary);
         }
 

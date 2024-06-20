@@ -309,8 +309,7 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
      */
     public function setShipAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $postalcode = '', $country = '', $note = '')
     {
-        $b = false;
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $this->set('ShipAddress Addr' . $i, ${'addr' . $i});
         }
 
@@ -354,7 +353,7 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
      */
     public function setBillAddress($addr1, $addr2 = '', $addr3 = '', $addr4 = '', $addr5 = '', $city = '', $state = '', $postalcode = '', $country = '', $note = '')
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $this->set('BillAddress Addr' . $i, ${'addr' . $i});
         }
 
@@ -376,9 +375,13 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
             $pending = $this->get('IsPending');
             if (is_bool($pending)) {
                 return $pending;
-            } elseif ($pending == 'false') {
+            }
+
+            if ($pending == 'false') {
                 return false;
-            } elseif ($pending == 'true') {
+            }
+            
+            if ($pending == 'true') {
                 return true;
             }
         }
@@ -730,7 +733,7 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
         switch ($root) {
             case QUICKBOOKS_ADD_SALESORDER:
 
-                foreach ($object['SalesOrderLineAdd'] as $key => $obj) {
+                foreach ($object['SalesOrderLineAdd'] as $obj) {
                     $obj->setOverride('SalesOrderLineAdd');
                 }
 
@@ -740,6 +743,7 @@ class QuickBooks_QBXML_Object_SalesOrder extends QuickBooks_QBXML_Object
                 if (isset($object['SalesOrderLine'])) {
                     $object['SalesOrderLineMod'] = $object['SalesOrderLine'];
                 }
+                
                 break;
         }
 

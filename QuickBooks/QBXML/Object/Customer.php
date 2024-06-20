@@ -426,18 +426,17 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
     protected function _setXYZAddress($pre, $post, $addr1, $addr2, $addr3, $addr4, $addr5, $city, $state, $province, $postalcode, $country, $note)
     {
         $b = false;
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $b = $this->set($pre . 'Address' . $post . ' Addr' . $i, ${'addr' . $i});
         }
 
         $b = $this->set($pre . 'Address' . $post . ' City', $city);
         $b = $this->set($pre . 'Address' . $post . ' State', $state);
         $b = $this->set($pre . 'Address' . $post . ' Province', $province);
-        $b = $this->set($pre . 'Address' . $post . ' PostalCode', $postalcode);
-        $b = $this->set($pre . 'Address' . $post . ' Country', $country);
-        $b = $this->set($pre . 'Address' . $post . ' Note', $note);
+        $this->set($pre . 'Address' . $post . ' PostalCode', $postalcode);
+        $this->set($pre . 'Address' . $post . ' Country', $country);
 
-        return $b;
+        return $this->set($pre . 'Address' . $post . ' Note', $note);
     }
 
     protected function _getXYZAddress($pre, $post, $part = null, $defaults = [])
@@ -694,16 +693,13 @@ class QuickBooks_QBXML_Object_Customer extends QuickBooks_QBXML_Object
      */
     public function setCreditCardInfo($cardno, $expmonth, $expyear, $name, $address, $postalcode)
     {
-        // should probably do better checking here for failed sets.
-        $b = false;
         $b = $this->set('CreditCardInfo CreditCardNumber', $cardno);
         $b = $this->set('CreditCardInfo ExpirationMonth', $expmonth);
         $b = $this->set('CreditCardInfo ExpirationYear', $expyear);
-        $b = $this->set('CreditCardInfo NameOnCard', $name);
-        $b = $this->set('CreditCardInfo CreditCardAddress', $address);
-        $b = $this->set('CreditCardInfo CreditCardPostalCode', $postalcode);
+        $this->set('CreditCardInfo NameOnCard', $name);
+        $this->set('CreditCardInfo CreditCardAddress', $address);
 
-        return $b;
+        return $this->set('CreditCardInfo CreditCardPostalCode', $postalcode);
     }
 
     /**

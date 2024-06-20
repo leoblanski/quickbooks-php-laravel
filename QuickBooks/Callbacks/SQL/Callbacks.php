@@ -81,10 +81,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
         // $requestID, $user, $hook, &$err, $hook_data, $callback_config
 
         // Driver instance
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
         // Map instance
-        $Map = new QuickBooks_Map_Qbxml($Driver);
+        $quickBooksMapQbxml = new QuickBooks_Map_Qbxml($quickBooksDriver);
 
         // Mode (read-onlyl, write-only, read/write)
         $mode = $callback_config['mode'];
@@ -115,6 +115,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
         foreach ($tmp as $action) {
             $sql_import[$action] = QuickBooks_Utilities::priorityForAction($action);
         }
+        
         //print('0.02 [' . (microtime(true) - $start) . ']' . "\n\n");
 
         $sql_import = QuickBooks_Callbacks_SQL_Callbacks::_filterActions($sql_import, $callback_config['_only_import'], $callback_config['_dont_import'], QUICKBOOKS_IMPORT);
@@ -158,8 +159,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
         // List of all actions we're performing
         $actions = [];
 
-        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_READONLY or
-            $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
+        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_READONLY || $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
             //print_r($sql_query);
             //print_r($sql_map);
 
@@ -175,28 +175,28 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 }
 
                 //$Queue->recurring($run_every, $action, md5(__FILE__), $priority, null, $user);
-                $Driver->recurEnqueue($user, $run_every, $action, md5(__FILE__), true, $priority);
+                $quickBooksDriver->recurEnqueue($user, $run_every, $action, md5(__FILE__), true, $priority);
 
                 $actions[] = $action;
             }
 
             if (in_array(QUICKBOOKS_QUERY_DELETEDLISTS, $callback_config['_only_misc'])) {
                 // Also grab any deleted records
-                $Driver->queueEnqueue($user, QUICKBOOKS_QUERY_DELETEDLISTS, 1, true, 0);
+                $quickBooksDriver->queueEnqueue($user, QUICKBOOKS_QUERY_DELETEDLISTS, 1, true, 0);
             }
 
             if (in_array(QUICKBOOKS_QUERY_DELETEDTXNS, $callback_config['_only_misc'])) {
-                $Driver->queueEnqueue($user, QUICKBOOKS_QUERY_DELETEDTXNS, 1, true, 0);
+                $quickBooksDriver->queueEnqueue($user, QUICKBOOKS_QUERY_DELETEDTXNS, 1, true, 0);
             }
 
             if (in_array(QUICKBOOKS_DERIVE_INVENTORYLEVELS, $callback_config['_only_misc'])) {
                 // Update inventory levels
-                $Driver->queueEnqueue($user, QUICKBOOKS_DERIVE_INVENTORYLEVELS, 1, true, 0);
+                $quickBooksDriver->queueEnqueue($user, QUICKBOOKS_DERIVE_INVENTORYLEVELS, 1, true, 0);
             }
 
             if (in_array(QUICKBOOKS_DERIVE_INVENTORYASSEMBLYLEVELS, $callback_config['_only_misc'])) {
                 // Update inventory assembly levels
-                $Driver->queueEnqueue($user, QUICKBOOKS_DERIVE_INVENTORYASSEMBLYLEVELS, 1, true, 0);
+                $quickBooksDriver->queueEnqueue($user, QUICKBOOKS_DERIVE_INVENTORYASSEMBLYLEVELS, 1, true, 0);
             }
         }
 
@@ -237,15 +237,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
         $time_start = time();	// When we started
 
         // Objects that need to be *ADDED* to QuickBooks
-        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY or
-            $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
+        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY || $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
             $mark_as_queued = false;
-            $map = $Map->adds($sql_add, $mark_as_queued);
+            $quickBooksMapQbxml = $quickBooksMapQbxml->adds($sql_add, $mark_as_queued);
 
             //$Driver->log('ADDS: ' . print_r($map, true));
 
             // Go through each action in the returned map
-            foreach ($map as $action => $list) {
+            foreach ($quickBooksMapQbxml as $action => $list) {
                 //$Driver->log('Now doing: ' . $action . ', ' . print_r($list, true));
 
                 //$__start = microtime(true);
@@ -253,14 +252,15 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 // Go through each ID for each action
                 $counter = 0;
                 foreach ($list as $ID => $priority) {
-                    $counter++;
+                    ++$counter;
 
                     if (time() - $time_start > $time_limit) {
                         //print('HIT LIMIT SO WE\'RE BREAKING OUT OF HERE [' . $action . '] [ ' . $counter . ' of ' . count($list) . ']!' . "\n");
                         break 2;
                     }
+                    
                     // Queue it up to be added to QuickBooks
-                    $Driver->queueEnqueue($user, $action, $ID, true, $priority);
+                    $quickBooksDriver->queueEnqueue($user, $action, $ID, true, $priority);
                 }
 
                 //print('now ' . $action . ' [' . (microtime(true) - $__start) . ']' . "\n");
@@ -270,8 +270,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
         //print('3 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
 
         // Objects that need to be *MODIFIED* within QuickBooks
-        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY or
-            $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
+        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY || $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
             // Check if any objects need to be pushed back to QuickBooks
             foreach ($sql_mod as $action => $priority) {
                 $object = QuickBooks_Utilities::actionToObject($action);
@@ -284,7 +283,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 //$Driver->log('Searching table: ' . print_r($table_and_field, true) . ' for MODIFIED records.', null, QUICKBOOKS_LOG_DEBUG);
 
                 // If we managed to map a table, we need to search that table for changed records
-                if (!empty($table_and_field[0]) and !empty($table_and_field[1])) {
+                if (!empty($table_and_field[0]) && !empty($table_and_field[1])) {
                     // For MODs:
                     //	- Do not sync if to_delete = 1
                     //	- Do not sync if to_skip = 1
@@ -308,16 +307,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                     $errnum = 0;
                     $errmsg = '';
-                    $res = $Driver->query($sql, $errnum, $errmsg);
-                    while ($arr = $Driver->fetch($res)) {
-                        if (strlen($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER])) {
+                    $res = $quickBooksDriver->query($sql, $errnum, $errmsg);
+                    while ($arr = $quickBooksDriver->fetch($res)) {
+                        if (strlen($arr[QUICKBOOKS_DRIVER_SQL_FIELD_ERROR_NUMBER]) !== 0) {
                             // Do not sync this record until the error is resolved
 
                             continue;
                         }
 
                         // Queue up this MOD request
-                        $Driver->queueEnqueue($user, $action, $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, $priority);
+                        $quickBooksDriver->queueEnqueue($user, $action, $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, $priority);
 
                         $actions[] = $action;
 
@@ -330,8 +329,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
         //print('4 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
 
-        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY or
-            $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
+        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY || $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
             // Check if any *voided* objects need to be voided in QuickBooks
             foreach ($sql_add as $action => $priority) {
                 $object = QuickBooks_Utilities::actionToObject($action);
@@ -367,14 +365,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                     $errnum = 0;
                     $errmsg = '';
-                    $res = $Driver->query($sql, $errnum, $errmsg);
+                    $res = $quickBooksDriver->query($sql, $errnum, $errmsg);
 
                     $extra = [
                         'object' => $object,
                         ];
 
-                    while ($arr = $Driver->fetch($res)) {
-                        $Driver->queueEnqueue($user, QUICKBOOKS_VOID_TRANSACTION, $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, $priority, $extra);
+                    while ($arr = $quickBooksDriver->fetch($res)) {
+                        $quickBooksDriver->queueEnqueue($user, QUICKBOOKS_VOID_TRANSACTION, $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, $priority, $extra);
                     }
                 }
             }
@@ -382,48 +380,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
         //print('5 [' . (microtime(true) - $start) . ']' . "\n\n"); $start = microtime(true);
 
-        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY or
-            $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
+        if ($mode == QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY || $mode == QuickBooks_WebConnector_Server_SQL::MODE_READWRITE) {
             // Check if any *deleted* objects need to be deleted from QuickBooks
-            foreach ($sql_add as $action => $priority) {
+            foreach ($sql_add as $priority) {
                 break;
-
-                $priority = 1000 - $priority;
-                $object = QuickBooks_Utilities::actionToObject($action);
-
-                $table_and_field = [];
-
-                // Convert to table and primary key, select qbsql id
-                QuickBooks_SQL_Schema::mapPrimaryKey($object, QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $table_and_field);
-
-                // Delete if it's marked for deletion and it hasn't been deleted already
-                if (!empty($table_and_field[0])) {
-                    $sql = '
-						SELECT 
-							' . QUICKBOOKS_DRIVER_SQL_FIELD_ID . '
-						FROM 
-							' . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table_and_field[0] . ' 
-						WHERE 
-							 ' . QUICKBOOKS_DRIVER_SQL_FIELD_TO_DELETE . ' = 1 AND 
-							 ' . QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_DELETED . ' != 1 AND 
-							 ' . QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY . " <= '" . $NOW . "' ";
-
-                    $errnum = 0;
-                    $errmsg = '';
-                    $res = $Driver->query($sql, $errnum, $errmsg);
-                    $key = QuickBooks_Utilities::keyForAction($action);
-
-                    if ($key == 'ListID') {
-                        $useAction = 'ListDel';
-                    } else {
-                        $useAction = 'TxnDel';
-                    }
-
-                    $extra['objectType'] = $object;
-                    while ($arr = $Driver->fetch($res)) {
-                        $Driver->queueEnqueue($user, $useAction, $extra['objectType'] . $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID], true, $priority, $extra);
-                    }
-                }
             }
         }
 
@@ -472,24 +432,27 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     protected static function _filterActions($action_to_priority, $only_do, $dont_do, $type)
     {
-        $start = microtime(true);
-        foreach ($action_to_priority as $action => $priority) {
+        microtime(true);
+        foreach (array_keys($action_to_priority) as $action) {
             //print('stepping 1... [' . (microtime(true) - $start) . ']' . "\n");
             $converted = QuickBooks_Utilities::actionToObject($action);
             //print('stepping 2... [' . (microtime(true) - $start) . ']' . "\n");
 
-            if (count($only_do) and
-                (false === array_search($action, $only_do) and
-                 false === array_search($converted, $only_do))) {
+            if (count($only_do) && (!in_array($action, $only_do) && !in_array($converted, $only_do))) {
                 unset($action_to_priority[$action]);
             }
 
-            if (count($dont_do) and
-                (false !== array_search($action, $dont_do) or
-                false !== array_search($converted, $dont_do))) {
-                unset($action_to_priority[$action]);
+            if (!count($dont_do)) {
+                continue;
             }
+
+            if (!in_array($action, $dont_do) && !in_array($converted, $dont_do)) {
+                continue;
+            }
+
+            unset($action_to_priority[$action]);
         }
+        
         //print("\n" . 'ending... [' . (microtime(true) - $start) . ']' . "\n\n");
 
         arsort($action_to_priority);
@@ -515,9 +478,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     protected static function _callHooks(&$hooks, $hook, $requestID, $user, &$err, $hook_data, $callback_config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
-        return QuickBooks_Callbacks::callHook($Driver, $hooks, $hook, $requestID, $user, null, $err, $hook_data, $callback_config, __FILE__, __LINE__);
+        return QuickBooks_Callbacks::callHook($quickBooksDriver, $hooks, $hook, $requestID, $user, null, $err, $hook_data, $callback_config, __FILE__, __LINE__);
     }
 
     /**
@@ -568,10 +531,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     protected static function _requiredVersionForElement($required, $current, $element, $locale = QUICKBOOKS_LOCALE_US, $action = null)
     {
-        if ($locale = QUICKBOOKS_LOCALE_US) {
-            if ($current >= $required) {
-                return $element;
-            }
+        if (($locale = QUICKBOOKS_LOCALE_US) === '') {
+            return '';
+        }
+
+        if ($current >= $required) {
+            return $element;
         }
 
         return '';
@@ -591,35 +556,31 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        if ($locale == QUICKBOOKS_LOCALE_CA or $locale == QUICKBOOKS_LOCALE_UK or $locale == QUICKBOOKS_LOCALE_AU) {
+        if ($locale == QUICKBOOKS_LOCALE_CA || $locale == QUICKBOOKS_LOCALE_UK || $locale == QUICKBOOKS_LOCALE_AU) {
             return '';
         }
 
-        if (is_array($extra) and
-            !empty($extra['iteratorID'])) {
+        if (is_array($extra) && !empty($extra['iteratorID'])) {
             $xml .= ' iterator="Continue" iteratorID="' . $extra['iteratorID'] . '" ';
         } else {
             $xml .= ' iterator="Start" ';
         }
 
         $xml .= '>' . "\n";
-        $xml .= "\t" . '<MaxReturned>';
+        $xml .= '	<MaxReturned>';
 
-        if (is_array($extra) and
-            !empty($extra['maxReturned'])) {
+        if (is_array($extra) && !empty($extra['maxReturned'])) {
             $xml .= $extra['maxReturned'];
         } else {
             $xml .= QUICKBOOKS_SERVER_SQL_ITERATOR_MAXRETURNED;
         }
 
-        $xml .= '</MaxReturned';
-
-        return $xml;
+        return $xml . '</MaxReturned';
     }
 
     public static function InventoryLevelsRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $xml = '<?xml version="1.0" encoding="utf-8"?>
+        return '<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="8.0"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="stopOnError">
@@ -637,8 +598,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					</GeneralSummaryReportQueryRq>
 				</QBXMLMsgsRq>
 			</QBXML>';
-
-        return $xml;
     }
 
     /**
@@ -646,7 +605,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function InventoryLevelsResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
         $col_defs = [];
 
@@ -661,11 +620,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
             $col_defs[$colID] = $type;
         }
-
-        //print_r($col_defs);
-        //exit;
-
-        $items = [];
 
         // Now, find the actual data
         $tmp = $xml;
@@ -720,7 +674,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             )
             */
 
-            $Driver->log('Inventory for "' . $item['FullName'] . '": ' . print_r($item, true), null, QUICKBOOKS_LOG_DEBUG);
+            $quickBooksDriver->log('Inventory for "' . $item['FullName'] . '": ' . print_r($item, true), null, QUICKBOOKS_LOG_DEBUG);
             //$errnum = null;
             //$errmsg = null;
             //mysql_query("INSERT INTO quickbooks_log VALUES ( msg, log_datetime) VALUES ( '" . mysql_real_escape_string(print_r($item, true)) . "', NOW() ) ");
@@ -747,11 +701,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
             $errnum = null;
             $errmsg = null;
-            $Driver->query($sql1, $errnum, $errmsg, 0, 1, $vars1);
+            $quickBooksDriver->query($sql1, $errnum, $errmsg, 0, 1, $vars1);
 
             //$Driver->log($sql1, null, QUICKBOOKS_LOG_DEBUG);
 
-            if (!$Driver->affected()) {
+            if (!$quickBooksDriver->affected()) {
                 $sql2 = '
 					UPDATE 
 						' . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventory 
@@ -766,7 +720,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                 $errnum = null;
                 $errmsg = null;
-                $Driver->query($sql2, $errnum, $errmsg, 0, 1, $vars2);
+                $quickBooksDriver->query($sql2, $errnum, $errmsg, 0, 1, $vars2);
 
                 //$Driver->log($sql2, null, QUICKBOOKS_LOG_DEBUG);
             }
@@ -776,7 +730,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 $hooks = $callback_config['hooks'];
             }
 
-            $Driver->log('CALLING THE HOOKS! ' . print_r($hooks, true), null, QUICKBOOKS_LOG_VERBOSE);
+            $quickBooksDriver->log('CALLING THE HOOKS! ' . print_r($hooks, true), null, QUICKBOOKS_LOG_VERBOSE);
 
             // Call any hooks that occur when a record is updated
             $hook_data = [
@@ -797,7 +751,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
     public static function InventoryAssemblyLevelsRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $xml = '<?xml version="1.0" encoding="utf-8"?>
+        return '<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="8.0"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="stopOnError">
@@ -813,8 +767,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					</GeneralSummaryReportQueryRq>
 				</QBXMLMsgsRq>
 			</QBXML>';
-
-        return $xml;
     }
 
     /**
@@ -822,7 +774,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function InventoryAssemblyLevelsResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
         $col_defs = [];
 
@@ -837,11 +789,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
             $col_defs[$colID] = $type;
         }
-
-        //print_r($col_defs);
-        //exit;
-
-        $items = [];
 
         // Now, find the actual data
         $tmp = $xml;
@@ -896,7 +843,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             )
             */
 
-            $Driver->log('Inventory Assembly for "' . $item['FullName'] . '": ' . print_r($item, true), null, QUICKBOOKS_LOG_DEBUG);
+            $quickBooksDriver->log('Inventory Assembly for "' . $item['FullName'] . '": ' . print_r($item, true), null, QUICKBOOKS_LOG_DEBUG);
             //$errnum = null;
             //$errmsg = null;
             //mysql_query("INSERT INTO quickbooks_log VALUES ( msg, log_datetime) VALUES ( '" . mysql_real_escape_string(print_r($item, true)) . "', NOW() ) ");
@@ -923,11 +870,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
             $errnum = null;
             $errmsg = null;
-            $Driver->query($sql1, $errnum, $errmsg, 0, 1, $vars1);
+            $quickBooksDriver->query($sql1, $errnum, $errmsg, 0, 1, $vars1);
 
             //$Driver->log($sql1, null, QUICKBOOKS_LOG_DEBUG);
 
-            if (!$Driver->affected()) {
+            if (!$quickBooksDriver->affected()) {
                 $sql2 = '
 					UPDATE
 						' . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventoryassembly
@@ -942,7 +889,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                 $errnum = null;
                 $errmsg = null;
-                $Driver->query($sql2, $errnum, $errmsg, 0, 1, $vars2);
+                $quickBooksDriver->query($sql2, $errnum, $errmsg, 0, 1, $vars2);
 
                 //$Driver->log($sql2, null, QUICKBOOKS_LOG_DEBUG);
             }
@@ -952,7 +899,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 $hooks = $callback_config['hooks'];
             }
 
-            $Driver->log('CALLING THE HOOKS! ' . print_r($hooks, true), null, QUICKBOOKS_LOG_VERBOSE);
+            $quickBooksDriver->log('CALLING THE HOOKS! ' . print_r($hooks, true), null, QUICKBOOKS_LOG_VERBOSE);
 
             // Call any hooks that occur when a record is updated
             $hook_data = [
@@ -1054,7 +1001,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -1097,9 +1044,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 					</ListDeletedQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -1107,22 +1052,22 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ListDeletedQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ListDeletedQueryRs');
 
-        foreach ($List->children() as $Node) {
+        foreach ($List->children() as $quickBooksXMLNode) {
             $map = [];
             $others = [];
 
-            QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt('ListDeletedRet ListDelType'))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
+            QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($quickBooksXMLNode->getChildDataAt('ListDeletedRet ListDelType'))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
 
             if (isset($map[0])) {
                 $table = $map[0];
@@ -1131,9 +1076,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     'qbsql_flag_deleted' => 1,
                     ];
 
-                $multipart = [ 'ListID' => $Node->getChildDataAt('ListDeletedRet ListID') ];
+                $multipart = [ 'ListID' => $quickBooksXMLNode->getChildDataAt('ListDeletedRet ListID') ];
 
-                $Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, [ $multipart ]);
+                $quickBooksDriver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, [ $multipart ]);
             }
         }
 
@@ -1151,7 +1096,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -1186,9 +1131,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 					</TxnDeletedQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -1198,22 +1141,22 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function TxnDeletedQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs TxnDeletedQueryRs');
 
-        foreach($List->children() as $Node) {
+        foreach($List->children() as $quickBooksXMLNode) {
             $map = [];
             $others = [];
 
-            QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt('TxnDeletedRet TxnDelType'))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
+            QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($quickBooksXMLNode->getChildDataAt('TxnDeletedRet TxnDelType'))), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
 
             /*
             $sqlObject = new QuickBooks_SQL_Object($map[0], trim(QuickBooks_Utilities::objectToXMLElement($Node->getChildDataAt("TxnDeletedRet TxnDelType"))));
@@ -1225,12 +1168,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 $data = [
                     'qbsql_flag_deleted' => 1,
                     ];
-                $multipart = [ 'TxnID' => $Node->getChildDataAt('TxnDeletedRet TxnID') ];
+                $multipart = [ 'TxnID' => $quickBooksXMLNode->getChildDataAt('TxnDeletedRet TxnID') ];
 
-                $Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, [ $multipart ]);
+                $quickBooksDriver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $data, [ $multipart ]);
             }
 
         }
+        
         return true;
     }
 
@@ -1239,24 +1183,22 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ListDelRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
         $ID = str_replace($extra['objectType'], '', $ID);
 
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . strtolower($extra['objectType']), [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
-            $Object = new QuickBooks_SQL_Object(null, null, $arr);
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . strtolower($extra['objectType']), [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+            $quickBooksSQLObject = new QuickBooks_SQL_Object(null, null, $arr);
 
-            $xml .= '<?xml version="1.0" encoding="utf-8"?>
+            return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<ListDelRq requestID="' . $requestID . '">
 						<ListDelType>' . $extra['objectType'] . '</ListDelType>
-						<ListID>' . $Object->get('ListID') . '</ListID>
+						<ListID>' . $quickBooksSQLObject->get('ListID') . '</ListID>
 					</ListDelRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-            return $xml;
+			</QBXML>');
         }
 
         return '';
@@ -1269,16 +1211,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ListDelResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        $Parser = new QuickBooks_XML_Parser($xml);
+        QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = QUICKBOOKS_XML_OK;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
-
-        $List = $Root->getChildAt('QBXML QBXMLMsgsRs ListDelRs');
-        $Node = $List;
+        $Root->getChildAt('QBXML QBXMLMsgsRs ListDelRs');
 
         if ($errnum == QUICKBOOKS_XML_OK) {
             /*
@@ -1313,11 +1253,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function TxnVoidRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . strtolower($extra['object']), [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . strtolower($extra['object']), [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             $xml = '';
-            $xml .= '<?xml version="1.0" encoding="utf-8"?>
+
+            return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="stopOnError">
@@ -1326,9 +1267,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						<TxnID>' . $arr['TxnID'] . '</TxnID>
 					</TxnVoidRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-            return $xml;
+			</QBXML>');
         }
 
         return '';
@@ -1341,7 +1280,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function TxnVoidResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
         // Figure out what SQL table this object came from
         $map = [];
@@ -1354,7 +1293,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
         $update = [
             QUICKBOOKS_DRIVER_SQL_FIELD_FLAG_VOIDED => 1,
             'AmountDue' => 0.0,
-            'Amount' => 0.0,
             'OpenAmount' => 0.0,
             'Amount' => 0.0,
             'Subtotal' => 0.0,
@@ -1368,7 +1306,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             ];
 
         // Update the SQL table to indicate it was voided
-        $Driver->update($table, $update, $where);
+        $quickBooksDriver->update($table, $update, $where);
 
         return true;
     }
@@ -1380,24 +1318,23 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function TxnDelRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
         $ID = str_replace($extra['objectType'], '', $ID);
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . strtolower($extra['objectType']), [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
-            $Object = new QuickBooks_SQL_Object(null, null, $arr);
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . strtolower($extra['objectType']), [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+            $quickBooksSQLObject = new QuickBooks_SQL_Object(null, null, $arr);
 
             $xml = '';
-            $xml .= '<?xml version="1.0" encoding="utf-8"?>
+
+            return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 				<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 				<QBXML>
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 						<TxnDelRq requestID="' . $requestID . '">
 							<TxnDelType>' . $extra['objectType'] . '</TxnDelType>
-							<TxnID>' . $Object->get('TxnID') . '</TxnID>
+							<TxnID>' . $quickBooksSQLObject->get('TxnID') . '</TxnID>
 						</TxnDelRq>
 					</QBXMLMsgsRq>
-				</QBXML>';
-
-            return $xml;
+				</QBXML>');
         }
 
         return '';
@@ -1410,12 +1347,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function TxnDelResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        $Parser = new QuickBooks_XML_Parser($xml);
+        QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs TxnDelRs');
@@ -1425,8 +1362,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $map = [];
             $others = [];
             QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::objectToXMLElement($extra['objectType'])), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $map, $others);
-            $sqlObject = new QuickBooks_SQL_Object($map[0], trim(QuickBooks_Utilities::objectToXMLElement($extra['objectType'])));
-            $table = $sqlObject->table();
+            $quickBooksSQLObject = new QuickBooks_SQL_Object($map[0], trim(QuickBooks_Utilities::objectToXMLElement($extra['objectType'])));
+            $table = $quickBooksSQLObject->table();
             $multipart = [ 'TxnID' => $Node->getChildDataAt('TxnDelRs TxnID') ];
 
             //$config['delete'] =
@@ -1469,7 +1406,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         if (!empty($extra['ListID'])) {
             $xml = '';
-            $xml .= '<?xml version="1.0" encoding="utf-8"?>
+            return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 				<?qbxml version="' . $version . '"?>
 				<QBXML>
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -1477,12 +1414,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							<ListID>' . $extra['ListID'] . '</ListID>
 						</CustomerQueryRq>
 					</QBXMLMsgsRq>
-				</QBXML>';
+				</QBXML>');
+        }
 
-            return $xml;
-        } elseif (!empty($extra['FullName'])) {
+        if (!empty($extra['FullName'])) {
             $xml = '';
-            $xml .= '<?xml version="1.0" encoding="utf-8"?>
+            return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 				<?qbxml version="' . $version . '"?>
 				<QBXML>
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -1490,9 +1427,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_CUSTOMER, 'FullName', $extra['FullName']) . '</FullName>
 						</CustomerQueryRq>
 					</QBXMLMsgsRq>
-				</QBXML>';
-
-            return $xml;
+				</QBXML>');
         }
 
         $err = '' . __METHOD__ . ' called without a proper $extra array: ' . print_r($extra, true);
@@ -1511,7 +1446,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -1519,9 +1454,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						<ListID>' . $extra['ListID'] . '</ListID>
 					</ItemQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function ItemDeriveResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
@@ -1535,11 +1468,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
     public static function InvoiceDeriveRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
         // Try to fetch it from the database
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
         if (!empty($extra['TxnID'])) {
             $xml = '';
-            $xml .= '<?xml version="1.0" encoding="utf-8"?>
+            return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 				<?qbxml version="' . $version . '"?>
 				<QBXML>
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -1547,12 +1479,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							<TxnID>' . $extra['TxnID'] . '</TxnID>
 						</InvoiceQueryRq>
 					</QBXMLMsgsRq>
-				</QBXML>';
+				</QBXML>');
+        }
 
-            return $xml;
-        } elseif ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             $xml = '';
-            $xml .= '<?xml version="1.0" encoding="utf-8"?>
+            return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 				<?qbxml version="' . $version . '"?>
 				<QBXML>
 					<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -1560,9 +1492,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 							<TxnID>' . $arr['TxnID'] . '</TxnID>
 						</InvoiceQueryRq>
 					</QBXMLMsgsRq>
-				</QBXML>';
-
-            return $xml;
+				</QBXML>');
         }
 
         $err = '' . __METHOD__ . ' called without a proper $extra array: ' . print_r($extra, true);
@@ -1587,50 +1517,50 @@ class QuickBooks_Callbacks_SQL_Callbacks
         // Charge. 		BalanceRemaining
         // CreditMemo.	IsPending, CreditRemaining
 
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt($path);
-        foreach ($List->children() as $Node) {
+        foreach ($List->children() as $quickBooksXMLNode) {
             switch ($type) {
                 case QUICKBOOKS_OBJECT_ITEM:
 
                     $xpath = '';
                     $table = '';
-                    switch ($Node->name()) {
+                    switch ($quickBooksXMLNode->name()) {
                         case 'ItemServiceRet':
-                            $xpath = $Node->name();
+                            $xpath = $quickBooksXMLNode->name();
                             $table = 'itemservice';
                             break;
                         case 'ItemInventoryRet':
-                            $xpath = $Node->name();
+                            $xpath = $quickBooksXMLNode->name();
                             $table = 'iteminventory';
                             break;
                         case 'ItemNonInventoryRet':
-                            $xpath = $Node->name();
+                            $xpath = $quickBooksXMLNode->name();
                             $table = 'itemnoninventory';
                             break;
                     }
 
-                    if ($xpath and $table) {
+                    if ($xpath && $table) {
                         $arr = [
-                            'ListID' => $Node->getChildDataAt($xpath . ' ListID'),
-                            'FullName' => $Node->getChildDataAt($xpath . ' FullName'),
-                            'Parent_ListID' => $Node->getChildDataAt($xpath . ' ParentRef ListID'),
-                            'Parent_FullName' => $Node->getChildDataAt($xpath . ' ParentRef FullName'),
-                            'IsActive' => (int) ($Node->getChildDataAt($xpath . ' IsActive') == 'true'),
-                            'EditSequence' => $Node->getChildDataAt($xpath . ' EditSequence'),
+                            'ListID' => $quickBooksXMLNode->getChildDataAt($xpath . ' ListID'),
+                            'FullName' => $quickBooksXMLNode->getChildDataAt($xpath . ' FullName'),
+                            'Parent_ListID' => $quickBooksXMLNode->getChildDataAt($xpath . ' ParentRef ListID'),
+                            'Parent_FullName' => $quickBooksXMLNode->getChildDataAt($xpath . ' ParentRef FullName'),
+                            'IsActive' => (int) ($quickBooksXMLNode->getChildDataAt($xpath . ' IsActive') == 'true'),
+                            'EditSequence' => $quickBooksXMLNode->getChildDataAt($xpath . ' EditSequence'),
                             ];
 
-                        $Driver->log('Updating DERIVED ' . $xpath . ' fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID, null, QUICKBOOKS_LOG_VERBOSE);
+                        $quickBooksDriver->log('Updating DERIVED ' . $xpath . ' fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID, null, QUICKBOOKS_LOG_VERBOSE);
                         //mysql_query("INSERT INTO quickbooks_log ( msg ) VALUES ( '" . mysql_real_escape_string('Updating DERIVED ' . $xpath . ' fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID) . "' ) ");
 
-                        $Driver->update(
+                        $quickBooksDriver->update(
                             QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table,
                             $arr,
                             [ [ 'qbsql_id' => $ID ] ],
@@ -1651,21 +1581,21 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     // Customer.	Balance, TotalBalance,
 
                     $arr = [
-                        'ListID' => $Node->getChildDataAt('CustomerRet ListID'),
-                        'FullName' => $Node->getChildDataAt('CustomerRet FullName'),
-                        'Parent_ListID' => $Node->getChildDataAt('CustomerRet ParentRef ListID'),
-                        'Parent_FullName' => $Node->getChildDataAt('CustomerRet ParentRef FullName'),
-                        'IsActive' => (int) ($Node->getChildDataAt('CustomerRet IsActive') == 'true'),
-                        'EditSequence' => $Node->getChildDataAt('CustomerRet EditSequence'),
-                        'Balance' => $Node->getChildDataAt('CustomerRet Balance'),
-                        'TotalBalance' => $Node->getChildDataAt('CustomerRet TotalBalance'),
+                        'ListID' => $quickBooksXMLNode->getChildDataAt('CustomerRet ListID'),
+                        'FullName' => $quickBooksXMLNode->getChildDataAt('CustomerRet FullName'),
+                        'Parent_ListID' => $quickBooksXMLNode->getChildDataAt('CustomerRet ParentRef ListID'),
+                        'Parent_FullName' => $quickBooksXMLNode->getChildDataAt('CustomerRet ParentRef FullName'),
+                        'IsActive' => (int) ($quickBooksXMLNode->getChildDataAt('CustomerRet IsActive') == 'true'),
+                        'EditSequence' => $quickBooksXMLNode->getChildDataAt('CustomerRet EditSequence'),
+                        'Balance' => $quickBooksXMLNode->getChildDataAt('CustomerRet Balance'),
+                        'TotalBalance' => $quickBooksXMLNode->getChildDataAt('CustomerRet TotalBalance'),
                         ];
 
                     //$Driver->log('Updating DERIVED CUSTOMER fields: ' . print_r($arr, true) . ' where: ' . print_r($extra, true), null, QUICKBOOKS_LOG_VERBOSE);
 
-                    $Driver->log('Updating DERIVED CUSTOMER fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID, null, QUICKBOOKS_LOG_VERBOSE);
+                    $quickBooksDriver->log('Updating DERIVED CUSTOMER fields: ' . print_r($arr, true) . ' where qbsql_id = ' . $ID, null, QUICKBOOKS_LOG_VERBOSE);
 
-                    $Driver->update(
+                    $quickBooksDriver->update(
                         QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customer',
                         $arr,
                         [ [ 'qbsql_id' => $ID ] ],
@@ -1702,30 +1632,30 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                     // Invoice.		IsPending, AppliedAmount, BalanceRemaining, IsPaid
 
-                    $existing = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ]);
+                    $existing = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ]);
 
                     $arr = [
-                        'TxnID' => $Node->getChildDataAt('InvoiceRet TxnID'),
-                        'EditSequence' => $Node->getChildDataAt('InvoiceRet EditSequence'),
-                        'AppliedAmount' => $Node->getChildDataAt('InvoiceRet AppliedAmount'),
-                        'BalanceRemaining' => $Node->getChildDataAt('InvoiceRet BalanceRemaining'),
+                        'TxnID' => $quickBooksXMLNode->getChildDataAt('InvoiceRet TxnID'),
+                        'EditSequence' => $quickBooksXMLNode->getChildDataAt('InvoiceRet EditSequence'),
+                        'AppliedAmount' => $quickBooksXMLNode->getChildDataAt('InvoiceRet AppliedAmount'),
+                        'BalanceRemaining' => $quickBooksXMLNode->getChildDataAt('InvoiceRet BalanceRemaining'),
                         ];
 
-                    if ($Node->getChildDataAt('InvoiceRet IsPending') == 'true') {
+                    if ($quickBooksXMLNode->getChildDataAt('InvoiceRet IsPending') == 'true') {
                         $arr['IsPending'] = 1;
-                    } elseif ($Node->getChildDataAt('InvoiceRet IsPending') == 'false') {
+                    } elseif ($quickBooksXMLNode->getChildDataAt('InvoiceRet IsPending') == 'false') {
                         $arr['IsPending'] = 0;
                     }
 
-                    if ($Node->getChildDataAt('InvoiceRet IsPaid') == 'true') {
+                    if ($quickBooksXMLNode->getChildDataAt('InvoiceRet IsPaid') == 'true') {
                         $arr['IsPaid'] = 1;
-                    } elseif ($Node->getChildDataAt('InvoiceRet IsPaid') == 'false') {
+                    } elseif ($quickBooksXMLNode->getChildDataAt('InvoiceRet IsPaid') == 'false') {
                         $arr['IsPaid'] = 0;
                     }
 
-                    $Driver->log('Updating DERIVED INVOICE fields: ' . print_r($arr, true) . ' where: ' . print_r($extra, true), null, QUICKBOOKS_LOG_VERBOSE);
+                    $quickBooksDriver->log('Updating DERIVED INVOICE fields: ' . print_r($arr, true) . ' where: ' . print_r($extra, true), null, QUICKBOOKS_LOG_VERBOSE);
 
-                    $Driver->update(
+                    $quickBooksDriver->update(
                         QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice',
                         $arr,
                         [ [ 'qbsql_id' => $ID ] ],
@@ -1782,19 +1712,17 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CustomerAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customer', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
-            $Customer = new QuickBooks_SQL_Object('customer', null, $arr);
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customer', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+            $quickBooksSQLObject = new QuickBooks_SQL_Object('customer', null, $arr);
 
-            if (!(is_numeric($Customer->get('CreditCardInfo_ExpirationMonth')) and
-                is_numeric($Customer->get('CreditCardInfo_ExpirationYear')) and
-                checkdate($Customer->get('CreditCardInfo_ExpirationMonth'), 1, $Customer->get('CreditCardInfo_ExpirationYear')))) {
-                $Customer->remove('CreditCardInfo_ExpirationMonth');
-                $Customer->remove('CreditCardInfo_ExpirationYear');
+            if (!(is_numeric($quickBooksSQLObject->get('CreditCardInfo_ExpirationMonth')) && is_numeric($quickBooksSQLObject->get('CreditCardInfo_ExpirationYear')) && checkdate($quickBooksSQLObject->get('CreditCardInfo_ExpirationMonth'), 1, $quickBooksSQLObject->get('CreditCardInfo_ExpirationYear')))) {
+                $quickBooksSQLObject->remove('CreditCardInfo_ExpirationMonth');
+                $quickBooksSQLObject->remove('CreditCardInfo_ExpirationYear');
             }
 
-            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CUSTOMER, $Customer, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CUSTOMER, $quickBooksSQLObject, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
         return '';
@@ -1807,11 +1735,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CustomerAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerAddRs');
@@ -1823,12 +1751,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
     public static function InventoryAdjustmentAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'inventoryadjustment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
-            $InventoryAdjustment = new QuickBooks_SQL_Object('inventoryadjustment', null, $arr);
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'inventoryadjustment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+            $quickBooksSQLObject = new QuickBooks_SQL_Object('inventoryadjustment', null, $arr);
 
-            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVENTORYADJUSTMENT, $InventoryAdjustment, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVENTORYADJUSTMENT, $quickBooksSQLObject, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
         return '';
@@ -1841,11 +1769,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function InventoryAdjustmentAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs InventoryAdjustmentAddRs');
@@ -1861,8 +1789,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CustomerMsgAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($CustomerMsg = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customermsg', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($CustomerMsg = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customermsg', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CUSTOMERMSG, $CustomerMsg, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -1876,11 +1804,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CustomerMsgAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerMsgAddRs');
@@ -1896,15 +1824,15 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function JournalEntryAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'journalentry', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
-            $JournalEntry = new QuickBooks_SQL_Object('journalentry', null, $arr);
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'journalentry', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+            $quickBooksSQLObject = new QuickBooks_SQL_Object('journalentry', null, $arr);
 
             // Some (all?) versions of QuickBooks don't support this tag...?
-            $JournalEntry->remove('IsAdjustment');
+            $quickBooksSQLObject->remove('IsAdjustment');
 
-            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_JOURNALENTRY, $JournalEntry, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_JOURNALENTRY, $quickBooksSQLObject, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
         return '';
@@ -1917,11 +1845,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function JournalEntryAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs JournalEntryAddRs');
@@ -1937,11 +1865,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'journalentry', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
-            $JournalEntry = new QuickBooks_SQL_Object('journalentry', null, $arr);
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'journalentry', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+            $quickBooksSQLObject = new QuickBooks_SQL_Object('journalentry', null, $arr);
 
-            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_JOURNALENTRY, $JournalEntry, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_JOURNALENTRY, $quickBooksSQLObject, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
         return '';
@@ -1954,11 +1882,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function JournalEntryModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs JournalEntryModRs');
@@ -1975,15 +1903,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CustomerModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customer', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
-            $Customer = new QuickBooks_SQL_Object('customer', null, $arr);
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'customer', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+            $quickBooksSQLObject = new QuickBooks_SQL_Object('customer', null, $arr);
 
-            if (!(is_numeric($Customer->get('CreditCardInfo_ExpirationMonth')) and
-                is_numeric($Customer->get('CreditCardInfo_ExpirationYear')) and
-                checkdate($Customer->get('CreditCardInfo_ExpirationMonth'), 1, $Customer->get('CreditCardInfo_ExpirationYear')))) {
-                $Customer->remove('CreditCardInfo_ExpirationMonth');
-                $Customer->remove('CreditCardInfo_ExpirationYear');
+            if (!(is_numeric($quickBooksSQLObject->get('CreditCardInfo_ExpirationMonth')) && is_numeric($quickBooksSQLObject->get('CreditCardInfo_ExpirationYear')) && checkdate($quickBooksSQLObject->get('CreditCardInfo_ExpirationMonth'), 1, $quickBooksSQLObject->get('CreditCardInfo_ExpirationYear')))) {
+                $quickBooksSQLObject->remove('CreditCardInfo_ExpirationMonth');
+                $quickBooksSQLObject->remove('CreditCardInfo_ExpirationYear');
             }
 
             //print('THIS IS RUNNING' . "\n");
@@ -2001,13 +1927,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
             foreach ($clear as $field) {
                 //if (!$Customer->exists($field))
-                if (!$Customer->get($field)) {
+                if (!$quickBooksSQLObject->get($field)) {
                     //print('setting ' . $field . ' to NULL' . "\n");
-                    $Customer->set($field, QUICKBOOKS_SERVER_SQL_VALUE_CLEAR);
+                    $quickBooksSQLObject->set($field, QUICKBOOKS_SERVER_SQL_VALUE_CLEAR);
                 }
             }
 
-            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CUSTOMER, $Customer, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
+            return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CUSTOMER, $quickBooksSQLObject, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
         return '';
@@ -2020,11 +1946,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CustomerModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerModRs');
@@ -2039,8 +1965,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ClassAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Class = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'class', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Class = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'class', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CLASS, $Class, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2054,11 +1980,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ClassAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ClassAddRs');
@@ -2073,10 +1999,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function DataExtAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
         $xml = '';
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'dataext', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
-            $DataExt = new QuickBooks_SQL_Object('dataext', null, $arr);
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'dataext', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+            $quickBooksSQLObject = new QuickBooks_SQL_Object('dataext', null, $arr);
 
             $xml .= '<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
@@ -2084,34 +2010,35 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<DataExtAddRq requestID="' . $requestID . '">
 						<DataExtAdd>
-							<OwnerID>' . $DataExt->get('OwnerID') . '</OwnerID>
-							<DataExtName>' . $DataExt->get('DataExtName') . '</DataExtName>
+							<OwnerID>' . $quickBooksSQLObject->get('OwnerID') . '</OwnerID>
+							<DataExtName>' . $quickBooksSQLObject->get('DataExtName') . '</DataExtName>
 					';
-            if($DataExt->get('EntityType') != null) {
-                $xml .= '<ListDataExtType>' . $DataExt->get('DataExtType') . '</ListDataExtType>
+            if($quickBooksSQLObject->get('EntityType') != null) {
+                $xml .= '<ListDataExtType>' . $quickBooksSQLObject->get('DataExtType') . '</ListDataExtType>
 						 <ListObjRef>
-						 	<ListID>' . $DataExt->get('Entity_ListID') . '</ListID>
+						 	<ListID>' . $quickBooksSQLObject->get('Entity_ListID') . '</ListID>
 						 </ListObjRef>
 						 ';
             } else {
-                $base = str_ireplace(['line', 'group'], '', end(explode('_', $DataExt->get('TxnType'))));
+                $base = str_ireplace(['line', 'group'], '', end(explode('_', $quickBooksSQLObject->get('TxnType'))));
                 $xml .= '<TxnDataExtType>' . $base . '</TxnDataExtType>
 						';
-                if(stripos($DataExt->get('TxnType'), 'line') !== false) {
-                    $table = strtolower($base) . '_' . strtolower($DataExt->get('TxnType'));
-                    if($temp = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, [ 'TxnLineID' => $DataExt->get('Txn_TxnID') ])) {
+                if(stripos($quickBooksSQLObject->get('TxnType'), 'line') !== false) {
+                    $table = strtolower($base) . '_' . strtolower($quickBooksSQLObject->get('TxnType'));
+                    if($temp = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, [ 'TxnLineID' => $quickBooksSQLObject->get('Txn_TxnID') ])) {
                         $xml .= '<TxnID>' . $temp->get($base . '_TxnID') . '</TxnID>
-								 <TxnLineID>' . $DataExt->get('Txn_TxnID') . '</TxnLineID>
+								 <TxnLineID>' . $quickBooksSQLObject->get('Txn_TxnID') . '</TxnLineID>
 								';
                     } else {
                         return '';
                     }
                 } else {
-                    $xml .= '<TxnID>' . $DataExt->get('Txn_TxnID') . '</TxnID>
+                    $xml .= '<TxnID>' . $quickBooksSQLObject->get('Txn_TxnID') . '</TxnID>
 							';
                 }
             }
-            $xml .= '<DataExtValue>' . $DataExt->get('DataExtValue') . '</DataExtValue>
+            
+            $xml .= '<DataExtValue>' . $quickBooksSQLObject->get('DataExtValue') . '</DataExtValue>
 				  </DataExtAdd>
 				</DataExtAddRq>
 		      </QBXMLMsgsRq>
@@ -2128,11 +2055,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function DataExtAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs DataExtAddRs');
@@ -2147,10 +2074,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function DataExtModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
         $xml = '';
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'dataext', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
-            $DataExt = new QuickBooks_SQL_Object('dataext', null, $arr);
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'dataext', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+            $quickBooksSQLObject = new QuickBooks_SQL_Object('dataext', null, $arr);
 
             $xml .= '<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
@@ -2158,34 +2085,35 @@ class QuickBooks_Callbacks_SQL_Callbacks
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<DataExtModRq requestID="' . $requestID . '">
 						<DataExtMod>
-							<OwnerID>' . $DataExt->get('OwnerID') . '</OwnerID>
-							<DataExtName>' . $DataExt->get('DataExtName') . '</DataExtName>
+							<OwnerID>' . $quickBooksSQLObject->get('OwnerID') . '</OwnerID>
+							<DataExtName>' . $quickBooksSQLObject->get('DataExtName') . '</DataExtName>
 					';
-            if($DataExt->get('EntityType') != null) {
-                $xml .= '<ListDataExtType>' . $DataExt->get('DataExtType') . '</ListDataExtType>
+            if($quickBooksSQLObject->get('EntityType') != null) {
+                $xml .= '<ListDataExtType>' . $quickBooksSQLObject->get('DataExtType') . '</ListDataExtType>
 						 <ListObjRef>
-						 	<ListID>' . $DataExt->get('Entity_ListID') . '</ListID>
+						 	<ListID>' . $quickBooksSQLObject->get('Entity_ListID') . '</ListID>
 						 </ListObjRef>
 						 ';
             } else {
-                $base = str_ireplace(['line', 'group'], '', end(explode('_', $DataExt->get('TxnType'))));
+                $base = str_ireplace(['line', 'group'], '', end(explode('_', $quickBooksSQLObject->get('TxnType'))));
                 $xml .= '<TxnDataExtType>' . $base . '</TxnDataExtType>
 						';
-                if(stripos($DataExt->get('TxnType'), 'line') !== false) {
-                    $table = strtolower($base) . '_' . strtolower($DataExt->get('TxnType'));
-                    if($temp = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, [ 'TxnLineID' => $DataExt->get('Txn_TxnID') ])) {
+                if(stripos($quickBooksSQLObject->get('TxnType'), 'line') !== false) {
+                    $table = strtolower($base) . '_' . strtolower($quickBooksSQLObject->get('TxnType'));
+                    if($temp = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, [ 'TxnLineID' => $quickBooksSQLObject->get('Txn_TxnID') ])) {
                         $xml .= '<TxnID>' . $temp->get($base . '_TxnID') . '</TxnID>
-								 <TxnLineID>' . $DataExt->get('Txn_TxnID') . '</TxnLineID>
+								 <TxnLineID>' . $quickBooksSQLObject->get('Txn_TxnID') . '</TxnLineID>
 								';
                     } else {
                         return '';
                     }
                 } else {
-                    $xml .= '<TxnID>' . $DataExt->get('Txn_TxnID') . '</TxnID>
+                    $xml .= '<TxnID>' . $quickBooksSQLObject->get('Txn_TxnID') . '</TxnID>
 							';
                 }
             }
-            $xml .= '<DataExtValue>' . $DataExt->get('DataExtValue') . '</DataExtValue>
+            
+            $xml .= '<DataExtValue>' . $quickBooksSQLObject->get('DataExtValue') . '</DataExtValue>
 				  </DataExtMod>
 				</DataExtModRq>
 		      </QBXMLMsgsRq>
@@ -2202,11 +2130,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function DataExtModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs DataExtModRs');
@@ -2221,8 +2149,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ShipMethodAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($ShipMethod = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'shipmethod', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($ShipMethod = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'shipmethod', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SHIPMETHOD, $ShipMethod, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2236,11 +2164,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ShipMethodAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ShipMethodAddRs');
@@ -2255,8 +2183,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PaymentMethodAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($PaymentMethod = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'paymentmethod', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($PaymentMethod = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'paymentmethod', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_PAYMENTMETHOD, $PaymentMethod, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2270,11 +2198,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PaymentMethodAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs PaymentMethodAddRs');
@@ -2291,8 +2219,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function AccountAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'account', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'account', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_ACCOUNT, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2306,11 +2234,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function AccountAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs AccountAddRs');
@@ -2327,8 +2255,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function AccountModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'account', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'account', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_ACCOUNT, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2342,11 +2270,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function AccountModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs AccountModRs');
@@ -2363,8 +2291,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemDiscountAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemdiscount', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemdiscount', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_DISCOUNTITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2378,11 +2306,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemDiscountAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemDiscountAddRs');
@@ -2399,8 +2327,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemDiscountModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemdiscount', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemdiscount', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_DISCOUNTITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2414,11 +2342,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemDiscountModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemDiscountModRs');
@@ -2435,8 +2363,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemFixedAssetAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemfixedasset', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemfixedasset', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_FIXEDASSETITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2450,11 +2378,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemFixedAssetAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemFixedAssetAddRs');
@@ -2471,8 +2399,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemFixedAssetModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemfixedasset', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemfixedasset', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_FIXEDASSETITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2486,11 +2414,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemFixedAssetModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemFixedAssetModRs');
@@ -2507,8 +2435,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemInventoryAssemblyAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventoryassembly', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventoryassembly', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVENTORYASSEMBLYITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2522,12 +2450,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemInventoryAssemblyAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        $Parser = new QuickBooks_XML_Parser($xml);
+        QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAssemblyAddRs');
@@ -2546,8 +2474,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemInventoryAssemblyModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventoryassembly', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventoryassembly', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVENTORYASSEMBLYITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2561,11 +2489,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemInventoryAssemblyModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAssemblyModRs');
@@ -2582,8 +2510,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemInventoryAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventory', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventory', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVENTORYITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2597,12 +2525,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemInventoryAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        $Parser = new QuickBooks_XML_Parser($xml);
+        QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAddRs');
@@ -2621,8 +2549,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemInventoryModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventory', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'iteminventory', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVENTORYITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2636,11 +2564,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemInventoryModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryModRs');
@@ -2657,8 +2585,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemNonInventoryAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemnoninventory', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemnoninventory', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_NONINVENTORYITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2672,11 +2600,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemNonInventoryAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemNonInventoryAddRs');
@@ -2693,8 +2621,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemNonInventoryModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemnoninventory', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemnoninventory', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_NONINVENTORYITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2708,11 +2636,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemNonInventoryModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemNonInventoryModRs');
@@ -2729,8 +2657,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemOtherChargeAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemothercharge', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemothercharge', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_OTHERCHARGEITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2744,11 +2672,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemOtherChargeAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemOtherChargeAddRs');
@@ -2765,8 +2693,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemOtherChargeModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemothercharge', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemothercharge', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_OTHERCHARGEITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2780,11 +2708,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemOtherChargeModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemOtherChargeModRs');
@@ -2801,8 +2729,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemPaymentAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itempayment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itempayment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_PAYMENTITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2816,11 +2744,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemPaymentAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemPaymentAddRs');
@@ -2837,8 +2765,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemPaymentModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itempayment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itempayment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_PAYMENTITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2852,11 +2780,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemPaymentModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemPaymentModRs');
@@ -2873,8 +2801,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemSalesTaxAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemsalestax', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemsalestax', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESTAXITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2888,11 +2816,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemSalesTaxAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSalesTaxAddRs');
@@ -2909,8 +2837,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemSalesTaxModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemsalestax', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemsalestax', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESTAXITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2924,11 +2852,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemSalesTaxModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSalesTaxModRs');
@@ -2945,8 +2873,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemServiceAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemservice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemservice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SERVICEITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2960,11 +2888,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemServiceAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemServiceAddRs');
@@ -2981,8 +2909,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemServiceModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemservice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemservice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SERVICEITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -2996,11 +2924,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemServiceModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemServiceModRs');
@@ -3017,8 +2945,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemSubtotalAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemsubtotal', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemsubtotal', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SUBTOTALITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3032,11 +2960,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemSubtotalAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSubtotalAddRs');
@@ -3053,8 +2981,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemSubtotalModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemsubtotal', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'itemsubtotal', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SUBTOTALITEM, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3068,8 +2996,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EmployeeAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'employee', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'employee', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_EMPLOYEE, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3083,11 +3011,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EmployeeAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs EmployeeAddRs');
@@ -3104,8 +3032,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EmployeeModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($arr = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'employee', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($arr = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'employee', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_EMPLOYEE, $arr, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3119,11 +3047,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EmployeeModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs EmployeeModRs');
@@ -3140,11 +3068,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ItemSubtotalModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSubtotalModRs');
@@ -3161,8 +3089,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EstimateAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'estimate', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'estimate', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_ESTIMATE, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3176,11 +3104,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EstimateAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs EstimateAddRs');
@@ -3197,8 +3125,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EstimateModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'estimate', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'estimate', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_ESTIMATE, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3212,11 +3140,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EstimateModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs EstimateModRs');
@@ -3233,8 +3161,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PurchaseOrderAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'purchaseorder', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'purchaseorder', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_PURCHASEORDER, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3248,11 +3176,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PurchaseOrderAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs PurchaseOrderAddRs');
@@ -3269,8 +3197,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PurchaseOrderModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'purchaseorder', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'purchaseorder', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_PURCHASEORDER, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3284,11 +3212,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PurchaseOrderModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs PurchaseOrderModRs');
@@ -3305,8 +3233,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ReceivePaymentAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'receivepayment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'receivepayment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_RECEIVEPAYMENT, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3320,11 +3248,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ReceivePaymentAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ReceivePaymentAddRs');
@@ -3345,8 +3273,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
         //$Driver = QuickBooks_Driver_Singleton::getInstance();
         //$Driver->log('got in: ' . print_r($args, true));
 
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($ReceivePayment = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'receivepayment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($ReceivePayment = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'receivepayment', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_RECEIVEPAYMENT, $ReceivePayment, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3360,11 +3288,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ReceivePaymentModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ReceivePaymentModRs');
@@ -3381,8 +3309,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function InvoiceAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Invoice = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Invoice = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVOICE, $Invoice, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3396,11 +3324,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function InvoiceAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs InvoiceAddRs');
@@ -3419,8 +3347,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
         //$args = func_get_args();
         //$Driver->log('got in: ' . print_r($args, true));
 
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Invoice = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Invoice = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'invoice', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_INVOICE, $Invoice, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3432,11 +3360,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function InvoiceModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs InvoiceModRs');
@@ -3453,8 +3381,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesReceiptAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($SalesReceipt = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesreceipt', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($SalesReceipt = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesreceipt', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESRECEIPT, $SalesReceipt, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3468,11 +3396,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesReceiptAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesReceiptAddRs');
@@ -3487,8 +3415,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesReceiptModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($SalesReceipt = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesreceipt', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($SalesReceipt = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesreceipt', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESRECEIPT, $SalesReceipt, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3500,11 +3428,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesReceiptModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesReceiptModRs');
@@ -3521,8 +3449,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CreditMemoAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Invoice = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'creditmemo', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Invoice = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'creditmemo', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CREDITMEMO, $Invoice, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3536,11 +3464,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CreditMemoAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditMemoAddRs');
@@ -3559,8 +3487,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
         //$args = func_get_args();
         //$Driver->log('got in: ' . print_r($args, true));
 
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Invoice = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'creditmemo', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Invoice = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'creditmemo', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_CREDITMEMO, $Invoice, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3572,11 +3500,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CreditMemoModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditMemoModRs');
@@ -3591,8 +3519,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function JobTypeAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($JobType = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'jobtype', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($JobType = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'jobtype', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_JOBTYPE, $JobType, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3604,11 +3532,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function JobTypeAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs JobTypeAddRs');
@@ -3623,8 +3551,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesOrderAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesorder', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesorder', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESORDER, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3636,11 +3564,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesOrderAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesOrderAddRs');
@@ -3657,8 +3585,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesOrderModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesorder', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesorder', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESORDER, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3672,11 +3600,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesOrderModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesOrderModRs');
@@ -3693,8 +3621,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesRepAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesrep', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesrep', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESREP, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3708,11 +3636,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesRepAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesRepAddRs');
@@ -3729,8 +3657,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesRepModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesrep', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salesrep', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESREP, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3744,11 +3672,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesRepModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesRepModRs');
@@ -3765,8 +3693,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesTaxCodeAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salestaxcode', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salestaxcode', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESTAXCODE, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3780,11 +3708,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesTaxCodeAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesTaxCodeAddRs');
@@ -3801,8 +3729,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesTaxCodeModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Account = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salestaxcode', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Account = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'salestaxcode', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_SALESTAXCODE, $Account, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3816,11 +3744,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesTaxCodeModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesTaxCodeModRs');
@@ -3837,8 +3765,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Customer = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'bill', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Customer = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'bill', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_BILL, $Customer, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3852,11 +3780,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillAddRs');
@@ -3867,8 +3795,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
     public static function BillModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Bill = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'bill', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Bill = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'bill', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_ModRequest(QUICKBOOKS_OBJECT_BILL, $Bill, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3882,11 +3810,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillModRs');
@@ -3903,8 +3831,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillPaymentCheckAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($BillPaymentCheck = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'billpaymentcheck', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($BillPaymentCheck = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'billpaymentcheck', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             // Special handling for bill payment check add requests
 
             // If a RefNumber is printed, then it can't be set as IsToBePrinted
@@ -3927,11 +3855,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillPaymentCheckAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCheckAddRs');
@@ -3948,8 +3876,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillPaymentCheckModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($BillPaymentCheck = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'billpaymentcheck', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($BillPaymentCheck = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'billpaymentcheck', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_BILLPAYMENTCHECK, $BillPaymentCheck, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3963,11 +3891,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillPaymentCheckModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCheckModRs');
@@ -3984,8 +3912,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillPaymentCreditCardAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($BillPaymentCreditCard = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'billpaymentcreditcard', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($BillPaymentCreditCard = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'billpaymentcreditcard', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_BILLPAYMENTCREDITCARD, $BillPaymentCreditCard, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -3999,11 +3927,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillPaymentCreditCardAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCreditCardAddRs');
@@ -4020,8 +3948,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Vendor = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'vendor', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Vendor = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'vendor', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_VENDOR, $Vendor, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -4035,11 +3963,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorAddRs');
@@ -4056,8 +3984,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Vendor = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'vendor', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Vendor = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'vendor', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_VENDOR, $Vendor, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -4071,11 +3999,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorModRs');
@@ -4092,8 +4020,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorCreditAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Vendor = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'vendorcredit', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Vendor = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'vendorcredit', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_VENDORCREDIT, $Vendor, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -4107,11 +4035,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorCreditAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorCreditAddRs');
@@ -4128,8 +4056,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorCreditModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Vendor = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'vendorcredit', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Vendor = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'vendorcredit', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             return QuickBooks_Callbacks_SQL_Callbacks::_AddRequest(QUICKBOOKS_OBJECT_VENDORCREDIT, $Vendor, $requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale, $config);
         }
 
@@ -4143,11 +4071,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorCreditModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorCreditModRs');
@@ -4178,13 +4106,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
     protected static function _AddRequest($type, $Object, $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
         // Driver instance...
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
         $type = strtolower($type);
 
         // This should actually always happen now that we fixed the Driver->get method to return an array
-        if (!is_object($Object) and
-            is_array($Object)) {
+        if (!is_object($Object) && is_array($Object)) {
             $Object = new QuickBooks_SQL_Object(null, null, $Object);
         }
 
@@ -4192,9 +4119,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
         $xml .= '<?xml version="1.0" encoding="utf-8"?>' . QUICKBOOKS_CRLF;
         $xml .= '<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>' . QUICKBOOKS_CRLF;
-        $xml .= "\t" . '<QBXML>' . QUICKBOOKS_CRLF;
-        $xml .= "\t" . "\t" . '<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">' . QUICKBOOKS_CRLF;
-        $xml .= "\t" . "\t" . "\t" . '<' . QuickBooks_Utilities::actionToRequest($action) . ' requestID="' . $requestID . '">' . QUICKBOOKS_CRLF;
+        $xml .= '	<QBXML>' . QUICKBOOKS_CRLF;
+        $xml .= '		<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">' . QUICKBOOKS_CRLF;
+        $xml .= '			<' . QuickBooks_Utilities::actionToRequest($action) . ' requestID="' . $requestID . '">' . QUICKBOOKS_CRLF;
 
         $file = '/QuickBooks/QBXML/Schema/Object/' . QuickBooks_Utilities::actionToRequest($action) . '.php';
         $class = 'QuickBooks_QBXML_Schema_Object_' . QuickBooks_Utilities::actionToRequest($action);
@@ -4218,7 +4145,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             //	try to fetch the correct, unfolded XML node name and set that
             //	instead.
             $unmapped = null;
-            if ($Driver->foldsToLower()) {
+            if ($quickBooksDriver->foldsToLower()) {
                 $unmapped = $map;
 
                 $retpos = strpos($map, 'Ret ');
@@ -4229,13 +4156,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
             }
 
             //print('dealing with: [' . $map . '] unmapped from (' . $unmapped . ')' . "\n");
-
             if (!$map) {
                 // This schema field doesn't map to anything in QuickBooks...
                 continue;
-            } elseif (!strlen($value)) {
-                // There's no value there, don't send it
+            }
 
+            if ((string) $value === '') {
+                // There's no value there, don't send it
                 // There are some special cases here... addresses commonly get
                 //	changes to set blank lines for some of the address lines,
                 //	and we need to send these blank values to overwrite the
@@ -4245,12 +4172,15 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 //	address line is being sent.
                 $begi = substr($field, 0, -5);
                 $last = substr($field, -5, 5);
-                if (($last == 'Addr2' or $last == 'Addr3' or $last == 'Addr4' or $last == 'Addr5') and
-                    strlen($Object->get($begi . 'Addr1'))) {
+                if (($last === 'Addr2' || $last === 'Addr3' || $last === 'Addr4' || $last === 'Addr5') && strlen($Object->get($begi . 'Addr1'))) {
                     // ... but don't allow 4 or 5 if they set the city, state, zip, or country?
                     //  EDIT: NEVER ALLOW ADDR4 OR ADDR5, IT JUST FUCKS SHIT UP! I HATE YOU INTUIT!
                     //   WHAT DOES THIS MEAN?!?   "The &quot;address&quot; field has an invalid value &quot;&quot;.  QuickBooks error message: The parameter is incorrect."
-                    if (($last == 'Addr4' or $last == 'Addr5')) {
+                    if ($last === 'Addr4') {
+                        continue;
+                    }
+
+                    if ($last === 'Addr5') {
                         continue;
                     }
 
@@ -4265,7 +4195,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 } else {
                     continue;
                 }
-            } else {
+            }
+            else {
                 if ($value == QUICKBOOKS_SERVER_SQL_VALUE_CLEAR) {
                     $value = '';
                 }
@@ -4290,9 +4221,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
             $begi = substr($field, 0, -5);
             $last = substr($field, -5, 5);
-            if ($locale == QUICKBOOKS_LOCALE_UK and
-                $last == 'State' and
-                !strlen($Object->get($begi . 'County'))) {		// UK *County* support instead of states
+            if ($locale == QUICKBOOKS_LOCALE_UK && $last === 'State' && !strlen($Object->get($begi . 'County'))) {		// UK *County* support instead of states
                 $Object->set($begi . 'County', $value);
                 //print_r($map);
                 $map = substr($map, 0, -5) . 'County';
@@ -4307,11 +4236,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $first = trim(current($explode));
             $map = trim(implode(' ', array_slice($explode, 1)));
 
-            if (stripos($action, 'add') !== false) {
-                $map = str_replace('Ret', 'Add', $map);
-            } else {
-                $map = str_replace('Ret', 'Mod', $map);
-            }
+            $map = stripos($action, 'add') !== false ? str_replace('Ret', 'Add', $map) : str_replace('Ret', 'Mod', $map);
 
             //print('	OK, handling [' . $map . ']' . "\n");
 
@@ -4320,8 +4245,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     $use_in_request = true;
 
                     // If this version doesn't support this field, skip it
-                    if ($schema_object->sinceVersion($map) > $version and
-                        $schema_object->sinceVersion($map) < 100.0) {			// For some reason I set the ->sinceVersion to return 999.99 if we don't know the support version...?
+                    if ($schema_object->sinceVersion($map) > $version && $schema_object->sinceVersion($map) < 100.0) {			// For some reason I set the ->sinceVersion to return 999.99 if we don't know the support version...?
                         $use_in_request = false;
                     }
 
@@ -4333,7 +4257,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                             break;
                         case 'DATETYPE':
 
-                            if (!$value or $value == '0000-00-00') {
+                            if (!$value || $value == '0000-00-00') {
                                 $use_in_request = false;
                             } else {
                                 $value = QuickBooks_Utilities::date($value);
@@ -4342,7 +4266,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                             break;
                         case 'DATETIMETYPE':
 
-                            if (!$value or $value == '0000-00-00 00:00:00') {
+                            if (!$value || $value == '0000-00-00 00:00:00') {
                                 $use_in_request = false;
                             } else {
                                 $value = QuickBooks_Utilities::datetime($value);
@@ -4376,8 +4300,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 $parts = explode(' ', $map);
                 foreach($parts as $key => $part) {
                     if (stripos($action, 'Mod') !== false) {
-                        if ($part == 'SalesAndPurchase' or
-                           $part == 'SalesOrPurchase') {
+                        if ($part === 'SalesAndPurchase' || $part === 'SalesOrPurchase') {
                             $parts[$key] = $part . 'Mod';
                         }
                     } elseif (stripos($action, 'Add') !== false) {
@@ -4390,8 +4313,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     $use_in_request = true;
 
                     // If this version doesn't support this field, skip it
-                    if ($schema_object->sinceVersion($map) > $version and
-                        $schema_object->sinceVersion($map) < 100.0) {			// For some reason I set the ->sinceVersion to return 999.99 if we don't know the support version...?
+                    if ($schema_object->sinceVersion($map) > $version && $schema_object->sinceVersion($map) < 100.0) {			// For some reason I set the ->sinceVersion to return 999.99 if we don't know the support version...?
                         $use_in_request = false;
                     }
 
@@ -4403,7 +4325,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                             break;
                         case 'DATETYPE':
 
-                            if (!$value or $value == '0000-00-00') {
+                            if (!$value || $value == '0000-00-00') {
                                 $use_in_request = false;
                             } else {
                                 $value = QuickBooks_Utilities::date($value);
@@ -4412,7 +4334,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                             break;
                         case 'DATETIMETYPE':
 
-                            if (!$value or $value == '0000-00-00 00:00:00') {
+                            if (!$value || $value == '0000-00-00 00:00:00') {
                                 $use_in_request = false;
                             } else {
                                 $value = QuickBooks_Utilities::datetime($value);
@@ -4461,17 +4383,15 @@ class QuickBooks_Callbacks_SQL_Callbacks
         //print_r($nodes);
         //exit;
 
-        if (count($nodes)) {
+        if (count($nodes) > 0) {
             foreach ($nodes as $nd) {
                 $Node->addChild($nd);
             }
-        } else {
+        } elseif ($action == QUICKBOOKS_ADD_RECEIVEPAYMENT) {
             // If we're adding a payment, but not applying it to anything, set IsAutoApply to TRUE
-            if ($action == QUICKBOOKS_ADD_RECEIVEPAYMENT) {
-                $Node->setChildDataAt($action . ' IsAutoApply', 'true', true);
-            } elseif ($action == QUICKBOOKS_MOD_RECEIVEPAYMENT) {
+            $Node->setChildDataAt($action . ' IsAutoApply', 'true', true);
+        } elseif ($action == QUICKBOOKS_MOD_RECEIVEPAYMENT) {
 
-            }
         }
 
         //print('ACTION IS: [' . $action . ']');
@@ -4485,11 +4405,9 @@ class QuickBooks_Callbacks_SQL_Callbacks
         $xml = str_replace('&amp;amp;', '&amp;', $xml);
         $xml = str_replace('&amp;quot;', '&quot;', $xml);
 
-        $xml .= '</' . QuickBooks_Utilities::actionToRequest($action) .'>
+        return $xml . ('</' . QuickBooks_Utilities::actionToRequest($action) .'>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -4503,7 +4421,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
     protected static function _ChildObjectsToXML($type, $action, $children, $parentPath = '')
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
         $nodes = [];
 
@@ -4533,34 +4451,45 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     $Node = new QuickBooks_XML_Node('LinkToTxnID', $child['data']->get('ToTxnID'));
                     $nodes[count($nodes)] = $Node;
                     continue;
-                } elseif ($schema_object->exists($action . ' ' . $part . ' ' . 'LinkToTxn')) {
+                }
+
+                if ($schema_object->exists($action . ' ' . $part . ' ' . 'LinkToTxn')) {
                     $Node = new QuickBooks_XML_Node('LinkToTxnID', $child['data']->get('ToTxnID'));
                     $nodes[count($nodes)] = $Node;
                     continue;
-                } elseif ($schema_object->exists($usePath . 'LinkedTxn')) {
+                }
+
+                if ($schema_object->exists($usePath . 'LinkedTxn')) {
                     $Node = new QuickBooks_XML_Node('LinkToTxnID', $child['data']->get('ToTxnID'));
                     $nodes[count($nodes)] = $Node;
                     continue;
-                } elseif ($schema_object->exists($action . ' ' . $part . ' ' . 'LinkedTxn')) {
+                }
+
+                if ($schema_object->exists($action . ' ' . $part . ' ' . 'LinkedTxn')) {
                     $Node = new QuickBooks_XML_Node('LinkToTxnID', $child['data']->get('ToTxnID'));
                     $nodes[count($nodes)] = $Node;
                     continue;
-                } elseif ($schema_object->exists($usePath . 'ApplyCheckToTxnAdd')) {
+                }
+
+                if ($schema_object->exists($usePath . 'ApplyCheckToTxnAdd')) {
                     $Node = new QuickBooks_XML_Node('ApplyCheckToTxnAdd');
                     $Node->setChildDataAt($Node->name() . ' ' . 'TxnID', $child['data']->get('ToTxnID'));
                     $Node->setChildDataAt($Node->name() . ' ' . 'Amount', $child['data']->get('ToTxnID'));
                     $nodes[count($nodes)] = $Node;
                     continue;
-                } elseif ($schema_object->exists($usePath . 'ApplyCheckToTxnMod')) {
+                }
+
+                if ($schema_object->exists($usePath . 'ApplyCheckToTxnMod')) {
                     $Node = new QuickBooks_XML_Node('ApplyCheckToTxnMod');
                     $Node->setChildDataAt($Node->name() . ' ' . 'TxnID', $child['data']->get('ToTxnID'));
                     $Node->setChildDataAt($Node->name() . ' ' . 'Amount', $child['data']->get('ToTxnID'));
                     $nodes[count($nodes)] = $Node;
                     continue;
-                } else {
-                    continue;
                 }
-            } elseif (strpos($child['table'], 'dataext') !== false) {
+                continue;
+            }
+
+            if (strpos($child['table'], 'dataext') !== false) {
                 continue;
             }
 
@@ -4574,19 +4503,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $first = trim(current($explode));
             $map = trim(implode(' ', array_slice($explode, 1)));
 
-            if (stripos($action, 'add') !== false) {
-                $map = str_replace('Ret', 'Add', $map);
-            } else {
-                $map = str_replace('Ret', 'Mod', $map);
-            }
+            $map = stripos($action, 'add') !== false ? str_replace('Ret', 'Add', $map) : str_replace('Ret', 'Mod', $map);
 
             // Journal entries have an unusual JournalEntryMod syntax. Instead of
             //	the typical CreditLineMod and DebitLineMod entries, they instead
             //	have just a single combined entry, JournalLineMod.
-            if ($action == QUICKBOOKS_MOD_JOURNALENTRY) {
-                if ($child['table'] == 'journalentry_journaldebitline' or $child['table'] == 'journalentry_journalcreditline') {
-                    $map = 'JournalLineMod';
-                }
+            if ($action == QUICKBOOKS_MOD_JOURNALENTRY && ($child['table'] == 'journalentry_journaldebitline' || $child['table'] == 'journalentry_journalcreditline')) {
+                $map = 'JournalLineMod';
             }
 
             $Node = new QuickBooks_XML_Node($map);
@@ -4601,17 +4524,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 $others = [];
                 QuickBooks_SQL_Schema::mapToSchema($child['table'] . '.' . $field, QUICKBOOKS_SQL_SCHEMA_MAP_TO_XML, $map, $others);
 
-                if ($Driver->foldsToLower()) {
+                if ($quickBooksDriver->foldsToLower()) {
                     $retpos = strpos($map, 'Ret ');
                     $retval = substr($map, 0, $retpos + 4);
 
                     $map = substr($map, $retpos + 4);
 
-                    if (stripos($action, 'add') !== false) {
-                        $map = str_replace('Ret ', 'Add ', $map);
-                    } else {
-                        $map = str_replace('Ret ', 'Mod ', $map);
-                    }
+                    $map = stripos($action, 'add') !== false ? str_replace('Ret ', 'Add ', $map) : str_replace('Ret ', 'Mod ', $map);
 
                     //print('unfolding: {' . $map . '}' . "\n");
 
@@ -4623,8 +4542,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 //print($field . ' => ' . $value . "\n");
                 //print_r($map);
                 //print("\n\n");
+                if (!$map) {
+                    continue;
+                }
 
-                if (!$map or !strlen($value)) {
+                if ((string) $value === '') {
                     continue;
                 }
 
@@ -4636,11 +4558,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 $first = trim(current($explode));
                 $map = trim(implode(' ', array_slice($explode, 1)));
 
-                if (stripos($action, 'add') !== false) {
-                    $map = str_replace('Ret', 'Add', $map);
-                } else {
-                    $map = str_replace('Ret', 'Mod', $map);
-                }
+                $map = stripos($action, 'add') !== false ? str_replace('Ret', 'Add', $map) : str_replace('Ret', 'Mod', $map);
 
                 $map = preg_replace('/.*'.$Node->name().' /', '', $map);
 
@@ -4724,8 +4642,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
             $tNodes = QuickBooks_Callbacks_SQL_Callbacks::_ChildObjectsToXML(strtolower($child['table']), $action, $child['children'], $usePath . $Node->name());
 
-            foreach ($tNodes as $tn) {
-                $Node->addChild($tn);
+            foreach ($tNodes as $tNode) {
+                $Node->addChild($tNode);
             }
 
             $nodes[count($nodes)] = $Node;
@@ -4739,7 +4657,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -4747,18 +4665,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</AccountQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function AccountImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
 
         $Root = $Doc->getRoot();
 
@@ -4783,8 +4699,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $tag = '<ListID>' . $extra['ListID'] . '</ListID>';
         } elseif (!empty($extra['FullName'])) {
             $tag = '<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_ACCOUNT, 'FullName', $extra['FullName']) . '</FullName>';
-        } elseif (!empty($extra['FromModifiedDate']) and
-            !empty($extra['ToModifiedDate'])) {
+        } elseif (!empty($extra['FromModifiedDate']) && !empty($extra['ToModifiedDate'])) {
             $tag = '';
             $tag .= '<FromModifiedDate>' . $extra['FromModifiedDate'] . '</FromModifiedDate>';
             $tag .= '<ToModifiedDate>' . $extra['ToModifiedDate'] . '</ToModifiedDate>';
@@ -4792,7 +4707,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_NOOP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -4800,9 +4715,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . $tag . '
 					</AccountQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function AccountQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
@@ -4823,7 +4736,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -4833,9 +4746,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</BillPaymentCheckQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -4845,11 +4756,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillPaymentCheckImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCheckQueryRs');
@@ -4869,7 +4780,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -4879,9 +4790,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</BillPaymentCreditCardQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -4891,11 +4800,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillPaymentCreditCardImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillPaymentCreditCardQueryRs');
@@ -4913,8 +4822,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $tag = '<TxnID>' . $extra['TxnID'] . '</TxnID>';
         } elseif (!empty($extra['RefNumber'])) {
             $tag = '<RefNumber>' . $extra['RefNumber'] . '</RefNumber>';
-        } elseif (!empty($extra['FromModifiedDate']) and
-            !empty($extra['ToModifiedDate'])) {
+        } elseif (!empty($extra['FromModifiedDate']) && !empty($extra['ToModifiedDate'])) {
             $tag = '';
             $tag .= '<ModifiedDateRangeFilter>';
             $tag .= '	<FromModifiedDate>' . $extra['FromModifiedDate'] . '</FromModifiedDate>';
@@ -4924,7 +4832,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_NOOP;
         }
 
-        $xml = '<?xml version="1.0" encoding="utf-8"?>
+        return '<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -4933,8 +4841,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					</BillQueryRq>
 				</QBXMLMsgsRq>
 			</QBXML>';
-
-        return $xml;
     }
 
     public static function BillQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
@@ -4953,7 +4859,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_NOOP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -4964,9 +4870,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</BillQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -4975,11 +4879,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillQueryRs');
@@ -5014,11 +4918,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
     public static function BillToPayQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillToPayQueryRs');
@@ -5038,7 +4942,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5046,9 +4950,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</BillingRateQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5057,11 +4959,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BillingRateQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BillingRateQueryRs');
@@ -5081,7 +4983,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5091,9 +4993,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</BuildAssemblyQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5102,11 +5002,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function BuildAssemblyQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs BuildAssemblyQueryRs');
@@ -5125,8 +5025,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CheckAddRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Check = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'check', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Check = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'check', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             // Special handling for check add requests
 
             // If a RefNumber is printed, then it can't be set as IsToBePrinted
@@ -5149,11 +5049,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CheckAddResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CheckAddRs');
@@ -5165,8 +5065,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
     public static function CheckModRequest($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale, $config = [])
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
-        if ($Check = $Driver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'check', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
+        if ($Check = $quickBooksDriver->get(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . 'check', [ QUICKBOOKS_DRIVER_SQL_FIELD_ID => $ID ])) {
             // Special handling for check add requests
 
             // If a RefNumber is printed, then it can't be set as IsToBePrinted
@@ -5189,11 +5089,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CheckModResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CheckModRs');
@@ -5207,7 +5107,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5218,9 +5118,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>', $locale) . '
 					</CheckQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5229,11 +5127,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CheckImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CheckQueryRs');
@@ -5253,7 +5151,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5263,9 +5161,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>', $locale) . '
 					</JournalEntryQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5274,11 +5170,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function JournalEntryImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs JournalEntryQueryRs');
@@ -5298,7 +5194,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5308,9 +5204,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>', $locale) . '
 					</ChargeQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5319,11 +5213,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ChargeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ChargeQueryRs');
@@ -5339,7 +5233,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5347,9 +5241,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</ClassQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5358,11 +5250,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ClassImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ClassQueryRs');
@@ -5378,7 +5270,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5388,9 +5280,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						</IncludeListMetaData>
 					</HostQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5401,11 +5291,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function HostImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs HostQueryRs');
@@ -5419,15 +5309,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
 					<PreferencesQueryRq requestID="' . $requestID . '"></PreferencesQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5438,11 +5326,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PreferencesImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs PreferencesQueryRs');
@@ -5458,7 +5346,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5466,9 +5354,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>', $locale) . '
 					</CompanyQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5479,11 +5365,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CompanyImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CompanyQueryRs');
@@ -5499,7 +5385,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5509,9 +5395,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</CreditCardChargeQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5520,11 +5404,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CreditCardChargeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditCardChargeQueryRs');
@@ -5540,7 +5424,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5550,9 +5434,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</CreditCardCreditQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5561,11 +5443,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CreditCardCreditImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditCardCreditQueryRs');
@@ -5581,7 +5463,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5592,9 +5474,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</CreditMemoQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5603,11 +5483,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CreditMemoImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CreditMemoQueryRs');
@@ -5623,7 +5503,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5631,9 +5511,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</CustomerMsgQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5644,11 +5522,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CustomerMsgImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerMsgQueryRs');
@@ -5662,7 +5540,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $iterator = QuickBooks_Callbacks_SQL_Callbacks::_buildIterator($extra, $version, $locale);
 
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
         if (!$iterator) {
             // This version of QuickBooks *does not support iterators*, so instead of using
@@ -5677,7 +5555,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $type = null;
             $opts = null;
             // 					configRead($user, $module, $key, &$type, &$opts)
-            $prev_sync_datetime = $Driver->configRead($user, $module, $key_prev, $type, $opts);	// last sync started...
+            $prev_sync_datetime = $quickBooksDriver->configRead($user, $module, $key_prev, $type, $opts);	// last sync started...
 
             // Calculate the # of days ago the last sync was...
             $prev_sync_timestamp = strtotime($prev_sync_datetime);
@@ -5686,14 +5564,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
             $every_six_hours = 60 * 60 * 6;
 
-            for ($i = $prev_sync_timestamp; $i <= time(); $i = $i + $every_six_hours) {
+            for ($i = $prev_sync_timestamp; $i <= time(); $i += $every_six_hours) {
                 $extra = [
                     'FromModifiedDate' => QuickBooks_Utilities::datetime($i),
                     'ToModifiedDate' => QuickBooks_Utilities::datetime($i + $every_six_hours),
                     ];
 
                 // Queue up some requests
-                $Driver->queueEnqueue(
+                $quickBooksDriver->queueEnqueue(
                     $user,
                     QUICKBOOKS_QUERY_CUSTOMER,
                     null,
@@ -5707,7 +5585,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
         }
 
         $xml = '';
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5717,9 +5596,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</CustomerQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5730,11 +5607,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CustomerImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerQueryRs');
@@ -5752,8 +5629,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $tag = '<ListID>' . $extra['ListID'] . '</ListID>';
         } elseif (!empty($extra['FullName'])) {
             $tag = '<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_CUSTOMER, 'FullName', $extra['FullName']) . '</FullName>';
-        } elseif (!empty($extra['FromModifiedDate']) and
-            !empty($extra['ToModifiedDate'])) {
+        } elseif (!empty($extra['FromModifiedDate']) && !empty($extra['ToModifiedDate'])) {
             $tag = '';
             $tag .= '<FromModifiedDate>' . $extra['FromModifiedDate'] . '</FromModifiedDate>';
             $tag .= '<ToModifiedDate>' . $extra['ToModifiedDate'] . '</ToModifiedDate>';
@@ -5761,7 +5637,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_NOOP;
         }
 
-        $xml = '<?xml version="1.0" encoding="utf-8"?>
+        return '<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5770,8 +5646,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					</CustomerQueryRq>
 				</QBXMLMsgsRq>
 			</QBXML>';
-
-        return $xml;
     }
 
     public static function CustomerQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
@@ -5784,7 +5658,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5792,9 +5666,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</CustomerTypeQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5804,11 +5676,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function CustomerTypeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs CustomerTypeQueryRs');
@@ -5833,16 +5705,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
         if (!QuickBooks_Callbacks_SQL_Callbacks::_requiredVersion(2.0, $version, $locale, QUICKBOOKS_QUERY_DATAEXTDEF)) {
             return QUICKBOOKS_SKIP;
         }
-
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
-			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
-			<QBXML>
-				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
-					<DataExtDefQueryRq requestID="' . $requestID . '">
-						<OwnerID>0</OwnerID>
-					</DataExtDefQueryRq>
-				</QBXMLMsgsRq>
-			</QBXML>';
+        
         /*
                         <AssignToObject>Customer</AssignToObject>
                         <AssignToObject>Employee</AssignToObject>
@@ -5851,16 +5714,24 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
          */
 
-        return $xml;
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
+			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
+			<QBXML>
+				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
+					<DataExtDefQueryRq requestID="' . $requestID . '">
+						<OwnerID>0</OwnerID>
+					</DataExtDefQueryRq>
+				</QBXMLMsgsRq>
+			</QBXML>');
     }
 
     public static function DataExtDefQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs DataExtDefQueryRs');
@@ -5876,7 +5747,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5884,9 +5755,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</DateDrivenTermsQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5896,11 +5765,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function DateDrivenTermsQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs DateDrivenTermsQueryRs');
@@ -5920,7 +5789,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5930,9 +5799,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</DepositQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5941,11 +5808,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function DepositImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs DepositQueryRs');
@@ -5966,7 +5833,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -5975,9 +5842,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</EmployeeQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -5986,11 +5851,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EmployeeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs EmployeeQueryRs');
@@ -6017,7 +5882,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_NOOP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6028,9 +5893,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</EstimateQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -6039,11 +5902,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function EstimateImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs EstimateQueryRs');
@@ -6081,11 +5944,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
     public static function InventoryAdjustmentImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs InventoryAdjustmentQueryRs');
@@ -6110,7 +5973,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_NOOP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6121,18 +5984,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</InvoiceQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function InvoiceImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs InvoiceQueryRs');
@@ -6161,21 +6022,20 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $tag2 = '';
             $tag2 .= '<MaxReturned>' . QUICKBOOKS_SERVER_SQL_ITERATOR_MAXRETURNED . '</MaxReturned>';
             $tag2 .= '<EntityFilter>' . QUICKBOOKS_CRLF;
-            $tag2 .= "\t" . '<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_INVOICE, 'EntityFilter FullName', $extra['Entity_FullName']) . '</FullName>' . QUICKBOOKS_CRLF;
+            $tag2 .= '	<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_INVOICE, 'EntityFilter FullName', $extra['Entity_FullName']) . '</FullName>' . QUICKBOOKS_CRLF;
             $tag2 .= '</EntityFilter>' . QUICKBOOKS_CRLF;
         } elseif (!empty($extra['Entity_ListID'])) {
             $tag2 = '';
             $tag2 .= '<MaxReturned>' . QUICKBOOKS_SERVER_SQL_ITERATOR_MAXRETURNED . '</MaxReturned>';
             $tag2 .= '<EntityFilter>' . QUICKBOOKS_CRLF;
-            $tag2 .= "\t" . '<ListID>' . $extra['Entity_ListID'] . '</ListID>' . QUICKBOOKS_CRLF;
+            $tag2 .= '	<ListID>' . $extra['Entity_ListID'] . '</ListID>' . QUICKBOOKS_CRLF;
             $tag2 .= '</EntityFilter>' . QUICKBOOKS_CRLF;
-        } elseif (!empty($extra['FromModifiedDate']) and
-            !empty($extra['ToModifiedDate'])) {
+        } elseif (!empty($extra['FromModifiedDate']) && !empty($extra['ToModifiedDate'])) {
             $tag2 = '';
             $tag2 .= '<MaxReturned>' . QUICKBOOKS_SERVER_SQL_ITERATOR_MAXRETURNED . '</MaxReturned>';
             $tag2 .= '<ModifiedDateRangeFilter>' . QUICKBOOKS_CRLF;
-            $tag2 .= "\t" . '<FromModifiedDate>' . QuickBooks_Utilities::datetime($extra['FromModifiedDate']) . '</FromModifiedDate>' . QUICKBOOKS_CRLF;
-            $tag2 .= "\t" . '<ToModifiedDate>' . QuickBooks_Utilities::datetime($extra['ToModifiedDate']) . '</ToModifiedDate>' . QUICKBOOKS_CRLF;
+            $tag2 .= '	<FromModifiedDate>' . QuickBooks_Utilities::datetime($extra['FromModifiedDate']) . '</FromModifiedDate>' . QUICKBOOKS_CRLF;
+            $tag2 .= '	<ToModifiedDate>' . QuickBooks_Utilities::datetime($extra['ToModifiedDate']) . '</ToModifiedDate>' . QUICKBOOKS_CRLF;
             $tag2 .= '</ModifiedDateRangeFilter>' . QUICKBOOKS_CRLF;
         } else {
             return QUICKBOOKS_NOOP;
@@ -6215,7 +6075,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6225,18 +6085,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemServiceQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function ItemServiceImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
 
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemServiceQueryRs');
@@ -6252,7 +6110,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6262,18 +6120,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemNonInventoryQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function ItemNonInventoryImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
 
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemNonInventoryQueryRs');
@@ -6289,7 +6145,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6299,18 +6155,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemInventoryQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function ItemInventoryImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
 
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryQueryRs');
@@ -6326,7 +6180,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6336,18 +6190,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemInventoryAssemblyQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function ItemInventoryAssemblyImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
 
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemInventoryAssemblyQueryRs');
@@ -6363,7 +6215,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6373,18 +6225,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemSalesTaxQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function ItemSalesTaxImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
 
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSalesTaxQueryRs');
@@ -6400,7 +6250,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6410,18 +6260,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemSalesTaxGroupQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function ItemSalesTaxGroupImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
 
         $Root = $Doc->getRoot();
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemSalesTaxGroupQueryRs');
@@ -6442,7 +6290,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6452,18 +6300,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ItemQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function ItemImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemQueryRs');
@@ -6479,7 +6325,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6489,18 +6335,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						<IncludeLinkedTxns>true</IncludeLinkedTxns>
 					</ItemReceiptQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function ItemReceiptImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ItemReceiptQueryRs');
@@ -6516,7 +6360,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6524,9 +6368,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</JobTypeQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -6535,11 +6377,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function JobTypeQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs JobTypeQueryRs');
@@ -6560,7 +6402,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6569,9 +6411,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</PaymentMethodQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -6580,11 +6420,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PaymentMethodImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs PaymentMethodQueryRs');
@@ -6600,7 +6440,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6608,9 +6448,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</PayrollItemWageQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -6619,11 +6457,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PayrollItemWageImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs PayrollItemWageQueryRs');
@@ -6637,7 +6475,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6645,9 +6483,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</PayrollItemNonWageQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -6656,11 +6492,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PayrollItemNonWageImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs PayrollItemNonWageQueryRs');
@@ -6682,7 +6518,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6690,9 +6526,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</PriceLevelQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -6701,11 +6535,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PriceLevelImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs PriceLevelQueryRs');
@@ -6732,7 +6566,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_NOOP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6743,9 +6577,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</PurchaseOrderQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -6754,11 +6586,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function PurchaseOrderImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs PurchaseOrderQueryRs');
@@ -6776,8 +6608,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $tag = '<TxnID>' . $extra['TxnID'] . '</TxnID>';
         } elseif (!empty($extra['RefNumber'])) {
             $tag = '<RefNumber>' . $extra['RefNumber'] . '</RefNumber>';
-        } elseif (!empty($extra['FromModifiedDate']) and
-            !empty($extra['ToModifiedDate'])) {
+        } elseif (!empty($extra['FromModifiedDate']) && !empty($extra['ToModifiedDate'])) {
             $tag = '';
             $tag .= '<ModifiedDateRangeFilter>';
             $tag .= '	<FromModifiedDate>' . $extra['FromModifiedDate'] . '</FromModifiedDate>';
@@ -6787,7 +6618,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_NOOP;
         }
 
-        $xml = '<?xml version="1.0" encoding="utf-8"?>
+        return '<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6796,8 +6627,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 					</PurchaseOrderQueryRq>
 				</QBXMLMsgsRq>
 			</QBXML>';
-
-        return $xml;
     }
 
     public static function PurchaseOrderQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
@@ -6826,7 +6655,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6836,9 +6665,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ReceivePaymentQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -6847,11 +6674,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ReceivePaymentImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ReceivePaymentQueryRs');
@@ -6886,27 +6713,26 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $tag2 = '';
             $tag2 .= '<MaxReturned>' . QUICKBOOKS_SERVER_SQL_ITERATOR_MAXRETURNED . '</MaxReturned>';
             $tag2 .= '<EntityFilter>' . QUICKBOOKS_CRLF;
-            $tag2 .= "\t" . '<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_INVOICE, 'EntityFilter FullName', $extra['Entity_FullName']) . '</FullName>' . QUICKBOOKS_CRLF;
+            $tag2 .= '	<FullName>' . QuickBooks_Cast::cast(QUICKBOOKS_OBJECT_INVOICE, 'EntityFilter FullName', $extra['Entity_FullName']) . '</FullName>' . QUICKBOOKS_CRLF;
             $tag2 .= '</EntityFilter>' . QUICKBOOKS_CRLF;
         } elseif (!empty($extra['Entity_ListID'])) {
             $tag2 = '';
             $tag2 .= '<MaxReturned>' . QUICKBOOKS_SERVER_SQL_ITERATOR_MAXRETURNED . '</MaxReturned>';
             $tag2 .= '<EntityFilter>' . QUICKBOOKS_CRLF;
-            $tag2 .= "\t" . '<ListID>' . $extra['Entity_ListID'] . '</ListID>' . QUICKBOOKS_CRLF;
+            $tag2 .= '	<ListID>' . $extra['Entity_ListID'] . '</ListID>' . QUICKBOOKS_CRLF;
             $tag2 .= '</EntityFilter>' . QUICKBOOKS_CRLF;
-        } elseif (!empty($extra['FromModifiedDate']) and
-            !empty($extra['ToModifiedDate'])) {
+        } elseif (!empty($extra['FromModifiedDate']) && !empty($extra['ToModifiedDate'])) {
             $tag2 = '';
             $tag2 .= '<MaxReturned>' . QUICKBOOKS_SERVER_SQL_ITERATOR_MAXRETURNED . '</MaxReturned>';
             $tag2 .= '<ModifiedDateRangeFilter>' . QUICKBOOKS_CRLF;
-            $tag2 .= "\t" . '<FromModifiedDate>' . QuickBooks_Utilities::datetime($extra['FromModifiedDate']) . '</FromModifiedDate>' . QUICKBOOKS_CRLF;
-            $tag2 .= "\t" . '<ToModifiedDate>' . QuickBooks_Utilities::datetime($extra['ToModifiedDate']) . '</ToModifiedDate>' . QUICKBOOKS_CRLF;
+            $tag2 .= '	<FromModifiedDate>' . QuickBooks_Utilities::datetime($extra['FromModifiedDate']) . '</FromModifiedDate>' . QUICKBOOKS_CRLF;
+            $tag2 .= '	<ToModifiedDate>' . QuickBooks_Utilities::datetime($extra['ToModifiedDate']) . '</ToModifiedDate>' . QUICKBOOKS_CRLF;
             $tag2 .= '</ModifiedDateRangeFilter>' . QUICKBOOKS_CRLF;
         } else {
             return QUICKBOOKS_NOOP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6917,9 +6743,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</ReceivePaymentQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -6962,11 +6786,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
     public static function SalesOrderImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesOrderQueryRs');
@@ -6983,7 +6807,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -6993,9 +6817,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</SalesReceiptQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7004,11 +6826,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesReceiptImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesReceiptQueryRs');
@@ -7021,7 +6843,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7029,9 +6851,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</SalesRepQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7040,11 +6860,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesRepImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesRepQueryRs');
@@ -7060,7 +6880,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7068,9 +6888,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</SalesTaxCodeQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7079,11 +6897,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function SalesTaxCodeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs SalesTaxCodeQueryRs');
@@ -7099,7 +6917,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7108,9 +6926,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '						
 					</ShipMethodQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7119,11 +6935,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function ShipMethodImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs ShipMethodQueryRs');
@@ -7144,7 +6960,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7153,9 +6969,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</TermsQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7164,11 +6978,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function TermsImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs TermsQueryRs');
@@ -7184,7 +6998,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7192,9 +7006,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 					</TimeTrackingQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7203,11 +7015,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function TimeTrackingImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs TimeTrackingQueryRs');
@@ -7225,7 +7037,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7233,9 +7045,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</UnitOfMeasureSetQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7244,11 +7054,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function UnitOfMeasureSetQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs UnitOfMeasureSetQueryRs');
@@ -7268,7 +7078,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7276,9 +7086,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra, true) . '
 					</VehicleMileageQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7287,11 +7095,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VehicleMileageQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs VehicleMileageQueryRs');
@@ -7311,7 +7119,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7319,9 +7127,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</VehicleQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7330,11 +7136,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VehicleImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs VehicleQueryRs');
@@ -7350,7 +7156,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7361,18 +7167,16 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</VendorCreditQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     public static function VendorCreditImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorCreditQueryRs');
@@ -7388,7 +7192,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7396,9 +7200,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</VendorTypeQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7407,11 +7209,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorTypeImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorTypeQueryRs');
@@ -7427,7 +7229,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
     {
         $xml = '';
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . QuickBooks_Callbacks_SQL_Callbacks::_version($version, $locale) . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7437,9 +7239,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_requiredVersionForElement(2.0, $version, '<OwnerID>0</OwnerID>') . '
 					</VendorQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7448,11 +7248,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function VendorImportResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs VendorQueryRs');
@@ -7472,7 +7272,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             return QUICKBOOKS_SKIP;
         }
 
-        $xml .= '<?xml version="1.0" encoding="utf-8"?>
+        return $xml . ('<?xml version="1.0" encoding="utf-8"?>
 			<?qbxml version="' . $version . '"?>
 			<QBXML>
 				<QBXMLMsgsRq onError="' . QUICKBOOKS_SERVER_SQL_ON_ERROR . '">
@@ -7480,9 +7280,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 						' . QuickBooks_Callbacks_SQL_Callbacks::_buildFilter($user, $action, $extra) . '
 					</WorkersCompCodeQueryRq>
 				</QBXMLMsgsRq>
-			</QBXML>';
-
-        return $xml;
+			</QBXML>');
     }
 
     /**
@@ -7491,11 +7289,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     public static function WorkersCompCodeQueryResponse($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $config = [])
     {
-        $Parser = new QuickBooks_XML_Parser($xml);
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
 
         $errnum = 0;
         $errmsg = '';
-        $Doc = $Parser->parse($errnum, $errmsg);
+        $Doc = $quickBooksXMLParser->parse($errnum, $errmsg);
         $Root = $Doc->getRoot();
 
         $List = $Root->getChildAt('QBXML QBXMLMsgsRs WorkersCompCodeQueryRs');
@@ -7836,7 +7634,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                     'purchaseorder' => [ 'id_field' => 'TxnID',
                                         'children' => [
-                                                'purchaseorder_linkedtxn' => 'FromTxnID',
                                                 'purchaseorder_linkedtxn' => 'PurchaseOrder_TxnID',
                                                 'purchaseorder_purchaseorderline' => 'PurchaseOrder_TxnID',
                                                 'purchaseorder_purchaseorderlinegroup' => 'PurchaseOrder_TxnID',
@@ -8000,7 +7797,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $retArr[$index]['children'] = QuickBooks_Callbacks_SQL_Callbacks::_GetChildrenTables($key);
         */
 
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
 
         if (empty($children)) {
             return $children;
@@ -8038,8 +7835,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
             //print($sql);
 
-            $res = $Driver->query($sql, $errnum, $errmsg);
-            while ($arr = $Driver->fetch($res)) {
+            $res = $quickBooksDriver->query($sql, $errnum, $errmsg);
+            while ($arr = $quickBooksDriver->fetch($res)) {
                 //print_r($arr);
 
                 if (!empty($arr[QUICKBOOKS_DRIVER_SQL_FIELD_TO_SKIP])) {
@@ -8627,6 +8424,8 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $tmp->set($relative_field, $TxnID_or_ListID);
             $Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $relative_table, $tmp, [ $multipart ], false);
         }
+
+        return null;
     }
 
     /**
@@ -8773,12 +8572,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     'dataext' => 'Entity_ListID'
                 ]
             ],
-
-                    'estimate_estimatelinegroup' => [ 'id_field' => 'TxnLineID',
-                                                'children' => [
-                                                    'dataext' => 'Txn_TxnID'
-                                                ]
-                                            ],
 
                     'estimate_estimateline' => [ 'id_field' => 'TxnLineID',
                                                 'children' => [
@@ -8957,7 +8750,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                     'receievepayment' => [ 'id_field' => 'TxnID',
                                         'children' => [
-                                                'receivepayment_appliedtotxn' => 'FromTxnID',
                                                 'receivepayment_appliedtotxn' => 'ReceivePayment_TxnID',
                                                     'dataext' => 'Txn_TxnID'
                                                 ]
@@ -9058,36 +8850,87 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
         if (!isset($delete_children_map[$table])) {
             return false;
-        } else {
-            $TxnID_or_ListID = $object->get($delete_children_map[$table]['id_field']);
-            foreach ($delete_children_map[$table]['children'] as $key => $value) {
-                //print('key: '); print_r($key); print("\n");
-                //print('value: '); print_r($value); print("\n");
+        }
 
-                // @todo Fix this wrong delete flag field
-                // If we are actually deleting an entire element, then we need to check the delete mode and if desired, just flag them rather than remove the rows.
-                if ($fullDelete and
-                    isset($callback_config['delete']) and
-                    $callback_config['delete'] == QuickBooks_WebConnector_Server_SQL::DELETE_FLAG) {
-                    if ($key == 'dataext' and !$deleteDataExt) {
-                        continue;
+        $TxnID_or_ListID = $object->get($delete_children_map[$table]['id_field']);
+        foreach ($delete_children_map[$table]['children'] as $key => $value) {
+            //print('key: '); print_r($key); print("\n");
+            //print('value: '); print_r($value); print("\n");
+
+            // @todo Fix this wrong delete flag field
+            // If we are actually deleting an entire element, then we need to check the delete mode and if desired, just flag them rather than remove the rows.
+            if ($fullDelete && isset($callback_config['delete']) && $callback_config['delete'] == QuickBooks_WebConnector_Server_SQL::DELETE_FLAG) {
+                if ($key === 'dataext' && !$deleteDataExt) {
+                    continue;
+                }
+
+                $multipart = [ $value => $TxnID_or_ListID ];
+
+                $order = [];
+                if (substr($key, -4, 4) === 'line') {
+                    $order = [ 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' ];
+
+                    if ($key === 'iteminventoryassembly_iteminventoryassemblyline') {
+                        unset($order['TxnLineID']);
                     }
+                }
 
-                    $multipart = [ $value => $TxnID_or_ListID ];
+                $obj = new QuickBooks_SQL_Object($table, null);
 
-                    $order = [];
-                    if (substr($key, -4, 4) == 'line') {
-                        $order = [ 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' ];
-
-                        if ($key == 'iteminventoryassembly_iteminventoryassemblyline') {
-                            unset($order['TxnLineID']);
-                        }
+                // Get a list of stuff that's going to be deleted
+                $list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart, $order);
+                foreach ($list as $arr) {
+                    if (isset($arr[QUICKBOOKS_TXNLINEID])) {
+                        $deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = [
+                            $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID],
+                            $arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID],
+                            $arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] ];
                     }
+                }
 
-                    $obj = new QuickBooks_SQL_Object($table, null);
+                // @todo Make the Boolean TRUE value used in the QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG field a constant,
+                //      in case the sql driver used uses something other than 1 and 0.
+                //$obj->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
+                //$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $obj, array( $multipart ));
+            } else {
+                // Otherwise we actually remove the rows.
+                if ($key === 'dataext' && !$deleteDataExt) {
+                    continue;
+                }
 
-                    // Get a list of stuff that's going to be deleted
-                    $list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart, $order);
+                $multipart = [ $value => $TxnID_or_ListID ];
+
+                $order = [];
+                if (substr($key, -4, 4) === 'line') {
+                    $order = [ 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' ];
+
+                    if ($key === 'iteminventoryassembly_iteminventoryassemblyline') {
+                        unset($order['TxnLineID']);
+                    }
+                }
+
+                //print_r($multipart);
+
+                //
+                // Get a list of stuff that's going to be deleted
+                //
+
+                // These are things that have a permenent TxnID (they've been synced to QB before)
+                $list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart, $order);
+                foreach ($list as $arr) {
+                    if (isset($arr[QUICKBOOKS_TXNLINEID])) {
+                        $deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = [
+                            $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID],
+                            $arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID],
+                            $arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] ];
+                    }
+                }
+
+                // These are things that were using a temporary TxnID, and now have a perm TxnID (it just got synced to QuickBooks)
+                if (isset($extra['is_add_response'])) {
+                    $multipart_tmp = [ $value => $extra['AddResponse_OldKey'] ];
+                    $list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart_tmp, $order);
+
                     foreach ($list as $arr) {
                         if (isset($arr[QUICKBOOKS_TXNLINEID])) {
                             $deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = [
@@ -9096,79 +8939,26 @@ class QuickBooks_Callbacks_SQL_Callbacks
                                 $arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] ];
                         }
                     }
+                }
 
-                    // @todo Make the Boolean TRUE value used in the QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG field a constant,
-                    //      in case the sql driver used uses something other than 1 and 0.
-                    //$obj->set(QUICKBOOKS_DRIVER_SQL_FIELD_DELETED_FLAG, 1);
-                    //$Driver->update(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $obj, array( $multipart ));
-                } else {
-                    // Otherwise we actually remove the rows.
-                    if ($key == 'dataext' and
-                        !$deleteDataExt) {
-                        continue;
-                    }
+                //print_r($list);
+                //print("\n\n\n");
 
-                    $multipart = [ $value => $TxnID_or_ListID ];
+                // This query deletes anything with an existing TxnID (i.e. this was UPDATEing QuickBooks)
+                $Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, [ $multipart ]);
 
-                    $order = [];
-                    if (substr($key, -4, 4) == 'line') {
-                        $order = [ 'SortOrder' => 'ASC', 'TxnLineID' => 'ASC' ];
-
-                        if ($key == 'iteminventoryassembly_iteminventoryassemblyline') {
-                            unset($order['TxnLineID']);
-                        }
-                    }
-
-                    //print_r($multipart);
-
-                    //
-                    // Get a list of stuff that's going to be deleted
-                    //
-
-                    // These are things that have a permenent TxnID (they've been synced to QB before)
-                    $list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart, $order);
-                    foreach ($list as $arr) {
-                        if (isset($arr[QUICKBOOKS_TXNLINEID])) {
-                            $deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = [
-                                $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID],
-                                $arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID],
-                                $arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] ];
-                        }
-                    }
-
-                    // These are things that were using a temporary TxnID, and now have a perm TxnID (it just got synced to QuickBooks)
-                    if (isset($extra['is_add_response'])) {
-                        $multipart_tmp = [ $value => $extra['AddResponse_OldKey'] ];
-                        $list = $Driver->select(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, $multipart_tmp, $order);
-
-                        foreach ($list as $arr) {
-                            if (isset($arr[QUICKBOOKS_TXNLINEID])) {
-                                $deleted[$key][QUICKBOOKS_TXNLINEID][$arr[QUICKBOOKS_TXNLINEID]] = [
-                                    $arr[QUICKBOOKS_DRIVER_SQL_FIELD_ID],
-                                    $arr[QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID],
-                                    $arr[QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID] ];
-                            }
-                        }
-                    }
-
-                    //print_r($list);
-                    //print("\n\n\n");
-
-                    // This query deletes anything with an existing TxnID (i.e. this was UPDATEing QuickBooks)
-                    $Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, [ $multipart ]);
-
-                    // This query deletes anything with a new TxnID (i.e. the TxnID was temporary, and
-                    //	now it's permenent because it's been ADDed to QuickBooks, so we need to delete
-                    //	the child records with the temporary TxnID)
-                    if (isset($extra['IsAddResponse']) or isset($extra['is_add_response'])) {
-                        $multipart_tmp = [ $value => $extra['AddResponse_OldKey'] ];
-                        $Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, [ $multipart_tmp ]);
-                    }
+                // This query deletes anything with a new TxnID (i.e. the TxnID was temporary, and
+                //	now it's permenent because it's been ADDed to QuickBooks, so we need to delete
+                //	the child records with the temporary TxnID)
+                if (isset($extra['IsAddResponse']) || isset($extra['is_add_response'])) {
+                    $multipart_tmp = [ $value => $extra['AddResponse_OldKey'] ];
+                    $Driver->delete(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $key, [ $multipart_tmp ]);
                 }
             }
         }
 
         //print_r($deleted);
+        return null;
     }
 
     protected static function _addResponse($type, $List, $requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $xml, $idents, $callback_config = [])
@@ -9223,7 +9013,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             // This keeps track of whether or not we're ignoring this entire batch of UPDATES/INSERTS
             $ignore_this_and_its_children = false;
 
-            foreach ($objects as $key => $object) {
+            foreach ($objects as $object) {
                 $Object = & $object;
 
                 if ($ignore_this_and_its_children) {
@@ -9247,15 +9037,12 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 //exit;
 
                 //
-                if ($table and
-                    count($map) and
-                    $map[0] and
-                    $map[1]) {
+                if ($table && count($map) && $map[0] && $map[1]) {
                     $addMapTest = [];
                     $addMapTestOthers = [];
                     QuickBooks_SQL_Schema::mapToSchema(trim(QuickBooks_Utilities::actionToXMLElement($action)), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $addMapTest, $addMapTestOthers);
 
-                    if ((!isset($extra['IsAddResponse']) and !isset($extra['is_add_response'])) or !(count($addMapTest) and $addMapTest[0]) or $map[0] != $addMapTest[0]) {
+                    if (!isset($extra['IsAddResponse']) && !isset($extra['is_add_response']) || !(count($addMapTest) && $addMapTest[0]) || $map[0] != $addMapTest[0]) {
                         // GARRETT'S bug Fix -- Arrays with primary keys consisting of multiple fields weren't updating properly
                         // due to failure to check for arrays.
                         $multipart = [];
@@ -9279,7 +9066,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $actually_do_update = false;
                         $actually_do_updaterelatives = false;
                         $actually_do_deletechildren = false;
-
                         if (isset($tmp[Quickbooks_Utilities::keyForAction($action)])) {
                             // I have no idea what this does or what this is for....
                             // > EDIT: This keeps track of what the old TxnID or ListID is, so that we can use it to update relative tables
@@ -9288,9 +9074,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                             $extra['temporary_TxnID_or_ListID_or_LineID'] = $tmp[Quickbooks_Utilities::keyForAction($action)];
                         }
 
-                        if (empty($extra['AddResponse_OldKey']) and
-                            Quickbooks_Utilities::keyForAction($action) == 'TxnID' and
-                            isset($tmp['TxnLineID'])) {
+                        if (empty($extra['AddResponse_OldKey']) && Quickbooks_Utilities::keyForAction($action) == 'TxnID' && isset($tmp['TxnLineID'])) {
                             //$extra['AddResponse_OldKey'] = $tmp->get("TxnLineID");
                             $extra['AddResponse_OldKey'] = $tmp['TxnLineID'];
                             $extra['temporary_TxnID_or_ListID_or_LineID'] = $tmp['TxnLineID'];
@@ -9305,10 +9089,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                             $callback_config['mode'] = QuickBooks_WebConnector_Server_SQL::MODE_READONLY;
                         }
 
-                        if (isset($extra['is_query_response']) or
-                            isset($extra['is_import_response']) or
-                            isset($extra['is_mod_response']) or
-                            isset($extra['is_add_response'])) {
+                        if (isset($extra['is_query_response']) || isset($extra['is_import_response']) || isset($extra['is_mod_response']) || isset($extra['is_add_response'])) {
                             // @TODO There should probably be some conflict handling code below to handle conflicts
 
                             $actually_do_update = true;
@@ -9317,12 +9098,10 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         }
 
                         //$Driver->log('Diagnostics for incoming: is_query[' . !empty($extra['is_query_response']) . '], is_import[' . !empty($extra['is_import_response']) . '], is_mod[' . !empty($extra['is_mod_response']) . '], is_add[' . !empty($extra['is_add_response']) . '], conflict mode: ' . $callback_config['conflicts'] . '', null, QUICKBOOKS_LOG_DEVELOP);
-
                         // Conflict handling code
                         // @todo I think this should only apply to query and improt, right? I mean, if it's a mod or add, then
                         //	*of course* it was modified after resynced, thats how we knew to send it back to QuickBooks...
-                        if ($tmp[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY] > $tmp[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC] and
-                            $callback_config['mode'] != QuickBooks_WebConnector_Server_SQL::MODE_READONLY) {
+                        if ($tmp[QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY] > $tmp[QUICKBOOKS_DRIVER_SQL_FIELD_RESYNC] && $callback_config['mode'] != QuickBooks_WebConnector_Server_SQL::MODE_READONLY) {
                             // CONFLICT resolution code
 
                             switch ($callback_config['conflicts']) {
@@ -9348,8 +9127,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                                     $msg = 'Conflict mode: (callback) ' . $callback_config['conflicts'] . ' is not supported right now.';
                                     trigger_error($msg);
                                     die($msg);
-
-                                    break;
                                 case QuickBooks_WebConnector_Server_SQL::CONFLICT_SQL:
 
                                     // The SQL table is the master table, but we have an out-of-date EditSequence value
@@ -9370,7 +9147,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                                 case QuickBooks_WebConnector_Server_SQL::CONFLICT_LOG:
                                 default:
 
-                                    if (isset($extra['IsModResponse']) or isset($extra['is_mod_response']) or isset($extra['is_add_response'])) {
+                                    if (isset($extra['IsModResponse']) || isset($extra['is_mod_response']) || isset($extra['is_add_response'])) {
                                         // If it's actually a mod response, then this isn't actually a conflict, it's just the mod response happening normally
 
                                         $actually_do_update = true;
@@ -9388,7 +9165,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                         //print_r($object);
                         //print_r($tmp);
-
                         // If the EditSequence has not changed since the last time this record was updated,
                         //	then we can just skip this update because everything should already be up to
                         //	date.
@@ -9401,9 +9177,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         //	made will be overwritten/a conflict will occur *even though the Query response
                         //	was only due to a Mod request that we sent ourselves* and the record in
                         //	QuickBooks never actually changed between the Mod and the Query.
-                        if (empty($extra['is_query_response']) and 					// However, if is_query_response is set this was a forced-update (like when a balance updates, the EditSequence doesn't change but the record *does* need to be updated)
-                            isset($tmp['EditSequence']) and 						// Check if EditSequence is set, qb_company doesn't have this field
-                            $tmp['EditSequence'] == $object->get('EditSequence')) {
+                        if (empty($extra['is_query_response']) && isset($tmp['EditSequence']) && $tmp['EditSequence'] == $object->get('EditSequence')) {
                             $actually_do_update = false;
                             $actually_do_deletechildren = false;
                             $actually_do_updaterelatives = false;
@@ -9468,7 +9242,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                             //$Driver->log('Skipping UPDATE: ' . $table . ': ' . print_r($object, true) . ', where: ' . print_r($multipart, true), null, QUICKBOOKS_LOG_DEVELOP);
                         }
 
-                        if ($actually_do_update and isset($extra['is_add_response'])) {
+                        if ($actually_do_update && isset($extra['is_add_response'])) {
                             // It's an add response, call the hooks
                             $qbsql_id = null;
                             if (!empty($multipart[QUICKBOOKS_DRIVER_SQL_FIELD_ID])) {			// I'm not sure why this would ever be empty...?
@@ -9488,7 +9262,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                             $err = null;
                             QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_QUICKBOOKS_INSERT, $requestID, $user, $err, $hook_data, $callback_config);
-                        } elseif ($actually_do_update and isset($extra['is_mod_response'])) {
+                        } elseif ($actually_do_update && isset($extra['is_mod_response'])) {
                             // It's an add response, call the hooks
                             $qbsql_id = null;
                             if (!empty($multipart[QUICKBOOKS_DRIVER_SQL_FIELD_ID])) {			// I'm not sure why this would ever be empty...?
@@ -9509,71 +9283,60 @@ class QuickBooks_Callbacks_SQL_Callbacks
                             $err = null;
                             QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_QUICKBOOKS_UPDATE, $requestID, $user, $err, $hook_data, $callback_config);
                         }
-                    } else {
+                    } elseif ($callback_config['mode'] != QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY) {
                         // The record *DOES NOT* exist in the current table, so just INSERT it
+                        // This handles setting certain special fields (booleans, SortOrder, etc.)
+                        QuickBooks_Callbacks_SQL_Callbacks::_massageInsertRecord($table, $object);
+                        //$Driver->log('DELETED: ' . print_r($deleted, true) . ', table: [' . $table . ']');
+                        // This makes sure that re-inserted child records are re-inserted with the
+                        //	same qbsql_id values
+                        if (isset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)][0])) {
+                            $tmp = $deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)];
+                            unset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)]);		// Can't use this anymore after it's been used for an INSERT
 
-                        if ($callback_config['mode'] != QuickBooks_WebConnector_Server_SQL::MODE_WRITEONLY) {
-                            // This handles setting certain special fields (booleans, SortOrder, etc.)
-                            QuickBooks_Callbacks_SQL_Callbacks::_massageInsertRecord($table, $object);
+                            $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
+                            $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);
+                            $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, $tmp[2]);
+                        } elseif (isset($deleted[$table][QUICKBOOKS_TXNLINEID]) && count($deleted[$table][QUICKBOOKS_TXNLINEID]) > 0) {
+                            // We deleted some child from this table, and what we deleted *should*
+                            //	have been sent to QuickBooks and received from QuickBooks in the
+                            //	same order... so we should be able to just fetch the next deleted
+                            //	thing, and re-use that qbsql_id value
 
-                            //$Driver->log('DELETED: ' . print_r($deleted, true) . ', table: [' . $table . ']');
+                            reset($deleted[$table][QUICKBOOKS_TXNLINEID]);
+                            $tmp = array_shift($deleted[$table][QUICKBOOKS_TXNLINEID]); 	// Remove it from the list so it can't be used anymore
 
-                            // This makes sure that re-inserted child records are re-inserted with the
-                            //	same qbsql_id values
-                            if (isset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)][0])) {
-                                $tmp = $deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)];
-                                unset($deleted[$table][QUICKBOOKS_TXNLINEID][$object->get(QUICKBOOKS_TXNLINEID)]);		// Can't use this anymore after it's been used for an INSERT
-
-                                $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
-                                $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);
-                                $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, $tmp[2]);
-                            } elseif (isset($deleted[$table][QUICKBOOKS_TXNLINEID]) and
-                                count($deleted[$table][QUICKBOOKS_TXNLINEID]) > 0) {
-                                // We deleted some child from this table, and what we deleted *should*
-                                //	have been sent to QuickBooks and received from QuickBooks in the
-                                //	same order... so we should be able to just fetch the next deleted
-                                //	thing, and re-use that qbsql_id value
-
-                                reset($deleted[$table][QUICKBOOKS_TXNLINEID]);
-                                $tmp = array_shift($deleted[$table][QUICKBOOKS_TXNLINEID]); 	// Remove it from the list so it can't be used anymore
-
-                                $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
-                                $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);
-                                $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, $tmp[2]);
-                            }
-
-                            if ('' == $object->get(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID)) {
-                                $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, null);
-                            }
-
-                            if ('' == $object->get(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID)) {
-                                $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, null);
-                            }
-
-                            //print_r($object);
-
-                            //$Driver->log('Applying INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
-
-                            $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY, date('Y-m-d H:i:s'));
-
-                            $Driver->insert(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object);
-                            $last = $Driver->last();
-
-                            // Call any hooks that occur when a record is inserted
-                            $hook_data = [
-                                'hook' => QuickBooks_SQL::HOOK_SQL_INSERT,
-                                'user' => $user,
-                                'table' => QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table,
-                                'object' => $object,
-                                'data' => $object->asArray(),
-                                'qbsql_id' => $last,
-                                ];
-
-                            $err = null;
-                            QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_SQL_INSERT, $requestID, $user, $err, $hook_data, $callback_config);
-                        } else {
-                            //$Driver->log('Skipping INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
+                            $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_ID, $tmp[0]);
+                            $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, $tmp[1]);
+                            $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, $tmp[2]);
                         }
+
+                        if ('' == $object->get(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID)) {
+                            $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_USERNAME_ID, null);
+                        }
+
+                        if ('' == $object->get(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID)) {
+                            $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_EXTERNAL_ID, null);
+                        }
+
+                        //print_r($object);
+                        //$Driver->log('Applying INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
+                        $object->set(QUICKBOOKS_DRIVER_SQL_FIELD_MODIFY, date('Y-m-d H:i:s'));
+                        $Driver->insert(QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table, $object);
+                        $last = $Driver->last();
+                        // Call any hooks that occur when a record is inserted
+                        $hook_data = [
+                            'hook' => QuickBooks_SQL::HOOK_SQL_INSERT,
+                            'user' => $user,
+                            'table' => QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table,
+                            'object' => $object,
+                            'data' => $object->asArray(),
+                            'qbsql_id' => $last,
+                            ];
+                        $err = null;
+                        QuickBooks_Callbacks_SQL_Callbacks::_callHooks($hooks, QuickBooks_SQL::HOOK_SQL_INSERT, $requestID, $user, $err, $hook_data, $callback_config);
+                    } else {
+                        //$Driver->log('Skipping INSERT: ' . $table . ': ' . print_r($object, true), null, QUICKBOOKS_LOG_DEVELOP);
                     }
 
                     // Triggered actions
@@ -9584,16 +9347,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 }
             }
         }
-
-        // Find out if we need to iterate further to get more results
-        $matches = [];
+        
         //$iterator_count = ereg('iteratorRemainingCount="([0-9]*)" iteratorID="([^"]*)"', $xml, $matches);
         $matched_iteratorID = QuickBooks_XML::extractTagAttribute('iteratorID', $xml);
         $matched_iteratorRemainingCount = QuickBooks_XML::extractTagAttribute('iteratorRemainingCount', $xml);
 
         // If an iterator was used and there's results remaining
-        if ($matched_iteratorID and
-            $matched_iteratorRemainingCount > 0) {
+        if ($matched_iteratorID && $matched_iteratorRemainingCount > 0) {
             $extra = [ 'iteratorID' => $matched_iteratorID ]; // Set the iteratorID to be used
 
             /*
@@ -9630,7 +9390,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     protected static function _triggerActions($user, $table, $Object, $action = null)
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        QuickBooks_Driver_Singleton::getInstance();
 
         // Be *CAREFUL* here, you don't want to trigger an infinite loop of
         //	high-priority Query requests! i.e.:
@@ -9737,7 +9497,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
         //$Driver = QuickBooks_Driver_Singleton::getInstance();
         //$Driver->log('issets: ' . print_r($isset, true));
 
-        foreach ($isset as $addrtype => $true) {
+        foreach (array_keys($isset) as $addrtype) {
             foreach ($parts as $part) {
                 if (!$object->get($addrtype . $part)) {
                     $object->set($addrtype . $part, '');
@@ -9760,7 +9520,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     protected static function _massageInsertRecord($table, &$object)
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
         $table = strtolower($table);
 
         // This is a list of "Boolean" fields in QuickBooks
@@ -9819,14 +9579,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
             ];
 
         // Cast QuickBooks booleans (strings, "true" and "false") to database booleans (tinyint 1 and 0)
-        foreach ($qb_to_sql_booleans as $qb_field_boolean) {
-            $qb_bool = $object->get($qb_field_boolean, false);
+        foreach ($qb_to_sql_booleans as $qb_to_sql_boolean) {
+            $qb_bool = $object->get($qb_to_sql_boolean, false);
 
             if ($qb_bool !== false) {
                 if ($qb_bool == 'true') {
-                    $object->set($qb_field_boolean, 1);
+                    $object->set($qb_to_sql_boolean, 1);
                 } else {
-                    $object->set($qb_field_boolean, 0);
+                    $object->set($qb_to_sql_boolean, 0);
                 }
             }
         }
@@ -9857,14 +9617,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if ($TxnID) {
                         $errnum = 0;
                         $errmsg = '';
-                        $res = $Driver->query('
+                        $res = $quickBooksDriver->query('
 							SELECT 
 								MAX(SortOrder) AS max_sort_order
 							FROM 
 								' . QUICKBOOKS_DRIVER_SQL_PREFIX_SQL . $table . ' 
 							WHERE 
 								' . $map[$table] . " = '" . $TxnID . "' ", $errnum, $errmsg);
-                        $arr = $Driver->fetch($res);
+                        $arr = $quickBooksDriver->fetch($res);
 
                         $object->set('SortOrder', (int) $arr['max_sort_order'] + 1);
                     }
@@ -9966,11 +9726,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
 
                     break;
                 case 'checkret itemgrouplineret':
-
+                case 'creditcardchargeret itemgrouplineret':
+                case 'creditcardcreditret itemgrouplineret':
+                case 'vendorcreditret itemgrouplineret':
                     if (!isset($extra['TxnLineID'])) {
                         $extra['TxnLineID'] = $Node->getChildDataAt('ItemGroupLineRet TxnLineID');
                     }
-
+                    
                     break;
                 case 'companyret':
                     if (!isset($extra['CompanyName'])) {
@@ -9991,29 +9753,19 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     $extra['TxnType'] = 'CreditCardCharge';
 
                     break;
-                case 'creditcardchargeret itemgrouplineret':
-
-                    if (!isset($extra['TxnLineID'])) {
-                        $extra['TxnLineID'] = $Node->getChildDataAt('ItemGroupLineRet TxnLineID');
-                    }
-
-                    break;
                 case 'creditcardcreditret':
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('CreditCardCreditRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'CreditCardCredit';
-                    break;
-                case 'creditcardcreditret itemgrouplineret':
-                    if (!isset($extra['TxnLineID'])) {
-                        $extra['TxnLineID'] = $Node->getChildDataAt('ItemGroupLineRet TxnLineID');
-                    }
                     break;
                 case 'creditmemoret':
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('CreditMemoRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'CreditMemo';
                     break;
@@ -10021,25 +9773,30 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['TxnLineID'])) {
                         $extra['TxnLineID'] = $Node->getChildDataAt('CreditMemoLineGroupRet TxnLineID');
                     }
+                    
                     break;
                 case 'customerret':
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('CustomerRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'Customer';
                     break;
                 case 'dataextdefret':
                     if (!isset($extra['DataExtName'])) {
                         $extra['DataExtName'] = $Node->getChildDataAt('DataExtDefRet DataExtName');
                     }
+                    
                     if (!isset($extra['OwnerID'])) {
                         $extra['OwnerID'] = $Node->getChildDataAt('DataExtDefRet OwnerID');
                     }
+                    
                     break;
                 case 'depositret':
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('DepositRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'Deposit';
                     break;
@@ -10047,6 +9804,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['ListID'])) {
                         $extra['ListID'] = $Node->getChildDataAt('EmployeeRet ListID');
                     }
+                    
                     $extra['EntityListID'] = $extra['ListID'];
                     $extra['EntityType'] = 'Employee';
                     break;
@@ -10057,6 +9815,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('EstimateRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'Estimate';
                     break;
@@ -10064,12 +9823,14 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if(!isset($extra['Txn_TxnID'])) {
                         $extra['Txn_TxnID'] = $Node->getChildDataAt('EstimateLineRet TxnLineID');
                     }
+                    
                     $extra['TxnType'] = 'EstimateLine';
                     break;
                 case 'estimateret estimatelinegroupret':
                     if (!isset($extra['TxnLineID'])) {
                         $extra['TxnLineID'] = $Node->getChildDataAt('EstimateLineGroupRet TxnLineID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnLineID'];
                     $extra['TxnType'] = 'EstimateLineGroup';
                     break;
@@ -10081,6 +9842,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('InventoryAdjustmentRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'InventoryAdjustment';
                     break;
@@ -10088,6 +9850,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('InvoiceRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'Inventory';
                     break;
@@ -10099,6 +9862,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['TxnLineID'])) {
                         $extra['TxnLineID'] = $Node->getChildDataAt('InvoiceLineGroupRet TxnLineID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnLineID'];
                     $extra['TxnType'] = 'InvoiceLineGroup';
                     break;
@@ -10110,6 +9874,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['ListID'])) {
                         $extra['ListID'] = $Node->getChildDataAt('ItemGroupRet ListID');
                     }
+                    
                     $extra['EntityListID'] = $extra['ListID'];
                     $extra['EntityType'] = 'ItemGroup';
                     break;
@@ -10121,6 +9886,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['ListID'])) {
                         $extra['ListID'] = $Node->getChildDataAt('ItemInventoryAssemblyRet ListID');
                     }
+                    
                     $extra['EntityListID'] = $extra['ListID'];
                     $extra['EntityType'] = 'ItemInventoryAssembly';
                     break;
@@ -10128,36 +9894,42 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('ItemNonInventoryRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'ItemNonInventory';
                     break;
                 case 'itemdiscountret':
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('ItemDiscountRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'ItemDiscount';
                     break;
                 case 'itemfixedassetret':
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('ItemFixedAssetRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'ItemFixedAsset';
                     break;
                 case 'itemotherchargeret':
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('ItemOtherChargeRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'ItemOtherCharge';
                     break;
                 case 'itempaymentret':
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('ItemPaymentRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'ItemPayment';
                     break;
                 case 'itemreceiptret':
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('ItemReceiptRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'ItemReceipt';
                     break;
@@ -10165,17 +9937,20 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['TxnLineID'])) {
                         $extra['TxnLineID'] = $Node->getChildDataAt('ItemReceiptLineGroupRet TxnLineID');
                     }
+                    
                     break;
                 case 'itemsalestaxret':
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('ItemSalesTaxRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'ItemSalesTax';
                     break;
                 case 'itemsalestaxgroupret':
                     if (!isset($extra['ListID'])) {
                         $extra['ListID'] = $Node->getChildDataAt('ItemSalesTaxGroupRet ListID');
                     }
+                    
                     $extra['EntityListID'] = $extra['ListID'];
                     $extra['EntityType'] = 'ItemSalesTaxGroup';
                     break;
@@ -10183,18 +9958,21 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('ItemServiceRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'ItemService';
                     break;
                 case 'itemsubtotalret':
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('ItemSubtotalRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'ItemSubtotal';
                     break;
                 case 'journalentryret':
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('JournalEntryRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'JournalEntry';
                     break;
@@ -10202,11 +9980,13 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['ListID'])) {
                         $extra['ListID'] = $Node->getChildDataAt('PriceLevelRet ListID');
                     }
+                    
                     break;
                 case 'purchaseorderret':
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('PurchaseOrderRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'PurchaseOrder';
                     break;
@@ -10218,6 +9998,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['TxnLineID'])) {
                         $extra['TxnLineID'] = $Node->getChildDataAt('PurchaseOrderLineGroupRet TxnLineID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnLineID'];
                     $extra['TxnType'] = 'PurchaseOrderLineGroup';
                     break;
@@ -10239,6 +10020,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('SalesOrderRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'SalesOrder';
                     break;
@@ -10259,6 +10041,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('SalesReceiptRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'SalesReceipt';
                     break;
@@ -10279,29 +10062,28 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     if(!isset($extra['ListID'])) {
                         $extra['ListID'] = $Node->getChildDataAt('UnitOfMeasureSetRet ListID');
                     }
+                    
                     break;
                 case 'vendorret':
                     if (!isset($extra['EntityListID'])) {
                         $extra['EntityListID'] = $Node->getChildDataAt('VendorRet ListID');
                     }
+                    
                     $extra['EntityType'] = 'Vendor';
                     break;
                 case 'vendorcreditret':
                     if (!isset($extra['TxnID'])) {
                         $extra['TxnID'] = $Node->getChildDataAt('VendorCreditRet TxnID');
                     }
+                    
                     $extra['Txn_TxnID'] = $extra['TxnID'];
                     $extra['TxnType'] = 'VendorCredit';
-                    break;
-                case 'vendorcreditret itemgrouplineret':
-                    if (!isset($extra['TxnLineID'])) {
-                        $extra['TxnLineID'] = $Node->getChildDataAt('ItemGroupLineRet TxnLineID');
-                    }
                     break;
                 case 'workerscompcoderet':
                     if (!isset($extra['ListID'])) {
                         $extra['ListID'] = $Node->getChildDataAt('WorkersCompCodeRet ListID');
                     }
+                    
                     break;
             }
 
@@ -10382,6 +10164,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                     $objects = array_values($objects);
                     $objects = array_merge($others, $objects);
                 }
+                
                 //
 
                 //echo '<br />&nbsp;&nbsp;&nbsp;';
@@ -10397,7 +10180,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
             //print('map for: {' . $curpath . ' ' . $Node->name() . "} [" . $map[0] . "]\n");
             //print_r($map);
 
-            if ($map[0] and !isset($objects[$map[0]])) {
+            if ($map[0] && !isset($objects[$map[0]])) {
                 //print('creating new object: ' . $map[0] . "\n");
                 //print_r($objects);
 
@@ -10438,11 +10221,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('Bill_TxnID', $extra['TxnID']);
                         break;
                     case 'bill_expenseline':
-                        $objects[$map[0]]->set('Bill_TxnID', $extra['TxnID']);
-                        break;
                     case 'bill_itemline':
-                        $objects[$map[0]]->set('Bill_TxnID', $extra['TxnID']);
-                        break;
                     case 'bill_itemgroupline':
                         $objects[$map[0]]->set('Bill_TxnID', $extra['TxnID']);
                         break;
@@ -10455,11 +10234,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('Check_TxnID', $extra['TxnID']);
                         break;
                     case 'check_expenseline':
-                        $objects[$map[0]]->set('Check_TxnID', $extra['TxnID']);
-                        break;
                     case 'check_itemline':
-                        $objects[$map[0]]->set('Check_TxnID', $extra['TxnID']);
-                        break;
                     case 'check_itemgroupline':
                         $objects[$map[0]]->set('Check_TxnID', $extra['TxnID']);
                         break;
@@ -10471,11 +10246,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('Company_CompanyName', $extra['CompanyName']);
                         break;
                     case 'creditcardcharge_expenseline':
-                        $objects[$map[0]]->set('CreditCardCharge_TxnID', $extra['TxnID']);
-                        break;
                     case 'creditcardcharge_itemline':
-                        $objects[$map[0]]->set('CreditCardCharge_TxnID', $extra['TxnID']);
-                        break;
                     case 'creditcardcharge_itemgroupline':
                         $objects[$map[0]]->set('CreditCardCharge_TxnID', $extra['TxnID']);
                         break;
@@ -10484,11 +10255,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('CreditCardCharge_ItemGroupLine_TxnLineID', $extra['TxnLineID']);
                         break;
                     case 'creditcardcredit_expenseline':
-                        $objects[$map[0]]->set('CreditCardCredit_TxnID', $extra['TxnID']);
-                        break;
                     case 'creditcardcredit_itemline':
-                        $objects[$map[0]]->set('CreditCardCredit_TxnID', $extra['TxnID']);
-                        break;
                     case 'creditcardcredit_itemgroupline':
                         $objects[$map[0]]->set('CreditCardCredit_TxnID', $extra['TxnID']);
                         break;
@@ -10501,8 +10268,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('CreditMemo_TxnID', $extra['TxnID']);
                         break;
                     case 'creditmemo_creditmemoline':
-                        $objects[$map[0]]->set('CreditMemo_TxnID', $extra['TxnID']);
-                        break;
                     case 'creditmemo_creditmemolinegroup':
                         $objects[$map[0]]->set('CreditMemo_TxnID', $extra['TxnID']);
                         break;
@@ -10527,7 +10292,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                             $objects[$map[0]]->set('DataExtDef_DataExtName', $extra['DataExtName']);
                         }
 
-                        if (!empty($extra['OwnerID']) or (isset($extra['OwnerID']) and $extra['OwnerID'] == 0)) {
+                        if (!empty($extra['OwnerID']) || isset($extra['OwnerID']) && $extra['OwnerID'] == 0) {
                             $objects[$map[0]]->set('DataExtDef_OwnerID', $extra['OwnerID']);
                         }
 
@@ -10543,8 +10308,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('Estimate_TxnID', $extra['TxnID']);
                         break;
                     case 'estimate_estimateline':
-                        $objects[$map[0]]->set('Estimate_TxnID', $extra['TxnID']);
-                        break;
                     case 'estimate_estimatelinegroup':
                         $objects[$map[0]]->set('Estimate_TxnID', $extra['TxnID']);
                         break;
@@ -10560,8 +10323,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('Invoice_TxnID', $extra['TxnID']);
                         break;
                     case 'invoice_invoiceline':
-                        $objects[$map[0]]->set('Invoice_TxnID', $extra['TxnID']);
-                        break;
                     case 'invoice_invoicelinegroup':
                         $objects[$map[0]]->set('Invoice_TxnID', $extra['TxnID']);
                         break;
@@ -10580,11 +10341,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('ItemReceipt_TxnID', $extra['TxnID']);
                         break;
                     case 'itemreceipt_expenseline':
-                        $objects[$map[0]]->set('ItemReceipt_TxnID', $extra['TxnID']);
-                        break;
                     case 'itemreceipt_itemline':
-                        $objects[$map[0]]->set('ItemReceipt_TxnID', $extra['TxnID']);
-                        break;
                     case 'itemreceipt_itemgroupline':
                         $objects[$map[0]]->set('ItemReceipt_TxnID', $extra['TxnID']);
                         break;
@@ -10596,8 +10353,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('ItemSalesTaxGroup_ListID', $extra['ListID']);
                         break;
                     case 'journalentry_journalcreditline':
-                        $objects[$map[0]]->set('JournalEntry_TxnID', $extra['TxnID']);
-                        break;
                     case 'journalentry_journaldebitline':
                         $objects[$map[0]]->set('JournalEntry_TxnID', $extra['TxnID']);
                         break;
@@ -10609,8 +10364,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('PurchaseOrder_TxnID', $extra['TxnID']);
                         break;
                     case 'purchaseorder_purchaseorderline':
-                        $objects[$map[0]]->set('PurchaseOrder_TxnID', $extra['TxnID']);
-                        break;
                     case 'purchaseorder_purchaseorderlinegroup':
                         $objects[$map[0]]->set('PurchaseOrder_TxnID', $extra['TxnID']);
                         break;
@@ -10628,8 +10381,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('SalesOrder_TxnID', $extra['TxnID']);
                         break;
                     case 'salesorder_salesorderline':
-                        $objects[$map[0]]->set('SalesOrder_TxnID', $extra['TxnID']);
-                        break;
                     case 'salesorder_salesorderlinegroup':
                         $objects[$map[0]]->set('SalesOrder_TxnID', $extra['TxnID']);
                         break;
@@ -10638,8 +10389,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('SalesOrder_SalesOrderLineGroup_TxnLineID', $extra['TxnLineID']);
                         break;
                     case 'salesreceipt_salesreceiptline':
-                        $objects[$map[0]]->set('SalesReceipt_TxnID', $extra['TxnID']);
-                        break;
                     case 'salesreceipt_salesreceiptlinegroup':
                         $objects[$map[0]]->set('SalesReceipt_TxnID', $extra['TxnID']);
                         break;
@@ -10648,8 +10397,6 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('SalesReceipt_SalesReceiptLineGroup_TxnLineID', $extra['TxnLineID']);
                         break;
                     case 'unitofmeasureset_relatedunit':
-                        $objects[$map[0]]->set('UnitOfMeasureSet_ListID', $extra['ListID']);
-                        break;
                     case 'unitofmeasureset_defaultunit':
                         $objects[$map[0]]->set('UnitOfMeasureSet_ListID', $extra['ListID']);
                         break;
@@ -10658,11 +10405,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
                         $objects[$map[0]]->set('VendorCredit_TxnID', $extra['TxnID']);
                         break;
                     case 'vendorcredit_expenseline':
-                        $objects[$map[0]]->set('VendorCredit_TxnID', $extra['TxnID']);
-                        break;
                     case 'vendorcredit_itemline':
-                        $objects[$map[0]]->set('VendorCredit_TxnID', $extra['TxnID']);
-                        break;
                     case 'vendorcredit_itemgroupline':
                         $objects[$map[0]]->set('VendorCredit_TxnID', $extra['TxnID']);
                         break;
@@ -10682,15 +10425,11 @@ class QuickBooks_Callbacks_SQL_Callbacks
                 QuickBooks_SQL_Schema::mapToSchema(trim($curpath), QUICKBOOKS_SQL_SCHEMA_MAP_TO_SQL, $tempMap, $tempOthers);
 
                 if ($map[0] == 'dataextdef_assigntoobject') {
-                    if ($objects[$map[0]]->path() != trim($curpath . ' ' . $Node->name()) and
-                        strlen(trim($curpath)) < strlen($objects[$map[0]]->path())) {
+                    if ($objects[$map[0]]->path() != trim($curpath . ' ' . $Node->name()) && strlen(trim($curpath)) < strlen($objects[$map[0]]->path())) {
                         $objects[$map[0]]->change(trim($curpath . ' ' . $Node->name()));
                     }
-                } else {
-                    if ($objects[$map[0]]->path() != trim($curpath) and
-                        strlen(trim($curpath)) < strlen($objects[$map[0]]->path())) {
-                        $objects[$map[0]]->change(trim($curpath));
-                    }
+                } elseif ($objects[$map[0]]->path() != trim($curpath) && strlen(trim($curpath)) < strlen($objects[$map[0]]->path())) {
+                    $objects[$map[0]]->change(trim($curpath));
                 }
 
                 $objects[$map[0]]->set($map[1], $Node->data());
@@ -10736,7 +10475,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
      */
     protected static function _buildFilter($user, $action, $extra, $filter_wrap = false)
     {
-        $Driver = QuickBooks_Driver_Singleton::getInstance();
+        $quickBooksDriver = QuickBooks_Driver_Singleton::getInstance();
         $xml = '';
         $type = '';
 
@@ -10749,7 +10488,7 @@ class QuickBooks_Callbacks_SQL_Callbacks
         $type = null;
         $opts = null;
         // 					configRead($user, $module, $key, &$type, &$opts)
-        $prev_sync_datetime = $Driver->configRead($user, $module, $key_prev, $type, $opts);	// last sync started...
+        $prev_sync_datetime = $quickBooksDriver->configRead($user, $module, $key_prev, $type, $opts);	// last sync started...
 
         if (!$prev_sync_datetime) {
             // If this query has *never* run before, let's get *all* of the records
@@ -10758,22 +10497,20 @@ class QuickBooks_Callbacks_SQL_Callbacks
             $extra = [];			// If an iterator exists, get rid of it (this should *never* happen... how could it?)
 
             //			configWrite($user, $module, $key, $value, $type, $opts
-            $Driver->configWrite($user, $module, $key_prev, $prev_sync_datetime, null);
+            $quickBooksDriver->configWrite($user, $module, $key_prev, $prev_sync_datetime, null);
         }
 
         // @TODO MAKE SURE THIS DOESN'T BREAK ANYTHING!
         $prev_sync_datetime = date('Y-m-d', strtotime($prev_sync_datetime) - 600) . 'T' . date('H:i:s', strtotime($prev_sync_datetime) - 600);
 
-        if (!is_array($extra) or
-            empty($extra['iteratorID'])) { 	// Checks to see if this is the first iteration or not
+        if (!is_array($extra) || empty($extra['iteratorID'])) {
+            // Checks to see if this is the first iteration or not
             // Start of a new iterator!
-
             // Store when we started to do this iterator (this will become the $prev_sync_datetime after we finish with this iterator)
             $curr_sync_datetime = date('Y-m-d') . 'T' . date('H:i:s');
-            $Driver->configWrite($user, $module, $key_curr, $curr_sync_datetime, null);
-
+            $quickBooksDriver->configWrite($user, $module, $key_curr, $curr_sync_datetime, null);
             if ($filter_wrap) {
-                if ($action == QUICKBOOKS_QUERY_DELETEDLISTS or $action == QUICKBOOKS_QUERY_DELETEDTXNS) {
+                if ($action == QUICKBOOKS_QUERY_DELETEDLISTS || $action == QUICKBOOKS_QUERY_DELETEDTXNS) {
                     $xml .= '<DeletedDateRangeFilter>' . "\n";
                     $xml .= '	<FromDeletedDate>' . $prev_sync_datetime . '</FromDeletedDate>' . "\n";
                     $xml .= '</DeletedDateRangeFilter>' . "\n";
@@ -10785,20 +10522,19 @@ class QuickBooks_Callbacks_SQL_Callbacks
             } else {
                 $xml .= '<FromModifiedDate>' . $prev_sync_datetime . '</FromModifiedDate>';
             }
-        } else { 	// ... otherwise use what we found in previous time stamp
-            if ($filter_wrap) {
-                if ($action == QUICKBOOKS_QUERY_DELETEDLISTS or $action == QUICKBOOKS_QUERY_DELETEDTXNS) {
-                    $xml .= '<DeletedDateRangeFilter>' . "\n";
-                    $xml .= '	<FromDeletedDate>' . $prev_sync_datetime . '</FromDeletedDate>' . "\n";
-                    $xml .= '</DeletedDateRangeFilter>' . "\n";
-                } else {
-                    $xml .= '<ModifiedDateRangeFilter>' . "\n";
-                    $xml .= '	<FromModifiedDate>' . $prev_sync_datetime . '</FromModifiedDate>' . "\n";
-                    $xml .= '</ModifiedDateRangeFilter>' . "\n";
-                }
+        } elseif ($filter_wrap) {
+            // ... otherwise use what we found in previous time stamp
+            if ($action == QUICKBOOKS_QUERY_DELETEDLISTS || $action == QUICKBOOKS_QUERY_DELETEDTXNS) {
+                $xml .= '<DeletedDateRangeFilter>' . "\n";
+                $xml .= '	<FromDeletedDate>' . $prev_sync_datetime . '</FromDeletedDate>' . "\n";
+                $xml .= '</DeletedDateRangeFilter>' . "\n";
             } else {
-                $xml .= '<FromModifiedDate>' . $prev_sync_datetime . '</FromModifiedDate>';
+                $xml .= '<ModifiedDateRangeFilter>' . "\n";
+                $xml .= '	<FromModifiedDate>' . $prev_sync_datetime . '</FromModifiedDate>' . "\n";
+                $xml .= '</ModifiedDateRangeFilter>' . "\n";
             }
+        } else {
+            $xml .= '<FromModifiedDate>' . $prev_sync_datetime . '</FromModifiedDate>';
         }
 
         return $xml;

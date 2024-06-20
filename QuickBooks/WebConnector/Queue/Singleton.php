@@ -48,7 +48,7 @@ class QuickBooks_WebConnector_Queue_Singleton
             $instance = new QuickBooks_WebConnector_Queue($dsn, $user, $config);
         }
 
-        if ($return_boolean and $instance) {
+        if ($return_boolean && $instance) {
             return true;
         }
 

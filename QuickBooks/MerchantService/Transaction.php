@@ -48,27 +48,45 @@ class QuickBooks_MerchantService_Transaction
      * @var string
      */
     protected $_clientTransID;
+    
     protected $_authcode;
+    
     protected $_merchant;
+    
     protected $_batch;
+    
     protected $_paymentgroup;
+    
     protected $_paymentstatus;
+    
     protected $_txnauthtime;
+    
     protected $_txnauthstamp;
+    
     protected $_avsstreet;
+    
     protected $_avszip;
+    
     protected $_cvvmatch;
+    
     protected $_networkname;
+    
     protected $_networknumber;
 
     protected $_resultcode;
+    
     protected $_resultmessage;
 
     protected $_creditcardnumber;
+    
     protected $_expmonth;
+    
     protected $_expyear;
+    
     protected $_nameoncard;
+    
     protected $_address;
+    
     protected $_postalcode;
 
     /**
@@ -359,7 +377,7 @@ class QuickBooks_MerchantService_Transaction
 
         $trans = array_merge($defaults, $arr);
 
-        $obj = new QuickBooks_MerchantService_Transaction(
+        $quickBooksMerchantServiceTransaction = new QuickBooks_MerchantService_Transaction(
             $trans['Type'],
             $trans['CreditCardTransID'],
             $trans['ClientTransID'],
@@ -377,7 +395,7 @@ class QuickBooks_MerchantService_Transaction
             $trans['NetworkNumber']
         );
 
-        $obj->setExtraData(
+        $quickBooksMerchantServiceTransaction->setExtraData(
             $trans['CreditCardTxnInfo_CreditCardTxnResultInfo_ResultCode'],
             $trans['CreditCardTxnInfo_CreditCardTxnResultInfo_ResultMessage'],
             $trans['CreditCardTxnInfo_CreditCardTxnInputInfo_CreditCardNumber'],
@@ -388,7 +406,7 @@ class QuickBooks_MerchantService_Transaction
             $trans['CreditCardTxnInfo_CreditCardTxnInputInfo_CreditCardPostalCode']
         );
 
-        return $obj;
+        return $quickBooksMerchantServiceTransaction;
     }
 
     public function toXML()
@@ -399,9 +417,8 @@ class QuickBooks_MerchantService_Transaction
         foreach ($this->toArray() as $key => $value) {
             $xml .= '<' . $key . '>' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '</' . $key . '>' . QUICKBOOKS_CRLF;
         }
-        $xml .= '</QBMSTransaction>';
 
-        return $xml;
+        return $xml . '</QBMSTransaction>';
     }
 
     public function toQBXML()
@@ -447,7 +464,7 @@ class QuickBooks_MerchantService_Transaction
             $xml .= '<' . $creditcardtxn . '>' . QUICKBOOKS_CRLF;
 
             foreach ($data as $key => $value) {
-                $xml .= "\t" . '<' . $key . '>' . htmlspecialchars($value) . '</' . $key . '>' . QUICKBOOKS_CRLF;
+                $xml .= '	<' . $key . '>' . htmlspecialchars($value) . '</' . $key . '>' . QUICKBOOKS_CRLF;
             }
 
             $xml .= '</' . $creditcardtxn . '>' . QUICKBOOKS_CRLF;
@@ -469,8 +486,8 @@ class QuickBooks_MerchantService_Transaction
 
         $arr = [];
 
-        $Parser = new QuickBooks_XML_Parser($xml);
-        if ($Doc = $Parser->parse($errnum, $errmsg)) {
+        $quickBooksXMLParser = new QuickBooks_XML_Parser($xml);
+        if ($Doc = $quickBooksXMLParser->parse($errnum, $errmsg)) {
             $Root = $Doc->getRoot();
 
             foreach ($Root->asArray(QuickBooks_XML::ARRAY_PATHS) as $path => $value) {

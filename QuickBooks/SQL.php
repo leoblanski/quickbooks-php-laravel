@@ -15,6 +15,8 @@
  */
 class QuickBooks_SQL
 {
+    public $_driver;
+
     /**
      * Hook which occurs every time a new record is INSERTed into the SQL mirror
      */

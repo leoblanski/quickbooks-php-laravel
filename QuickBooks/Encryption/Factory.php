@@ -47,8 +47,7 @@ class QuickBooks_Encryption_Factory
      */
     public static function determine(&$encrypted)
     {
-        if ($encrypted[0] == '{' and
-            false !== ($end = strpos($encrypted, ':'))) {
+        if ($encrypted[0] == '{' && false !== ($end = strpos($encrypted, ':'))) {
             $number = substr($encrypted, 1, $end);
 
             $method = substr($encrypted, 1 + strlen($number), $number);

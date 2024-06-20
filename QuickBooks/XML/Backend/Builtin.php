@@ -18,7 +18,7 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
 
     public function validate(&$errnum, &$errmsg)
     {
-        if (!strlen($this->_xml)) {
+        if ((string) $this->_xml === '') {
             return false;
         }
 
@@ -30,7 +30,7 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
             $start = strpos($xml, '<!--');
             $end = strpos($xml, '-->', $start);
 
-            if (false !== $start and false !== $end) {
+            if (false !== $end) {
                 $xml = substr($xml, 0, $start) . substr($xml, $end + 3);
             } else {
                 break;
@@ -45,7 +45,7 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
             $start = strpos($xml, '<![CDATA[');
             $end = strpos($xml, ']]>', $start);
 
-            if (false !== $start and false !== $end) {
+            if (false !== $end) {
                 $xml = substr($xml, 0, $start) . substr($xml, $end + 3);
             } else {
                 break;
@@ -63,13 +63,13 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
             $attributes = [];
             $this->_extractAttributes($tag_w_attrs, $tag, $attributes);
 
-            if (substr($tag_w_attrs, 0, 1) == '?') {			// < ? x m l
+            if (substr($tag_w_attrs, 0, 1) === '?') {			// < ? x m l
                 // ignore
-            } elseif (substr($tag_w_attrs, 0, 1) == '!') {		// <!DOCTYPE
+            } elseif (substr($tag_w_attrs, 0, 1) === '!') {		// <!DOCTYPE
                 // ignore
-            } elseif (substr($tag_w_attrs, -1, 1) == '/') {
+            } elseif (substr($tag_w_attrs, -1, 1) === '/') {
                 // completely ignore, auto-closed because it has no children
-            } elseif (substr($tag_w_attrs, 0, 1) == '/') {		// close tag
+            } elseif (substr($tag_w_attrs, 0, 1) === '/') {		// close tag
                 $tag = substr($tag, 1);
 
                 $pop = array_shift($stack);
@@ -87,13 +87,13 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
             $xml = trim(substr($xml, $opentag_end + 1));
         }
 
-        if (strlen($xml)) {
+        if (strlen($xml) !== 0) {
             $errnum = QuickBooks_XML::ERROR_GARBAGE;
             $errmsg = 'Found this garbage data at end of stream: ' . $xml;
             return false;
         }
 
-        if (count($stack)) {
+        if ($stack !== []) {
             $errnum = QuickBooks_XML::ERROR_DANGLING;
             $errmsg = 'XML stack still contains this after parsing: ' . var_export($stack, true);
             return false;
@@ -104,14 +104,14 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
 
     public function parse(&$errnum, &$errmsg)
     {
-        $base = new QuickBooks_XML_Node('root');
-        $this->_parseHelper($this->_xml, $base, $errnum, $errmsg);
+        $quickBooksXMLNode = new QuickBooks_XML_Node('root');
+        $this->_parseHelper($this->_xml, $quickBooksXMLNode, $errnum, $errmsg);
 
         if ($errnum != QuickBooks_XML::ERROR_OK) {
             return false;
         }
 
-        $tmp = $base->children();
+        $tmp = $quickBooksXMLNode->children();
 
         return new QuickBooks_XML_Document(current($tmp));
     }
@@ -127,11 +127,9 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
     {
         $errnum = QuickBooks_XML::ERROR_OK;
         $errmsg = '';
-
-        $arr = [];
         $xml = trim($xml);
 
-        if (!strlen($xml)) {
+        if ($xml === '') {
             return false;
         }
 
@@ -145,7 +143,7 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
             $start = strpos($xml, '<!--');
             $end = strpos($xml, '-->', $start);
 
-            if (false !== $start and false !== $end) {
+            if (false !== $end) {
                 $xml = substr($xml, 0, $start) . substr($xml, $end + 3);
             } else {
                 break;
@@ -155,8 +153,6 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
         $raw = $xml;
         $current = 0;
         $last = '';
-
-        $i = 0;
 
         // Parse
         while (false !== strpos($xml, '<')) {
@@ -172,7 +168,7 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
             $opentag_end = strpos($xml, '>');
 
             // CDATA check
-            if (substr($xml, $opentag_start, 3) == '<![') {
+            if (substr($xml, $opentag_start, 3) === '<![') {
                 // Find the end of the CDATA section
                 $cdata_end = strpos($xml, ']]>');
 
@@ -188,16 +184,16 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
             $attributes = [];
             $this->_extractAttributes($tag_w_attrs, $tag, $attributes);
 
-            if (substr($tag_w_attrs, 0, 1) == '?') {		// xml declration
+            if (substr($tag_w_attrs, 0, 1) === '?') {		// xml declration
                 // ignore
-            } elseif (substr($tag_w_attrs, 0, 1) == '!') {
+            } elseif (substr($tag_w_attrs, 0, 1) === '!') {
                 // ignore
             }
             //else if (substr($tag_w_attrs, 0, 3) == '!--')		// comment
             //{
             //	// ignore
             //}
-            elseif (substr($tag_w_attrs, -1, 1) == '/') {
+            elseif (substr($tag_w_attrs, -1, 1) === '/') {
                 // ***DO NOT*** completely ignore, auto-closed because it has no children
                 // Completely ignoring causes some SOAP errors for requests like <serverVersion xmlns="http://developer.intuit.com/" />
 
@@ -225,12 +221,12 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
                 $length = 0;
                 $data = null;
 
-                if (count($vstack)) {
+                if ($vstack !== []) {
                     array_shift($dstack);
                 } else {
                     $dstack[$key] = [ $pop, $gnk, $pos, $length, $data ];
                 }
-            } elseif (substr($tag_w_attrs, 0, 1) == '/') {		// close tag
+            } elseif (substr($tag_w_attrs, 0, 1) === '/') {		// close tag
                 // NOTE: If you change the code here, you'll likely have to
                 //	change it in the above else () section as well, as that
                 //	section handles data-less tags like <serverVersion />
@@ -254,7 +250,7 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
                 $data = substr($raw, $pos, $current + $opentag_start - $pos);
 
                 // Handle <![CDATA[ ... ]]> sections
-                if (substr($data, 0, 9) == '<![CDATA[') {
+                if (substr($data, 0, 9) === '<![CDATA[') {
                     $cdata_end = strpos($data, ']]>');
 
                     // Set the data to the CDATA section...
@@ -264,7 +260,7 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
                     //$current = $current + strlen($data) + 12;
                 }
 
-                if (count($vstack)) {
+                if ($vstack !== []) {
                     array_shift($dstack);
                 } else {
                     $dstack[$key] = [ $pop, $gnk, $pos, $current + $opentag_start - $pos, $data ];
@@ -283,13 +279,13 @@ class QuickBooks_XML_Backend_Builtin implements QuickBooks_XML_Backend
             $current = $current + $opentag_end + 1;
         }
 
-        if (strlen($xml)) {
+        if (strlen($xml) !== 0) {
             $errnum = QuickBooks_XML::ERROR_GARBAGE;
             $errmsg = 'Found this garbage data at end of stream: ' . $xml;
             return false;
         }
 
-        if (count($vstack)) {
+        if ($vstack !== []) {
             $errnum = QuickBooks_XML::ERROR_DANGLING;
             $errmsg = 'XML stack still contains this after parsing: ' . var_export($vstack, true);
             return false;

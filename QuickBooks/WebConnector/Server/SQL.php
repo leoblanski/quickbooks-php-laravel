@@ -37,8 +37,6 @@ if (!defined('QUICKBOOKS_SERVER_SQL_VALUE_CLEAR')) {
 if (!defined('QUICKBOOKS_SERVER_SQL_ITERATOR_PRIORITY')) {
     /**
      * The priority value to use when re-queueing a request for the next part of an iterator
-     *
-     * @var integer
      */
     define('QUICKBOOKS_SERVER_SQL_ITERATOR_PRIORITY', 1000);
 }
@@ -46,8 +44,6 @@ if (!defined('QUICKBOOKS_SERVER_SQL_ITERATOR_PRIORITY')) {
 if (!defined('QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY')) {
     /**
      * The priority value to use when issuing requests from an Error Handler for Add/Mods
-     *
-     * @var integer
      */
     define('QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY', 9999);
 }
@@ -55,8 +51,6 @@ if (!defined('QUICKBOOKS_SERVER_SQL_CONFLICT_QUEUE_PRIORITY')) {
 if (!defined('QUICKBOOKS_SERVER_SQL_ITERATOR_MAXRETURNED')) {
     /**
      * How many records an iterator should grab in a single transaction
-     *
-     * @var integer
      */
     define('QUICKBOOKS_SERVER_SQL_ITERATOR_MAXRETURNED', 25);
 }
@@ -123,9 +117,13 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
     public const MODE_READWRITE = '+';
 
     public const CONFLICT_LOG = 2;
+    
     public const CONFLICT_NEWER = 4;
+    
     public const CONFLICT_QUICKBOOKS = 8;
+    
     public const CONFLICT_SQL = 16;
+    
     public const CONFLICT_CALLBACK = 32;
 
     /**
@@ -133,9 +131,11 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
      *
      */
     public const DELETE_REMOVE = 2;
+    
     //define('QUICKBOOKS_SERVER_SQL_ON_DELETE_REMOVE', QUICKBOOKS_SERVER_SQL_DELETE_REMOVE);
 
     public const DELETE_FLAG = 4;
+    
     //define('QUICKBOOKS_SERVER_SQL::ON_DELETE_FLAG', QUICKBOOKS_SERVER_SQL_DELETE_FLAG);
 
     /**
@@ -195,7 +195,7 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
         $sql_map = [];
 
         foreach (get_class_methods('QuickBooks_Callbacks_SQL_Callbacks') as $method) {
-            if (strtolower(substr($method, -7)) == 'request') {
+            if (strtolower(substr($method, -7)) === 'request') {
                 $action = substr($method, 0, -7);
 
                 $sql_map[$action] = [
@@ -269,7 +269,7 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
         $sql_callback_options = $this->_merge($callback_options, $sql_callback_options, false);
 
         // Initialize the Driver singleton
-        $Driver = QuickBooks_Driver_Singleton::getInstance($dsn_or_conn, $driver_options, $sql_hooks, $log_level);
+        QuickBooks_Driver_Singleton::getInstance($dsn_or_conn, $driver_options, $sql_hooks, $log_level);
 
         // $dsn_or_conn, $map, $onerror = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_BUILTIN, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array()
         parent::__construct($dsn_or_conn, $sql_map, $sql_onerror, $sql_hooks, $log_level, $soap, $wsdl, $soap_options, $handler_options, $driver_options, $sql_callback_options);
@@ -308,8 +308,7 @@ class QuickBooks_WebConnector_Server_SQL extends QuickBooks_WebConnector_Server
             ];
 
         foreach ($tmp as $filter) {
-            if (empty($config[$filter]) or
-                (!empty($config[$filter]) and !is_array($config[$filter]))) {
+            if (empty($config[$filter]) || !empty($config[$filter]) && !is_array($config[$filter])) {
                 $config[$filter] = [];
             }
         }

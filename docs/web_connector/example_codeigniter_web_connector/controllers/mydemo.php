@@ -17,6 +17,8 @@
  */
 class MyDemo extends CI_Controller
 {
+    public $quickbooks;
+
     public function __construct()
     {
         parent::__construct();

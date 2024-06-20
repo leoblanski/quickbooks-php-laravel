@@ -31,7 +31,7 @@ error_reporting(E_ALL | E_STRICT);
 //define('QUICKBOOKS_DRIVER_SQL_MYSQLI_PREFIX', 'myqb_');
 
 // Require the framework
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 // A username and password you'll use in:
 //	a) Your .QWC file
@@ -72,17 +72,25 @@ $obj = new My_Class_Name($my_example_var1, $my_example_var2);
 
 // Map QuickBooks actions to handler functions
 $map = [
-    QUICKBOOKS_ADD_CUSTOMER => [ [ $obj, 'addCustomerRequest' ], [ $obj, 'addCustomerResponse' ] ],
+    QUICKBOOKS_ADD_CUSTOMER => [ static function ($requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale) use ($obj) {
+        return $obj->addCustomerRequest($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $version, $locale);
+    }, static function ($requestID, $user, $action, $ID, array $extra, &$err, $last_action_time, $last_actionident_time, $xml, array $idents) use ($obj) {
+        $obj->addCustomerResponse($requestID, $user, $action, $ID, $extra, $err, $last_action_time, $last_actionident_time, $xml, $idents);
+    } ],
     ];
 
 // This is entirely optional, use it to trigger actions when an error is returned by QuickBooks
 $errmap = [
-    500 => [ $obj, 'handleError500' ],
+    500 => static function ($requestID, $user, $action, $ID, $extra, &$err, $xml, $errnum, $errmsg) use ($obj) {
+        $obj->handleError500($requestID, $user, $action, $ID, $extra, $err, $xml, $errnum, $errmsg);
+    },
     ];
 
 // An array of callback hooks
 $hooks = [
-    QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS => [ [ $obj, 'hookLoginSuccess' ] ],
+    QUICKBOOKS_HANDLERS_HOOK_LOGINSUCCESS => [ static function ($requestID, $user, $hook, &$err, array $hook_data, array $callback_config) use ($obj) {
+        return $obj->hookLoginSuccess($requestID, $user, $hook, $err, $hook_data, $callback_config);
+    } ],
     ];
 
 /**
@@ -101,14 +109,6 @@ class My_Class_Name
      * DSN-style connection string
      */
     protected $_dsn;
-
-    /**
-     * Class constructor
-     */
-    public function __construct($my_example_var1, $my_example_var2)
-    {
-
-    }
 
     /**
      * Set our DSN-style connection string

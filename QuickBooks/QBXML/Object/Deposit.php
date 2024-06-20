@@ -129,6 +129,7 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
     {
         return $this->getTxnDate($format = null);
     }
+    
     // Path: Memo, datatype: STRTYPE
 
     /**
@@ -194,14 +195,14 @@ class QuickBooks_QBXML_Object_Deposit extends QuickBooks_QBXML_Object
         switch ($root) {
             case QUICKBOOKS_ADD_DEPOSIT:
 
-                foreach ($object['DepositLineAdd'] as $key => $obj) {
+                foreach ($object['DepositLineAdd'] as $obj) {
                     $obj->setOverride('DepositLineAdd');
                 }
 
                 break;
             case QUICKBOOKS_MOD_DEPOSIT:
 
-                foreach ($object['DepositLineMod'] as $key => $obj) {
+                foreach ($object['DepositLineMod'] as $obj) {
                     $obj->setOverride('DepositLineMod');
                 }
 

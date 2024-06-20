@@ -92,7 +92,9 @@ class QuickBooks_IPP
     public const API_GETENTITLEMENTVALUESANDUSERROLE = 'API_GetEntitlementValuesAndUserRole';
 
     public const AUTHMODE_FEDERATED = 'federated';
+    
     public const AUTHMODE_OAUTHV1 = 'oauthv1';
+    
     public const AUTHMODE_OAUTHV2 = 'oauthv2';
 
     /**
@@ -186,22 +188,30 @@ class QuickBooks_IPP
      */
     public const ERROR_HTTP = -1096;
 
-    protected $_test;
+    protected $_test = false;
 
     protected $_key;
 
     protected $_username;
+    
     protected $_password;
+    
     protected $_ticket;
+    
     protected $_token;
+    
     protected $_dbid;
 
     protected $_flavor;
+    
     protected $_baseurl;
-    protected $_sandbox;
+    
+    protected $_sandbox = false;
 
     protected $_authmode;
+    
     protected $_authuser;
+    
     protected $_authcred;
 
     /**
@@ -216,20 +226,24 @@ class QuickBooks_IPP
      */
     protected $_authkey;
 
-    protected $_debug;
+    protected $_debug = false;
 
     protected $_last_request;
+    
     protected $_last_response;
+    
     protected $_last_debug;
 
-    protected $_masking;
+    protected $_masking = true;
 
     protected $_driver;
 
     protected $_certificate;
 
     protected $_errcode;
+    
     protected $_errtext;
+    
     protected $_errdetail;
 
     /**
@@ -242,37 +256,16 @@ class QuickBooks_IPP
      * Whether or not to use the IDS parser and parse XML responses into objects
      * @var boolean
      */
-    protected $_ids_parser;
+    protected $_ids_parser = true;
 
     /**
      * The version of IDS to use
      * @var string
      */
-    protected $_ids_version;
+    protected $_ids_version = QuickBooks_IPP_IDS::VERSION_3;
 
     public function __construct($dsn, $encryption_key, $config = [], $log_level = QUICKBOOKS_LOG_NORMAL)
     {
-        // Are we in sandbox mode?
-        $this->_sandbox = false;
-
-        // Use a test gateway?
-        $this->_test = false;
-
-        // Use debug mode?
-        $this->_debug = false;
-
-        // Mask sensitive data in the logs (tickets, credit card numbers, etc.)
-        $this->_masking = true;
-
-        // Parse returned IDS responses into objects?
-        $this->_ids_parser = true;
-
-        // What version of IDS to use
-        $this->_ids_version = QuickBooks_IPP_IDS::VERSION_3;
-
-        // Driver class for logging
-        $this->_driver = null;
-
         if ($dsn) {
             $this->_driver = QuickBooks_Driver_Factory::create($dsn, $config, $log_level);
             $this->_driver->setLogLevel($log_level);
@@ -438,24 +431,21 @@ class QuickBooks_IPP
 
         // Try to parse the response from IPP
         $parsed = $Parser->parseIPP($data, $action, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
-
         /*
         print('parsed out: [');
         print_r($parsed);
         print(']');
         */
-
         //$this->_setLastDebug(__CLASS__, array( 'ipp_parser_duration' => microtime(true) - $start ));
-
         if ($xml_errnum != QuickBooks_XML::ERROR_OK) {
             // Error parsing the returned XML?
             $this->_setError(QuickBooks_IPP::ERROR_XML, 'XML parser said: ' . $xml_errnum . ': ' . $xml_errmsg);
-
             return false;
-        } elseif ($err_code != QuickBooks_IPP::ERROR_OK) {
+        }
+
+        if ($err_code != QuickBooks_IPP::ERROR_OK) {
             // Some other IPP error
             $this->_setError($err_code, $err_desc, 'Database error code: ' . $err_db);
-
             return false;
         }
 
@@ -596,7 +586,7 @@ class QuickBooks_IPP
      */
     public function handleRenewal()
     {
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             $renewed = $this->_handleRenewal();
 
             if ($renewed) {
@@ -614,7 +604,7 @@ class QuickBooks_IPP
      */
     public function forceRenewal()
     {
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             $renewed = $this->_handleRenewal(true);
 
             if ($renewed) {
@@ -640,19 +630,14 @@ class QuickBooks_IPP
         $this->_log('  Was renewed already? ' . var_export($was_renewed_during_this_session, true), QUICKBOOKS_LOG_DEBUG);
         $this->_log('  Renewal attemps so far: ' . var_export($renewal_attempts, true), QUICKBOOKS_LOG_DEBUG);
 
-        $renewal_attempts++;
+        ++$renewal_attempts;
 
         $needs_renewal = false;
 
-        if (is_object($this->_driver) and
-            $this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
-            $force_renewal) {
+        if (is_object($this->_driver) && $this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 && $force_renewal) {
             $this->_log('Forced renewal, so renewal is needed!', QUICKBOOKS_LOG_DEBUG);
             $needs_renewal = true;
-        } elseif (!$was_renewed_during_this_session and
-            is_object($this->_driver) and
-            $this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
-            strtotime($this->_authcred['oauth_access_expiry']) - 60 < time()) {
+        } elseif (!$was_renewed_during_this_session && is_object($this->_driver) && $this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 && strtotime($this->_authcred['oauth_access_expiry']) - 60 < time()) {
             $this->_log('Expired token, so renewal is needed!', QUICKBOOKS_LOG_DEBUG);
             $needs_renewal = true;
         }
@@ -662,8 +647,7 @@ class QuickBooks_IPP
         if ($needs_renewal) {
             $this->_log('Attempting discover...', QUICKBOOKS_LOG_DEBUG);
 
-            if ($discover = QuickBooks_IPP_IntuitAnywhere::discover($this->_sandbox) and
-                !empty($this->_authcred['oauth_client_id'])) {
+            if (($discover = QuickBooks_IPP_IntuitAnywhere::discover($this->_sandbox)) && !empty($this->_authcred['oauth_client_id'])) {
                 $this->_log('Attempting renewal...', QUICKBOOKS_LOG_DEBUG);
 
                 $ch = curl_init($discover['token_endpoint']);
@@ -701,9 +685,9 @@ class QuickBooks_IPP
 
                     // Successfully renewed!
                     return true;
-                } else {
-                    $this->_log('  Renewal failed: ' . $info['http_code'] . ': ' . $retr, QUICKBOOKS_LOG_DEBUG);
                 }
+
+                $this->_log('  Renewal failed: ' . $info['http_code'] . ': ' . $retr, QUICKBOOKS_LOG_DEBUG);
             }
 
             $this->_log('  Discover failed!', QUICKBOOKS_LOG_DEBUG);
@@ -726,11 +710,10 @@ class QuickBooks_IPP
 
         $post = false;
         $xml = null;
-        $query = null;
 
         $guid = QuickBooks_Utilities::GUID();
 
-        if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD) {
+        if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD || $optype == QuickBooks_IPP_IDS::OPTYPE_MOD) {
             $post = true;
             $url = $this->baseURL() . '/company/' . $realm . '/' . strtolower($resource) . '?requestid=' . $guid . '&minorversion=' . QUICKBOOKS_IPP_MINORVERSION;
             $xml = $xml_or_query;
@@ -796,16 +779,15 @@ class QuickBooks_IPP
         $parsed = $Parser->parseIDS($data, $optype, $this->flavor(), QuickBooks_IPP_IDS::VERSION_3, $xml_errnum, $xml_errmsg, $err_code, $err_desc, $err_db);
 
         $this->_setLastDebug(__CLASS__, [ 'ids_parser_duration' => microtime(true) - $start ]);
-
         if ($xml_errnum != QuickBooks_XML::ERROR_OK) {
             // Error parsing the returned XML?
             $this->_setError(QuickBooks_IPP::ERROR_XML, 'XML parser said: ' . $xml_errnum . ': ' . $xml_errmsg);
-
             return false;
-        } elseif ($err_code != QuickBooks_IPP::ERROR_OK) {
+        }
+
+        if ($err_code != QuickBooks_IPP::ERROR_OK) {
             // Some other IPP error
             $this->_setError($err_code, $err_desc, 'Database error code: ' . $err_db);
-
             return false;
         }
 
@@ -827,7 +809,7 @@ class QuickBooks_IPP
         $stripped = substr($response, $pos + 4);
 
         // To handle "HTTP/1.1 100 Continue\r\n\r\nHTTP/1.1 200 OK\r\n .... " responses
-        if (substr($stripped, 0, 8) == 'HTTP/1.1') {
+        if (substr($stripped, 0, 8) === 'HTTP/1.1') {
             return $this->_stripHTTPHeaders($stripped);
         }
 
@@ -963,10 +945,7 @@ class QuickBooks_IPP
     {
         $headers = [];
 
-        if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD or
-            $action == QuickBooks_IPP_IDS::OPTYPE_MOD or
-            $action == QuickBooks_IPP_IDS::OPTYPE_VOID or
-            $action == QuickBooks_IPP_IDS::OPTYPE_DELETE) {
+        if ($action == QuickBooks_IPP_IDS::OPTYPE_ADD || $action == QuickBooks_IPP_IDS::OPTYPE_MOD || $action == QuickBooks_IPP_IDS::OPTYPE_VOID || $action == QuickBooks_IPP_IDS::OPTYPE_DELETE) {
             $headers['Content-Type'] = 'application/xml';
         } else {
             $headers['Content-Type'] = 'text/plain';
@@ -979,25 +958,19 @@ class QuickBooks_IPP
             }
         } elseif ($this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV1) {
             // If we have credentials, sign the request
-            if ($this->_authcred['oauth_access_token'] and
-                $this->_authcred['oauth_access_token_secret']) {
+            if ($this->_authcred['oauth_access_token'] && $this->_authcred['oauth_access_token_secret']) {
                 // Sign the request
-                $OAuth = new QuickBooks_IPP_OAuthv1($this->_authcred['oauth_consumer_key'], $this->_authcred['oauth_consumer_secret']);
+                $quickBooksIPPOAuthv1 = new QuickBooks_IPP_OAuthv1($this->_authcred['oauth_consumer_key'], $this->_authcred['oauth_consumer_secret']);
 
                 // Different than default signature method?
                 if ($this->_authsign) {
-                    $OAuth->signature($this->_authsign, $this->_authkey);
+                    $quickBooksIPPOAuthv1->signature($this->_authsign, $this->_authkey);
                 }
 
-                if ($post) {
-                    $action = QuickBooks_IPP_OAuthv1::METHOD_POST;
-                } else {
-                    $action = QuickBooks_IPP_OAuthv1::METHOD_GET;
-                }
+                $action = $post ? QuickBooks_IPP_OAuthv1::METHOD_POST : QuickBooks_IPP_OAuthv1::METHOD_GET;
 
                 $signdata = null;
-                if ($data and
-                    $data[0] == '<') {
+                if ($data && $data[0] == '<') {
                     // It's an XML body, we don't sign that
                     $signdata = null;
                 } else {
@@ -1006,7 +979,7 @@ class QuickBooks_IPP
                     parse_str($data, $signdata);
                 }
 
-                $signed = $OAuth->sign($action, $url, $this->_authcred['oauth_access_token'], $this->_authcred['oauth_access_token_secret'], $signdata);
+                $signed = $quickBooksIPPOAuthv1->sign($action, $url, $this->_authcred['oauth_access_token'], $this->_authcred['oauth_access_token_secret'], $signdata);
 
                 // Always use the header, regardless of POST or GET
                 $headers['Authorization'] = $signed[3];
@@ -1015,7 +988,7 @@ class QuickBooks_IPP
                     // Remove any whitespace padding before checking
                     $data = trim($data);
 
-                    if ($data and $data[0] == '<') {
+                    if ($data && $data[0] === '<') {
                         // Do nothing
                     } else {
                         $data = http_build_query($signdata);
@@ -1027,39 +1000,32 @@ class QuickBooks_IPP
         }
 
         // Our HTTP requestor
-        $HTTP = new QuickBooks_HTTP($url);
+        $quickBooksHTTP = new QuickBooks_HTTP($url);
 
         // Set the headers
-        $HTTP->setHeaders($headers);
+        $quickBooksHTTP->setHeaders($headers);
 
         // Turn on debugging for the HTTP object if it's been enabled in the payment processor
-        $HTTP->useDebugMode($this->_debug);
+        $quickBooksHTTP->useDebugMode($this->_debug);
 
         //
-        $HTTP->setRawBody($data);
+        $quickBooksHTTP->setRawBody($data);
 
         // We need the headers back
-        $HTTP->returnHeaders(true);
+        $quickBooksHTTP->returnHeaders(true);
 
         // Send the request
-        if ($post) {
-            $return = $HTTP->POST();
-        } else {
-            $return = $HTTP->GET();
-        }
+        $return = $post ? $quickBooksHTTP->POST() : $quickBooksHTTP->GET();
 
         // If we got back a 401, indicating an expired token, we can renew and retry!
-        $info = $HTTP->lastInfo();
+        $info = $quickBooksHTTP->lastInfo();
         $this->_log('HTTP response code: ' . $info['http_code'], QUICKBOOKS_LOG_DEBUG);
 
         if ($info['http_code'] == QuickBooks_HTTP::HTTP_401) {
             $this->_log('Caught HTTP 401 on response on token ' . $this->_authcred['oauth_access_token'] . ', will attempt renewal: ' . $return, QUICKBOOKS_LOG_DEBUG);
         }
 
-        if ($info['http_code'] == QuickBooks_HTTP::HTTP_401 and
-            (false !== stripos($return, 'expired') or false !== stripos($return, 'AuthenticationFailed')) and         // Expired OAuth token
-            $this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 and
-            $this->_authcred['oauth_access_token']) {
+        if ($info['http_code'] == QuickBooks_HTTP::HTTP_401 && (false !== stripos($return, 'expired') || false !== stripos($return, 'AuthenticationFailed')) && $this->_authmode == QuickBooks_IPP::AUTHMODE_OAUTHV2 && $this->_authcred['oauth_access_token']) {
             $this->_log('Forcing renewal...', QUICKBOOKS_LOG_DEBUG);
 
             // Force renewal of the token _right now_
@@ -1069,29 +1035,22 @@ class QuickBooks_IPP
 
             if ($renewed) {
                 $this->_log('Renewal success! Setting new token and re-attempting: ' . $this->_authcred['oauth_access_token'], QUICKBOOKS_LOG_DEBUG);
-
                 // Set the new token
                 $headers['Authorization'] = 'Bearer ' . $this->_authcred['oauth_access_token'];
-
-                $HTTP->setHeaders($headers);
-
+                $quickBooksHTTP->setHeaders($headers);
                 // Retry the request
-                if ($post) {
-                    $return = $HTTP->POST();
-                } else {
-                    $return = $HTTP->GET();
-                }
+                $return = $post ? $quickBooksHTTP->POST() : $quickBooksHTTP->GET();
             }
         }
 
-        $this->_setLastRequestResponse($HTTP->lastRequest(), $HTTP->lastResponse());
-        $this->_setLastDebug(__CLASS__, [ 'http_request_response_duration' => $HTTP->lastDuration() ]);
+        $this->_setLastRequestResponse($quickBooksHTTP->lastRequest(), $quickBooksHTTP->lastResponse());
+        $this->_setLastDebug(__CLASS__, [ 'http_request_response_duration' => $quickBooksHTTP->lastDuration() ]);
 
         //
-        $this->_log($HTTP->getLog(), QUICKBOOKS_LOG_DEBUG);
+        $this->_log($quickBooksHTTP->getLog(), QUICKBOOKS_LOG_DEBUG);
 
-        $errnum = $HTTP->errorNumber();
-        $errmsg = $HTTP->errorMessage();
+        $errnum = $quickBooksHTTP->errorNumber();
+        $errmsg = $quickBooksHTTP->errorMessage();
 
         if ($errnum) {
             // An error occurred!

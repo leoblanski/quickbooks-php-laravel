@@ -49,8 +49,6 @@ abstract class QuickBooks_Encryption
         $tmp = array_merge(range('a', 'z'), range('A', 'Z'), range(0, 9));
         shuffle($tmp);
 
-        $salt = substr(implode('', $tmp), 0, 32);
-
-        return $salt;
+        return substr(implode('', $tmp), 0, 32);
     }
 }

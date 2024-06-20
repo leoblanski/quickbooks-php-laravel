@@ -83,8 +83,7 @@ class QuickBooks_QBXML_Object_OtherChargeItem extends QuickBooks_QBXML_Object
 
     public function setIsActive($active)
     {
-        if (strtolower($active) == 'true' or
-            (is_bool($active) and $active)) {
+        if (strtolower($active) === 'true' || is_bool($active) && $active) {
             return $this->set('IsActive', 'true');
         }
 
@@ -95,8 +94,7 @@ class QuickBooks_QBXML_Object_OtherChargeItem extends QuickBooks_QBXML_Object
     {
         $active = $this->get('IsActive');
 
-        return strtolower($active) == 'true' or
-            (is_bool($active) and $active);
+        return strtolower($active) === 'true' || is_bool($active) && $active;
     }
 
     public function setParentListID($ListID)

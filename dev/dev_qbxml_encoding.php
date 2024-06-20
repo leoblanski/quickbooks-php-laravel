@@ -1,6 +1,6 @@
 <?php
 
-require_once '../QuickBooks.php';
+require_once __DIR__ . '/../QuickBooks.php';
 
 $arr = [
     'Cable&Atilde;‚&Acirc;&nbsp;Raceway/Wire Chase,&Atilde;‚&Acirc;&nbsp;1.25&quot; x 6\', White',
@@ -14,5 +14,7 @@ $arr = [
     ];
 
 foreach ($arr as $str) {
-    print("\n\n" . '{' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_INVOICE, 'InvoiceLineAdd Desc', html_entity_decode($str)) . '}' . "\n\n");
+    print('
+
+{' . QuickBooks_Cast::cast(QUICKBOOKS_ADD_INVOICE, 'InvoiceLineAdd Desc', html_entity_decode($str)) . '}' . "\n\n");
 }

@@ -20,7 +20,7 @@ if (!function_exists('array_intersect_key')) {
     {
         $argc = func_num_args();
         if ($argc > 2) {
-            for ($i = 1; !empty($isec) && $i < $argc; $i++) {
+            for ($i = 1; !empty($isec) && $i < $argc; ++$i) {
                 $arr = func_get_arg($i);
                 foreach (array_keys($isec) as $key) {
                     if (!isset($arr[$key])) {
@@ -30,14 +30,15 @@ if (!function_exists('array_intersect_key')) {
             }
 
             return $isec;
-        } else {
-            $res = [];
-            foreach (array_keys($isec) as $key) {
-                if (isset($keys[$key])) {
-                    $res[$key] = $isec[$key];
-                }
-            }
-            return $res;
         }
+
+        $res = [];
+        foreach (array_keys($isec) as $key) {
+            if (isset($keys[$key])) {
+                $res[$key] = $isec[$key];
+            }
+        }
+
+        return $res;
     }
 }

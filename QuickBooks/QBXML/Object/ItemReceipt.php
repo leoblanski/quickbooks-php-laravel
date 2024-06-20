@@ -305,36 +305,45 @@ class QuickBooks_QBXML_Object_ItemReceipt extends QuickBooks_QBXML_Object
                 if (isset($this->_object['ItemLine'])) {
                     $this->_object['ItemLineAdd'] = $this->_object['ItemLine'];
                 }
+                
                 if (isset($this->_object['ItemGroupLine'])) {
                     $this->_object['ItemGroupLineAdd'] = $this->_object['ItemGroupLine'];
                 }
+                
                 if (isset($this->_object['ExpenseLine'])) {
                     $this->_object['ExpenseLineAdd'] = $this->_object['ExpenseLine'];
                 }
+                
                 break;
 
             case QUICKBOOKS_MOD_RECEIPTITEM . 'Rq':
                 if (isset($this->_object['ItemLine'])) {
                     $this->_object['ItemLineMod'] = $this->_object['ItemLine'];
                 }
+                
                 if (isset($this->_object['ItemGroupLine'])) {
                     $this->_object['ItemGroupLineMod'] = $this->_object['ItemGroupLine'];
                 }
+                
                 if (isset($this->_object['ExpenseLine'])) {
                     $this->_object['ExpenseLineMod'] = $this->_object['ExpenseLine'];
                 }
+                
                 break;
 
             case QUICKBOOKS_QUERY_RECEIPTITEM . 'Rq':
                 if (isset($this->_object['ItemLine'])) {
                     $this->_object['ItemLineQuery'] = $this->_object['ItemLine'];
                 }
+                
                 if (isset($this->_object['ItemGroupLine'])) {
                     $this->_object['ItemGroupLineQuery'] = $this->_object['ItemGroupLine'];
                 }
+                
                 if (isset($this->_object['ExpenseLIne'])) {
                     $this->_object['ExpenseLineQuery'] = $this->_object['ExpenseLine'];
                 }
+                
                 break;
         }
 
@@ -360,20 +369,23 @@ class QuickBooks_QBXML_Object_ItemReceipt extends QuickBooks_QBXML_Object
         switch ($root) {
             case QUICKBOOKS_ADD_ITEMRECEIPT:
                 if (isset($object['ItemLineAdd'])) {
-                    foreach ($object['ItemLineAdd'] as $key => $obj) {
+                    foreach ($object['ItemLineAdd'] as $obj) {
                         $obj->setOverride('ItemLineAdd');
                     }
                 }
+                
                 if (isset($object['ItemGroupLineAdd'])) {
-                    foreach ($object['ItemGroupLineAdd'] as $key => $obj) {
+                    foreach ($object['ItemGroupLineAdd'] as $obj) {
                         $obj->setOverride('ItemGroupLineAdd');
                     }
                 }
+                
                 if (isset($object['ExpenseLineAdd'])) {
-                    foreach ($object['ExpenseLineAdd'] as $key => $obj) {
+                    foreach ($object['ExpenseLineAdd'] as $obj) {
                         $obj->setOverride('ExpenseLineAdd');
                     }
                 }
+                
                 break;
                 // For possible future use...
                 /*
@@ -403,25 +415,29 @@ class QuickBooks_QBXML_Object_ItemReceipt extends QuickBooks_QBXML_Object
                 */
             case QUICKBOOKS_MOD_RECEIPTITEM:
                 if (isset($object['ItemLineAdd'])) {
-                    foreach ($object['ItemLineMod'] as $key => $obj) {
+                    foreach ($object['ItemLineMod'] as $obj) {
                         $obj->setOverride('ItemLineMod');
                     }
                 }
+                
                 if (isset($object['ItemGroupLineAdd'])) {
-                    foreach ($object['ItemGroupMod'] as $key => $obj) {
+                    foreach ($object['ItemGroupMod'] as $obj) {
                         $obj->setOverride('ItemGroupMod');
                     }
                 }
+                
                 if (isset($object['ExpenseLineAdd'])) {
-                    foreach ($object['ExpenseLineMod'] as $key => $obj) {
+                    foreach ($object['ExpenseLineMod'] as $obj) {
                         $obj->setOverride('ExpenseLineMod');
                     }
                 }
+                
                 break;
         }
 
         return parent::asXML($root, $parent, $object);
     }
+    
     /**
      * Convert this object to a valid qbXML request
      *

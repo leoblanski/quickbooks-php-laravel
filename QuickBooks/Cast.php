@@ -247,10 +247,14 @@ class QuickBooks_Cast
 
         static $files = [];
 
-        if (!count($files)) {
+        if (count($files) === 0) {
             $dh = opendir(dirname(__FILE__) . '/QBXML/Schema/Object');
             while (false !== ($file = readdir($dh))) {
-                if ($file{0} == '.' or substr($file, -6, 6) != 'Rq.php') {
+                if ($file{0} === '.') {
+                    continue;
+                }
+
+                if (substr($file, -6, 6) !== 'Rq.php') {
                     continue;
                 }
 
@@ -330,6 +334,7 @@ class QuickBooks_Cast
             $class = 'QuickBooks_QBXML_Schema_Object_' . $types5[$type_or_action];
             $schema = new $class();
         }
+        
         //else
         //{
         //	return $value;
@@ -337,8 +342,8 @@ class QuickBooks_Cast
 
         //print('	casting using schema: ' . get_class($schema) . "\n");
 
-        if ($class and $schema) {
-            if (!$schema->exists($field) and false !== strpos($field, '_')) {
+        if ($class && $schema) {
+            if (!$schema->exists($field) && false !== strpos($field, '_')) {
                 $field = str_replace('_', ' ', $field);
             }
 
@@ -352,7 +357,7 @@ class QuickBooks_Cast
                         //$value = QuickBooks_Cast::_castCharset($value);
 
                         // Make sure it'll fit in the allocated field length
-                        if (is_int($maxlength) and $maxlength > 0) {
+                        if (is_int($maxlength) && $maxlength > 0) {
                             $value = QuickBooks_Cast::_castTruncate($value, $maxlength, $use_abbrevs);
                         }
 
@@ -361,15 +366,15 @@ class QuickBooks_Cast
                         if ($value) {
                             $value = date('Y-m-d', strtotime($value));
                         }
+                        
                         break;
                     case QUICKBOOKS_DATATYPE_DATETIME:
                         if ($value) {
                             $value = date('Y-m-d', strtotime($value)) . 'T' . date('H:i:s', strtotime($value));
                         }
+                        
                         break;
                     case QUICKBOOKS_DATATYPE_ENUM:
-                        // do nothing
-                        break;
                     case QUICKBOOKS_DATATYPE_ID:
                         // do nothing
                         break;
@@ -378,11 +383,7 @@ class QuickBooks_Cast
                         break;
                     case QUICKBOOKS_DATATYPE_BOOLEAN:
 
-                        if ($value and $value !== 'false') {
-                            $value = 'true';
-                        } else {
-                            $value = 'false';
-                        }
+                        $value = $value && $value !== 'false' ? 'true' : 'false';
 
                         break;
                     case QUICKBOOKS_DATATYPE_INTEGER:
@@ -452,13 +453,9 @@ class QuickBooks_Cast
      */
     protected static function _is8Bit($string, $charset = '')
     {
-        if (preg_match('/^iso-8859/i', $charset)) {
-            $needle = '/\240|[\241-\377]/';
-        } else {
-            $needle = '/[\200-\237]|\240|[\241-\377]/';
-        }
+        $needle = preg_match('/^iso-8859/i', $charset) ? '/\240|[\241-\377]/' : '/[\200-\237]|\240|[\241-\377]/';
 
-        return preg_match("$needle", $string);
+        return preg_match($needle, $string);
     }
 
     /**
@@ -473,11 +470,10 @@ class QuickBooks_Cast
         if (!preg_match("'&#[0-9]+;'", $string)) {
             return $string;
         }
-
-        $string = preg_replace('/&#([0-9]+);/e', "QuickBooks_Cast_unicodetoutf8('\\1')", $string);
+        
         // $string=preg_replace("/&#[xX]([0-9A-F]+);/e","unicodetoutf8(hexdec('\\1'))",$string);
 
-        return $string;
+        return preg_replace('/&#([0-9]+);/e', "QuickBooks_Cast_unicodetoutf8('\\1')", $string);
     }
 
     /**
@@ -496,7 +492,7 @@ class QuickBooks_Cast
         // decode four byte unicode characters
         $string = preg_replace_callback(
             "/([\360-\367])([\200-\277])([\200-\277])([\200-\277])/",
-            function ($arr) {
+            static function ($arr) {
                 $val = ((ord($arr[1]) - 240) * 262144 + (ord($arr[2]) - 128) * 4096 + (ord($arr[3]) - 128) * 64 + (ord($arr[4]) - 128));
                 return '&#' . $val . ';';
             },
@@ -506,7 +502,7 @@ class QuickBooks_Cast
         // decode three byte unicode characters
         $string = preg_replace_callback(
             "/([\340-\357])([\200-\277])([\200-\277])/",
-            function ($arr) {
+            static function ($arr) {
                 $val = ((ord($arr[1]) - 224) * 4096 + (ord($arr[2]) - 128) * 64 + (ord($arr[3]) - 128));
                 return '&#' . $val . ';';
             },
@@ -516,7 +512,7 @@ class QuickBooks_Cast
         // decode two byte unicode characters
         $string = preg_replace_callback(
             "/([\300-\337])([\200-\277])/",
-            function ($arr) {
+            static function ($arr) {
                 $val = ((ord($arr[1]) - 192) * 64 + (ord($arr[2]) - 128));
                 return '&#' . $val . ';';
             },

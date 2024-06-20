@@ -101,9 +101,9 @@ class QuickBooks_IPP_Object
     {
         if ((string) ((float) $value) == $value) {
             return $this->set($field, date('Y-m-d', $value));
-        } else {
-            return $this->set($field, date('Y-m-d', strtotime($value)));
         }
+
+        return $this->set($field, date('Y-m-d', strtotime($value)));
     }
 
     public function getDateType($field, $format = 'Y-m-d')
@@ -128,11 +128,9 @@ class QuickBooks_IPP_Object
 
     public function __call($name, $args)
     {
-        if (substr($name, 0, 3) == 'set') {
+        if (substr($name, 0, 3) === 'set') {
             //print('called: ' . $name . ' with args: ' . print_r($args, true) . "\n");
-
             $field = substr($name, 3);
-
             $tmp = null;
             if (count($args) == 1) {
                 $tmp = current($args);
@@ -142,74 +140,76 @@ class QuickBooks_IPP_Object
             }
 
             return $tmp;
-        } elseif (substr($name, 0, 3) == 'get') {
-            $field = substr($name, 3);
+        }
 
+        if (substr($name, 0, 3) === 'get') {
+            $field = substr($name, 3);
             //print('getting field: [' . $field . ']' . "\n");
             //print_r($this->_data);
-
             if (isset($this->_data[$field])) {
-                if (isset($args[0]) and
-                    is_numeric($args[0])) {
+                if (isset($args[0]) && is_numeric($args[0])) {
                     // Trying to fetch a repeating element
                     if (isset($this->_data[$field][$args[0]])) {
                         return $this->_data[$field][$args[0]];
                     }
 
                     return null;
-                } elseif (!count($args) and
-                    isset($this->_data[$field]) and
-                    is_array($this->_data[$field])) {
-                    return $this->_data[$field][0];
-                } else {
-                    // Normal data
-                    return $this->_data[$field];
                 }
+
+                if (!count($args) && isset($this->_data[$field]) && is_array($this->_data[$field])) {
+                    return $this->_data[$field][0];
+                }
+                // Normal data
+                return $this->_data[$field];
             }
 
             return null;
-        } elseif (substr($name, 0, 5) == 'count') {
+        }
+
+        if (substr($name, 0, 5) === 'count') {
             $field = substr($name, 5);
-
-            if (isset($this->_data[$field]) and
-                is_array($this->_data[$field])) {
+            if (isset($this->_data[$field]) && is_array($this->_data[$field])) {
                 return count($this->_data[$field]);
-            } elseif (isset($this->_data[$field])) {
-                return 1;
-            } else {
-                return 0;
             }
-        } elseif (substr($name, 0, 3) == 'add') {
-            $field = substr($name, 3);
 
+            if (isset($this->_data[$field])) {
+                return 1;
+            }
+            return 0;
+        }
+
+        if (substr($name, 0, 3) === 'add') {
+            $field = substr($name, 3);
             if (!isset($this->_data[$field])) {
                 $this->_data[$field] = [];
             }
 
             $tmp = current($args);
             $this->_data[$field][] = $tmp;
-
             return $tmp;
-        } elseif (substr($name, 0, 5) == 'unset') {
-            $field = substr($name, 5);
+        }
 
+        if (substr($name, 0, 5) === 'unset') {
+            $field = substr($name, 5);
             if (isset($this->_data[$field])) {
-                if (isset($args[0]) and
-                    is_numeric($args[0])) {
+                if (isset($args[0]) && is_numeric($args[0])) {
                     // Trying to fetch a repeating element
                     if (isset($this->_data[$field][$args[0]])) {
                         unset($this->_data[$field][$args[0]]);
                     }
 
                     return true;
-                } else {
-                    unset($this->_data[$field]);
                 }
+
+                unset($this->_data[$field]);
             }
-        } else {
+        }
+        else {
             trigger_error('Call to undefined method $' . get_class($this) . '->' . $name . '(...)', E_USER_ERROR);
             return false;
         }
+
+        return null;
     }
 
     public function resource()
@@ -250,9 +250,9 @@ class QuickBooks_IPP_Object
 
         $diff = array_diff_key($data, $order);
 
-        if (count($diff)) {
+        if ($diff !== []) {
             // Some keys got left behind!
-            $retr = array_merge($retr, $diff);
+            return array_merge($retr, $diff);
         }
 
         return $retr;
@@ -289,9 +289,9 @@ class QuickBooks_IPP_Object
     {
         if ($version == QuickBooks_IPP_IDS::VERSION_3) {
             return $this->_asXML_v3($indent, $parent, $optype, $flavor);
-        } else {
-            return $this->asIDSXML($indent, $parent, $optype, $flavor);
         }
+
+        return $this->asIDSXML($indent, $parent, $optype, $flavor);
     }
 
     protected function _asXML_v3($indent, $parent, $optype, $flavor)
@@ -307,7 +307,7 @@ class QuickBooks_IPP_Object
                 // If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
                 $xml .= $value->_asXML_v3($indent + 1, null, null, $flavor);
             } elseif (is_array($value)) {
-                foreach ($value as $skey => $svalue) {
+                foreach ($value as $svalue) {
                     //print('converting array: [' . $key . ' >> ' . $skey . ']');
 
                     if (is_object($svalue)) {
@@ -338,21 +338,13 @@ class QuickBooks_IPP_Object
                         //$xml .= QuickBooks_XML::encode($value, $for_qbxml);
                         //$xml .= '</' . $key . '>' . QUICKBOOKS_CRLF;
 
-                        if ($svalue and
-                            substr($key, -3, 3) == 'Ref' and
-                            $svalue[0] == '{') {
+                        if ($svalue && substr($key, -3, 3) === 'Ref' && $svalue[0] == '{') {
                             $svalue = trim($svalue, '{}-');
-                        } elseif ($svalue and
-                            $key == 'Id' and
-                            $svalue[0] == '{') {
+                        } elseif ($svalue && $key == 'Id' && $svalue[0] == '{') {
                             $svalue = trim($svalue, '{}-');
-                        } elseif ($svalue and
-                            $key == 'DefinitionId' and
-                            $svalue[0] == '{') {
+                        } elseif ($svalue && $key == 'DefinitionId' && $svalue[0] == '{') {
                             $svalue = trim($svalue, '{}-');
-                        } elseif ($svalue and
-                            $key == 'TxnId' and
-                            $svalue[0] == '{') {
+                        } elseif ($svalue && $key == 'TxnId' && $svalue[0] == '{') {
                             $svalue = trim($svalue, '{}-');
                         }
 
@@ -381,29 +373,13 @@ class QuickBooks_IPP_Object
             else {
                 $for_qbxml = false;
 
-                if ($value and
-                    substr($key, -3, 3) == 'Ref' and
-                    strlen($value) > 0 and
-                    is_string($value) and
-                    $value[0] == '{') {
+                if ($value && substr($key, -3, 3) === 'Ref' && strlen($value) > 0 && is_string($value) && $value[0] === '{') {
                     $value = trim($value . '', '{}-');
-                } elseif ($value and
-                    $key == 'Id' and
-                    strlen($value) > 0 and
-                    is_string($value) and
-                    $value[0] == '{') {
+                } elseif ($value && $key == 'Id' && strlen($value) > 0 && is_string($value) && $value[0] === '{') {
                     $value = trim($value . '', '{}-');
-                } elseif ($value and
-                    $key == 'DefinitionId' and
-                    strlen($value) > 0 and
-                    is_string($value) and
-                    $value[0] == '{') {
+                } elseif ($value && $key == 'DefinitionId' && strlen($value) > 0 && is_string($value) && $value[0] === '{') {
                     $value = trim($value . '', '{}-');
-                } elseif ($value and
-                    $key == 'TxnId' and
-                    strlen($value) > 0 and
-                    is_string($value) and
-                    $value[0] == '{') {
+                } elseif ($value && $key == 'TxnId' && strlen($value) > 0 && is_string($value) && $value[0] === '{') {
                     $value = trim($value . '', '{}-');
                 }
 
@@ -413,9 +389,7 @@ class QuickBooks_IPP_Object
             }
         }
 
-        $xml .= str_repeat("\t", $indent) . '</' . $this->resource() . '>' . QUICKBOOKS_CRLF;
-
-        return $xml;
+        return $xml . (str_repeat("\t", $indent) . '</' . $this->resource() . '>' . QUICKBOOKS_CRLF);
     }
 
     public function asIDSXML($indent = 0, $parent = null, $optype = null, $flavor = null)
@@ -427,7 +401,7 @@ class QuickBooks_IPP_Object
             $parent = $this->resource();
         }
 
-        if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD) {
+        if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD || $optype == QuickBooks_IPP_IDS::OPTYPE_MOD) {
             if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE) {
                 $xml = str_repeat("\t", $indent) . '<' . $this->resource() . ' xmlns="http://www.intuit.com/sb/cdm/v2" xmlns:ns2="http://www.intuit.com/sb/cdm/qbopayroll/v1" xmlns:ns3="http://www.intuit.com/sb/cdm/qbo">' . QUICKBOOKS_CRLF;
             } else {
@@ -451,12 +425,12 @@ class QuickBooks_IPP_Object
                 // If this causes problems, it can be commented out. It handles only situations where you are ->set(...)ing full objects, which can also be done by ->add(...)ing full objects instead
                 $xml .= $value->asIDSXML($indent + 1, null, null, $flavor);
             } elseif (is_array($value)) {
-                foreach ($value as $skey => $svalue) {
+                foreach ($value as $svalue) {
                     //print('converting array: [' . $key . ' >> ' . $skey . ']');
 
                     if (is_object($svalue)) {
                         $xml .= $svalue->asIDSXML($indent + 1, $key, null, $flavor);
-                    } elseif (substr($key, -2, 2) == 'Id') {
+                    } elseif (substr($key, -2, 2) === 'Id') {
                         $for_qbxml = false;
 
                         $tmp = QuickBooks_IPP_IDS::parseIdType($svalue);
@@ -479,7 +453,7 @@ class QuickBooks_IPP_Object
                         $xml .= str_repeat("\t", $indent + 1) . '<' . $key . '>' . QuickBooks_XML::encode($svalue, false) . '</' . $key . '>' . QUICKBOOKS_CRLF;
                     }
                 }
-            } elseif (substr($key, -2, 2) == 'Id') {
+            } elseif (substr($key, -2, 2) === 'Id') {
                 $for_qbxml = false;
 
                 $tmp = QuickBooks_IPP_IDS::parseIdType($value);
@@ -501,7 +475,7 @@ class QuickBooks_IPP_Object
             }
         }
 
-        if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD or $optype == QuickBooks_IPP_IDS::OPTYPE_MOD) {
+        if ($optype == QuickBooks_IPP_IDS::OPTYPE_ADD || $optype == QuickBooks_IPP_IDS::OPTYPE_MOD) {
             if ($flavor == QuickBooks_IPP_IDS::FLAVOR_ONLINE) {
                 $xml .= str_repeat("\t", $indent) . '</' . $this->resource() . '>' . QUICKBOOKS_CRLF;
             } else {
