@@ -52,6 +52,9 @@ class QuickBooks_Loader
             require QUICKBOOKS_BASEDIR . $file;
         }
 
+        if (!class_exists('QuickBooks_Driver_Sql_Mysql')) {
+            class_alias('QuickBooks_Driver_Mysql', 'QuickBooks_Driver_Sql_Mysql');
+        }
         return true;
     }
 
@@ -72,7 +75,7 @@ class QuickBooks_Loader
 
             if (function_exists('spl_autoload_register')) {
                 // Register the autoloader, and return TRUE
-                spl_autoload_register([ 'QuickBooks_Loader', '__autoload' ]);
+                spl_autoload_register(['QuickBooks_Loader', '__autoload']);
 
                 $auto = true;
                 return true;
