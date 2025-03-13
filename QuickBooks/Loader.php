@@ -46,15 +46,16 @@ class QuickBooks_Loader
 
         $loaded[$file] = true;
 
+        if (!class_exists('QuickBooks_Driver_Sql_Mysql')) {
+            class_alias('QuickBooks_Driver_Mysql', 'QuickBooks_Driver_Sql_Mysql');
+        }
+
         if (QUICKBOOKS_LOADER_REQUIREONCE) {
             require_once QUICKBOOKS_BASEDIR . $file;
         } else {
             require QUICKBOOKS_BASEDIR . $file;
         }
 
-        if (!class_exists('QuickBooks_Driver_Sql_Mysql')) {
-            class_alias('QuickBooks_Driver_Mysql', 'QuickBooks_Driver_Sql_Mysql');
-        }
         return true;
     }
 
