@@ -33,7 +33,8 @@ define('QUICKBOOKS_TIMESTAMP', microtime(true));
 /**
  *
  */
-define('QUICKBOOKS_BASEDIR', dirname(__FILE__));
+// define('QUICKBOOKS_BASEDIR', dirname(__FILE__));
+define('QUICKBOOKS_BASEDIR', base_path('vendor/leoblanski/quickbooks-php-laravel/'));
 
 /**
  * Path separator for file paths/include/require paths
@@ -304,7 +305,7 @@ define('QUICKBOOKS_IMPORT_BILLPAYMENTCHECK', 'BillPaymentCheckImport');
 
 define('QUICKBOOKS_OBJECT_BILLPAYMENTCREDITCARD', 'BillPaymentCreditCard');
 define('QUICKBOOKS_ADD_BILLPAYMENTCREDITCARD', 'BillPaymentCreditCardAdd');
-define('QUICKBOOKS_MOD_BILLPAYMENTCREDITCARD', 'BillPaymentCreditCardMod');	// Not supported by current QuickBooks SDK
+define('QUICKBOOKS_MOD_BILLPAYMENTCREDITCARD', 'BillPaymentCreditCardMod');    // Not supported by current QuickBooks SDK
 define('QUICKBOOKS_QUERY_BILLPAYMENTCREDITCARD', 'BillPaymentCreditCardQuery');
 define('QUICKBOOKS_IMPORT_BILLPAYMENTCREDITCARD', 'BillPaymentCreditCardImport');
 
